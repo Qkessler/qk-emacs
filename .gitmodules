@@ -1,0 +1,3 @@
+[submodule "modules/personal"]
+	path = modules/personal
+	url = git@github.com:Qkessler/qk-emacs-amz.git

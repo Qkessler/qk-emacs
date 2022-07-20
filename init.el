@@ -29,7 +29,8 @@
   (require 'use-package))
 
 ;; Add modules directory.
-(add-load-path! "modules" "modules/personal")
+(add-to-list 'load-path (concat user-emacs-directory "modules"))
+(add-to-list 'load-path (concat user-emacs-directory "modules/personal"))
 
 ;; Core libs.
 (require 'core)

@@ -133,15 +133,6 @@ server getting expensively restarted when reverting buffers."
                        (+lsp-optimization-mode -1))))
              lsp--cur-workspace)))))
 
-;; Barium lsp server for Brazil Config files.
-(after! lsp-mode
-  (add-to-list 'lsp-language-id-configuration '(brazil-config-mode . "barium"))
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection (lsp-stdio-connection "barium")
-    :activation-fn (lsp-activate-on "barium")
-    :server-id 'brazil-config)))
-
 (use-package lsp-ui
   :straight t
   :after lsp-mode

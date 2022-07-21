@@ -70,6 +70,7 @@
    org-refile-allow-creating-parent-nodes 'confirm
    org-enforce-todo-dependencies t
    org-confirm-babel-evaluate nil
+   org-log-repeat nil
    safe-local-variable-values '((eval org-content 2) (eval org-content 3))
    org-refile-targets (quote ((nil :maxlevel . 5)
                               (org-agenda-files :maxlevel . 5)

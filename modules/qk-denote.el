@@ -24,7 +24,7 @@
   (defun qk-denote-find-notes ()
     "Use `affe-find' for searching the `denote-directory'."
     (interactive)
-    (affe-find denote-directory)))
+    (with-current-directory! denote-directory (call-interactively 'find-file))))
 
 (use-package denote-org-capture
   :init

@@ -816,5 +816,21 @@ type will need to be passed as args."
   `(dolist (variable ,variables)
     (put variable 'safe-local-variable ,@args)))
   
+(defmacro with-current-directory! (directory &rest body)
+  "Switch the current buffer to DIRECTORY and execute BODY.
+
+Restore the current buffer to its original directory on exit."
+  (declare (indent 1)
+           (debug (sexp body)))
+  (let ((olddirvar (gensym))
+        (dirvar (gensym)))
+    `(let ((,olddirvar default-directory)
+           (,dirvar ,directory))
+       (unwind-protect
+           (progn
+             (cd ,dirvar)
+             ,@body)
+         (cd ,olddirvar)))))
+
 (provide 'core-lib)
 ;;; core-lib.el ends here

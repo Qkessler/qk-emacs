@@ -10,7 +10,6 @@
    org-agenda-hide-tags-regexp ".*"
    org-roam-v2-ack t
    org-deadline-warning-days 3
-   org-agenda-dim-blocked-tasks nil
    org-agenda-inhibit-startup t
    org-agenda-use-tag-inheritance nil
    org-agenda-ignore-drawer-properties '(effort appt category)

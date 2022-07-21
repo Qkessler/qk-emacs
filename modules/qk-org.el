@@ -52,7 +52,7 @@
    org-directory "~/Documents/org_files"
    org-return-follows-link t
    org-default-notes-file (concat qk-notes-directory "pages/refile.org")
-   org-archive-location (concat org-directory "/archive/%s_archive::")
+   org-archive-location (concat qk-notes-directory "/archive/%s_archive::")
    org-src-fontify-natively t
    org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
    org-clock-out-remove-zero-time-clocks t

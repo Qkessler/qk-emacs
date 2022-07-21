@@ -7,7 +7,7 @@
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
-   denote-directory (expand-file-name "~/Documents/testnotes/")
+   denote-directory (expand-file-name "~/Documents/slipbox/")
    qk-notes-directory denote-directory
    denote-known-keywords '()
    denote-prompts '(title)
@@ -21,8 +21,13 @@
     "i" 'denote-link
     "r" 'denote-dired-rename-file-and-rewrite-front-matter)
   :config
+  (defun qk-denote-find-dailies ()
+    "Find daily notes in the current `qk-notes-dailies-directory'."
+    (interactive)
+    (with-current-directory! qk-notes-dailies-directory (call-interactively 'find-file)))
+
   (defun qk-denote-find-notes ()
-    "Use `affe-find' for searching the `denote-directory'."
+    "Find notes in the current `denote-directory'."
     (interactive)
     (with-current-directory! denote-directory (call-interactively 'find-file))))
 
@@ -55,8 +60,6 @@
 (defconst qk-denote-get-projects-name "qk-denote-get-projects")
 (defconst qk-denote-get-projects-buffer "*qk-denote-get-projects*")
 (defconst qk-denote-get-projects-pattern "\\+filetags: .*project")
-(setq org-roam-directory (expand-file-name org-roam-directory))
-
 (defun qk-denote--get-projects (&rest _)
   "Run `rg' process to get the projects that have the file tag."
   (set-process-sentinel
@@ -86,6 +89,14 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
     (progn
       (qk-denote--get-projects-cleanup)
       (setq org-agenda-files project-list))))
+
+(defvar qk-notes-dailies-directory (expand-file-name (concat qk-notes-directory "dailies/")))
+(defun qk-denote--move-to-dailies ()
+  "If moved to DONE state, move to the daily note for the day."
+  (when (string= org-state "DONE")
+    (let ((org-archive-location (concat qk-notes-dailies-directory (format-time-string "%F") "::")))
+      (org-archive-subtree))))
+(add-hook! org-after-todo-state-change 'qk-denote--move-to-dailies)
 
 (after! org-agenda
   (use-package vulpea

@@ -832,5 +832,9 @@ Restore the current buffer to its original directory on exit."
              ,@body)
          (cd ,olddirvar)))))
 
+(use-package vulpea
+  :straight t
+  :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)
+
 (provide 'core-lib)
 ;;; core-lib.el ends here

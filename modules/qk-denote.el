@@ -7,7 +7,7 @@
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
-   denote-directory (expand-file-name "~/Documents/slipbox/")
+   denote-directory (expand-file-name "~/Documents/slipbox/pages/")
    qk-notes-directory denote-directory
    denote-known-keywords '()
    denote-prompts '(title)
@@ -19,7 +19,7 @@
   (+general-global-notes
     "f" 'qk-denote-find-notes
     "i" 'denote-link
-    "r" 'denote-dired-rename-file-and-rewrite-front-matter)
+    "d" 'qk-denote-find-dailies)
   :config
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
@@ -66,7 +66,7 @@
    (start-process
     qk-denote-get-projects-name
     qk-denote-get-projects-buffer
-    qk-rg-command "-l" qk-denote-get-projects-pattern org-roam-directory)
+    qk-rg-command "-l" qk-denote-get-projects-pattern denote-directory)
    #'qk-denote--get-projects-process-events))
 
 (defun qk-denote--get-projects-process-events (process event)
@@ -90,7 +90,7 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
       (qk-denote--get-projects-cleanup)
       (setq org-agenda-files project-list))))
 
-(defvar qk-notes-dailies-directory (expand-file-name (concat qk-notes-directory "dailies/")))
+(defvar qk-notes-dailies-directory (expand-file-name (concat qk-notes-directory "../dailies/")))
 (defun qk-denote--move-to-dailies ()
   "If moved to DONE state, move to the daily note for the day."
   (when (string= org-state "DONE")
@@ -113,7 +113,16 @@ file following `denote''s title best practices, to contain the new filetags."
       (unless (string= name-tags current-tags)
         (rename-file (buffer-file-name) new-name t)
         (set-visited-file-name new-name t t)))))
-(add-hook! (find-file before-save) 'qk-denote--rename-file-on-tags-change)
+(add-hook! before-save 'qk-denote--rename-file-on-tags-change)
+
+(defvar qk-denote--migrate-blocklisted `(,(concat denote-directory ".DS_Store")))
+(defun qk-denote--migrate ()
+  "Visit and open all files in a directory."
+  (cl-loop for file in (directory-files denote-directory) collect
+           (unless (or
+                    (member (concat denote-directory file) qk-denote--migrate-blocklisted)
+                    (file-directory-p file))
+             (find-file (concat denote-directory file)))))
 
 (after! org-agenda
   (defun vulpea-project-p ()

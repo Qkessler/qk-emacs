@@ -98,11 +98,24 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
       (org-archive-subtree))))
 (add-hook! org-after-todo-state-change 'qk-denote--move-to-dailies)
 
-(after! org-agenda
-  (use-package vulpea
-    :straight t
-    :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)
+(defun qk-denote--rename-file-on-tags-change ()
+  "If the filetags property on the file changes, rename the current
+file following `denote''s title best practices, to contain the new filetags."
+  (when (s-contains-p denote-directory (file-name-directory (buffer-file-name)))
+    (let* ((file-name (file-name-nondirectory buffer-file-name))
+           (directory (file-name-directory buffer-file-name))
+           (_ (string-match "\\(.*__\\)\\(.*\\)\\(\\..*\\)" file-name))
+           (name-without-tags (match-string 1 file-name))
+           (name-tags (match-string 2 file-name))
+           (extension (match-string 3 file-name))
+           (current-tags (string-join (vulpea-buffer-tags-get) "_"))
+           (new-name (concat name-without-tags current-tags extension)))
+      (unless (string= name-tags current-tags)
+        (rename-file (buffer-file-name) new-name t)
+        (set-visited-file-name new-name t t)))))
+(add-hook! (find-file before-save) 'qk-denote--rename-file-on-tags-change)
 
+(after! org-agenda
   (defun vulpea-project-p ()
     "Return non-nil if current buffer has any todo entry.
 

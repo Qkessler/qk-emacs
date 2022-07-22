@@ -155,7 +155,7 @@ Intended as :after advice for `delete-file'."
    eww-restore-desktop t
    eww-desktop-remove-duplicates t
    eww-header-line-format nil
-   eww-download-directory (expand-file-name "~/Downloads/eww-downloads")
+   eww-download-directory qk-eww-download-directory
    eww-suggest-uris '(eww-links-at-point thing-at-point-url-at-point)
    eww-bookmarks-directory (concat no-littering-var-directory "eww-bookmarks/")
    eww-history-limit 150
@@ -178,10 +178,7 @@ Intended as :after advice for `delete-file'."
   (connection-local-set-profile-variables
    'remote-bash
    '((shell-file-name . "/bin/bash")
-     (shell-command-switch . "-ic")))
-  (connection-local-set-profiles
-   '(:application tramp :protocol "ssh" :machine "*.aka.corp.amazon.com")
-   'remote-bash))
+     (shell-command-switch . "-ic"))))
 
 (provide 'qk-defaults)
 ;; qk-defaults.el ends here.

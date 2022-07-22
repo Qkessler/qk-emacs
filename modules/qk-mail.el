@@ -3,8 +3,7 @@
 ;; Adding mu4e configuration that was configured with mbsync.
 ;; We have installed it with the package manager, in order to make sure
 ;; that the mu4e version is in sync with the mu binary from my distro.
-(add-to-list 'load-path "/usr/local/Cellar/mu/1.6.10/share/emacs/site-lisp/mu/mu4e")
-
+(add-load-path! qk-mu4e-load-path)
 (use-package mu4e
   :defer 2
   :general
@@ -30,12 +29,12 @@
   (setq
    mu4e-maildir "~/.Mail"
    mu4e-attachment-dir "~/Downloads"
-   mu4e-get-mail-command "mbsync amazon"
+   mu4e-get-mail-command qk-mu4e-get-mail-command
    mu4e-change-filenames-when-moving t
    mu4e-headers-show-threads nil
    mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout"
    mu4e-hide-index-messages t
-   mu4e-compose-signature "Enrique Kessler Martínez\n"
+   mu4e-compose-signature qk-mu4e-compose-signature
    mu4e-update-interval (* 5 60)
    mu4e-compose-signature-auto-include t
    mu4e-confirm-quit nil
@@ -61,7 +60,7 @@
     (use-package mu4e-icalendar
       :demand t)
     (mu4e-icalendar-setup)
-    (setq gnus-icalendar-org-capture-file (concat qk-notes-directory "/pages/meetings.org"))
+    (setq gnus-icalendar-org-capture-file qk-icalendar-org-capture-file)
     (setq gnus-icalendar-org-capture-headline '("Meetings"))
     (gnus-icalendar-org-setup))
 

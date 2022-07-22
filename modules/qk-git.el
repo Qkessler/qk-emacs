@@ -34,7 +34,8 @@
     (save-excursion
       (goto-char (point-min))
       (when (re-search-forward "^<<<<<<< " nil :noerror)
-        (smerge-mode 1)))))
+        (smerge-mode 1))))
+  (add-hook! smerge-mode (flycheck-mode -1)))
 
 (use-package magit
   :straight t

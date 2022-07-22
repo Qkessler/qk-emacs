@@ -7,8 +7,7 @@
   :commands org-roam-db-query
   :init
   (setq
-   org-roam-directory "~/Documents/slipbox/"
-   qk-notes-directory org-roam-directory
+   org-roam-directory qk-notes-directory
    org-roam-v2-ack t
    org-roam-node-display-template "${title}                                          ${tags}"
    org-roam-capture-templates `(("d" "default" plain "%?" :if-new
@@ -20,7 +19,7 @@
                                     "#+title: ${title}\n"
                                     "#+filetags: \n\n"))
                                  :unnarrowed t)))
-  (defvar org-book-list-file (concat org-roam-directory "/pages/book_list.org"))
+  (defvar org-book-list-file (concat qk-notes-directory "/pages/book_list.org"))
   :general
   (+general-global-notes
     "f" 'org-roam-node-find

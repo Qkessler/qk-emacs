@@ -7,8 +7,7 @@
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
-   denote-directory (expand-file-name "~/Documents/testnotes/")
-   qk-notes-directory denote-directory
+   denote-directory qk-notes-directory
    denote-known-keywords '()
    denote-prompts '(title)
    denote-allow-multi-word-keywords t
@@ -43,7 +42,7 @@
         :jump-to-captured t)))
 
   ;; I wonder whether this affects performance. This :config block is only run
-  ;; when the `qk-denote-org-capture' is computed, and that's kind of my intention.
+  ;; when the `qk-denote-org-capture' is invoked, and that's kind of my intention.
   (require 'org-capture)
 
   (defun qk-denote-org-capture ()

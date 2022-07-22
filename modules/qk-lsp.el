@@ -1,6 +1,5 @@
 ;;; qk-lsp.el -*- lexical-binding: t; -*-
 
-(defvar qk-manual-lsp nil)
 (defun qk-toggle-manual-lsp ()
   "Toggle automatic initialization of the language server"
   (interactive)

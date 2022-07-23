@@ -24,12 +24,14 @@
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
     (interactive)
-    (with-current-directory! qk-notes-dailies-directory (call-interactively 'find-file)))
+    (with-current-directory! qk-notes-dailies-directory (call-interactively 'find-file))
+    (cd qk-notes-dailies-directory))
 
   (defun qk-denote-find-notes ()
     "Find notes in the current `denote-directory'."
     (interactive)
-    (with-current-directory! denote-directory (call-interactively 'find-file))))
+    (with-current-directory! denote-directory (call-interactively 'find-file))
+    (cd denote-directory)))
 
 (use-package denote-org-capture
   :init

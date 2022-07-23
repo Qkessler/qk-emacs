@@ -95,6 +95,9 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
   "If moved to DONE state, move to the daily note for the day."
   (when (string= org-state "DONE")
     (let ((org-archive-location (concat qk-notes-dailies-directory (format-time-string "%F") "::")))
+      (when (org-get-repeat)
+        (setq current-prefix-arg '(4))
+        (org-clone-subtree-with-time-shift 1 nil))
       (org-archive-subtree))))
 (add-hook! org-after-todo-state-change 'qk-denote--move-to-dailies)
 

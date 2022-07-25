@@ -1,0 +1,51 @@
+* qk-emacs
+qk-emacs is a pre-configured, evil-like, and modular configuration with sane defaults, and a preference for built-in packages in nature.
+
+// TODO: Photo of gruvbox theme with the configuration. Org-agenda and elisp code.
+
+** Keybinding scheme
+With the intention of keeping the user experience as consistent as possible, =qk-emacs= follows different principles across the modules, with the intention that irrespectively of the mode the user is in, the same keybindings will perform DWIM-like behaviours.
+
+=SPC= has been chosen as leader key, and some of the [[https://www.spacemacs.org/][Spacemacs]] keybindings have been migrated or adapted to a more ergonomic (to me) alternative. Nevertheless, =qk-emacs= has been built with customizability and extensibility on its core: feel free to jump to the modules and modify them out!
+
+*** Major-mode and minor-mode definers
+Even though each of the modules may include personalized keybindings which are discussed under each of the modules, the bulk of the keybindings are stored inside the [[file:modules/qk-general.el][qk-general module]]. The module uses the [[https://github.com/noctuid/general.el][general.el]] package and the binding across the modules are configured with it. A =major-mode= and a =minor-mode= definers have been defined with general. Each of them configure the prefix =SPC m= for a specific major-mode or minor-mode respectively. The minor-mode definer has preference over the major-mode one. Let's see an example on the [[file:modules/qk-org.el][qk-org module]].
+#+begin_src emacs-lisp
+  (major-mode-definer
+    :major-modes '(org-mode)
+    :keymaps '(org-mode-map)
+    "c" '(org-edit-special :which-key "open source block")
+    "r" 'org-refile
+    ...)
+  (minor-mode-definer
+    :keymaps 'org-capture-mode
+    "f" 'org-capture-finalize
+    "c" '(org-capture-kill :which-key "org-capture cancel")
+    "r" 'org-capture-refile)
+#+end_src
+
+The above snippet defines conflicting keybindings for the =org-mode= major-mode, and the =org-capture-mode= minor-mode.
+
+- If on an org-capture-mode buffer, the =SPC m c= keybinding will invoke the =org-capture-kill= function, thus cancelling the org-capture process.
+- On the other hand, if on any other non-org-capture org-mode buffer, the =SPC m c= binding will open a source block at point, invoking the =org-edit-special= function.
+
+Note the properties passed to the definers: when using the =minor-mode-definer=, we pass the =:keymaps= property, but this represents the minor-mode that will be affected. For major-modes, we pass the major-mode(s) affected and the keymaps that are gonna define those keybindings.
+
+*** Finalize or Abort
+In Emacs, there are lots of situations for actions to be finalized or aborted. An example of this is the org-capture snippet shown above. When invoking the =org-capture= function, one has the ability to finalize the org-capture note and therefore create the file/heading or abort it, returning to the starting state.
+
+Since this happens in different situations, we use a standarized binding across all of them in qk-emacs.
+
+- =SPC m f=: Finalizes and confirms the action.
+- =SPC m c=: Cancels or aborts the action.
+
+Examples:
+
+- Confirm or Abort changes in an org source block.
+- Confirm or Abort capturing with org-capture.
+- Confirm or Abort composing an email.
+- Confirm or Abort a commit message in =git-commit-mode=.
+- Confirm or Abort a temporary =emacs-everywhere-mode= buffer.
+  
+** Modules
+Here is the list of the modules that have been implemented, and an explanation for each of them. I'll also add the keybindings that are connected to each module.

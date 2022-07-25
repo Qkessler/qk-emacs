@@ -7,10 +7,10 @@
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
-   denote-directory (expand-file-name "~/Documents/slipbox/pages/")
+   denote-directory (expand-file-name "~/Documents/slipbox/pages")
    qk-notes-directory denote-directory
    denote-known-keywords '()
-   denote-prompts '(title)
+   denote-prompts '(title keywords)
    denote-allow-multi-word-keywords t
    denote-date-format nil
    denote-link-fontify-backlinks t
@@ -59,9 +59,9 @@
     (let ((org-capture-templates qk-denote-capture-template))
       (org-capture nil "n"))))
 
-(defconst qk-denote-get-projects-name "qk-denote-get-projects")
-(defconst qk-denote-get-projects-buffer "*qk-denote-get-projects*")
-(defconst qk-denote-get-projects-pattern "\\+filetags: .*project")
+(defvar qk-denote-get-projects-name "qk-denote-get-projects")
+(defvar qk-denote-get-projects-buffer "*qk-denote-get-projects*")
+(defvar qk-denote-get-projects-pattern "\\+filetags: .*project")
 (defun qk-denote--get-projects (&rest _)
   "Run `rg' process to get the projects that have the file tag."
   (set-process-sentinel
@@ -76,7 +76,10 @@
   (cond ((string= event "finished\n") (qk-denote--get-projects-rg))
         ((string= event "exited abnormally with code 1\n")
          (message "qk-denote: rg didn't find any files."))
-        ((string= event "exited abnormally with code 2\n") (message "error"))))
+        ((string= event "exited abnormally with code 2\n")
+         (message
+          (format "qk-denote: error. Check the %s"
+                  qk-denote-get-projects-buffer)))))
 
 (defun qk-denote--get-projects-cleanup ()
   "Cleanup the buffer that was created for the async process."
@@ -88,25 +91,32 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
   (let ((project-list
          (with-current-buffer qk-denote-get-projects-buffer
            (s-lines (buffer-string)))))
-    (progn
-      (qk-denote--get-projects-cleanup)
-      (setq org-agenda-files project-list))))
+    (qk-denote--get-projects-cleanup)
+    (setq org-agenda-files project-list)))
 
 (defvar qk-notes-dailies-directory (expand-file-name (concat qk-notes-directory "../dailies/")))
-(defun qk-denote--move-to-dailies ()
+(defun qk-denote--dailies-project-p ()
+  "Return `t' if the current heading has the PROJECT tag."
+  (let* ((element (org-element-at-point))
+         (tags (org-element-property :tags element)))
+    (member "PROJECT" tags)))
+
+(defun qk-denote--dailies-archive ()
   "If moved to DONE state, move to the daily note for the day."
-  (when (string= org-state "DONE")
-    (let ((org-archive-location (concat qk-notes-dailies-directory (format-time-string "%F") "::")))
+  (when (and (string= org-state "DONE") (not (qk-denote--dailies-project-p)))
+    (let ((org-archive-location
+           (concat qk-notes-dailies-directory (format-time-string "%F") "::")))
       (when (org-get-repeat)
         (setq current-prefix-arg '(4))
         (org-clone-subtree-with-time-shift 1 nil))
       (org-archive-subtree))))
-(add-hook! org-after-todo-state-change 'qk-denote--move-to-dailies)
+(add-hook! org-after-todo-state-change 'qk-denote--dailies-archive)
 
 (defun qk-denote--rename-file-on-tags-change ()
   "If the filetags property on the file changes, rename the current
 file following `denote''s title best practices, to contain the new filetags."
-  (when (s-contains-p denote-directory (file-name-directory (buffer-file-name)))
+  (when (and (not (bound-and-true-p org-capture-mode))
+             (s-contains-p denote-directory (file-name-directory (buffer-file-name))))
     (let* ((file-name (file-name-nondirectory buffer-file-name))
            (directory (file-name-directory buffer-file-name))
            (_ (string-match "\\(.*__\\)\\(.*\\)\\(\\..*\\)" file-name))
@@ -118,7 +128,7 @@ file following `denote''s title best practices, to contain the new filetags."
       (unless (string= name-tags current-tags)
         (rename-file (buffer-file-name) new-name t)
         (set-visited-file-name new-name t t)))))
-(add-hook! before-save 'qk-denote--rename-file-on-tags-change)
+(add-hook! (find-file before-save) 'qk-denote--rename-file-on-tags-change)
 
 (defvar qk-denote--migrate-blocklisted `(,(concat denote-directory ".DS_Store")))
 (defun qk-denote--migrate ()

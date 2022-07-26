@@ -7,8 +7,9 @@
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
-   denote-directory (expand-file-name "~/Documents/slipbox/pages")
+   denote-directory (expand-file-name "~/Documents/slipbox/pages/")
    qk-notes-directory denote-directory
+   org-default-notes-file (concat qk-notes-directory "refile.org")
    denote-known-keywords '()
    denote-prompts '(title keywords)
    denote-allow-multi-word-keywords t
@@ -62,14 +63,17 @@
 (defvar qk-denote-get-projects-name "qk-denote-get-projects")
 (defvar qk-denote-get-projects-buffer "*qk-denote-get-projects*")
 (defvar qk-denote-get-projects-pattern "\\+filetags: .*project")
+(defvar qk-denote-get-projects--lock t)
 (defun qk-denote--get-projects (&rest _)
   "Run `rg' process to get the projects that have the file tag."
-  (set-process-sentinel
-   (start-process
-    qk-denote-get-projects-name
-    qk-denote-get-projects-buffer
-    qk-rg-command "-l" qk-denote-get-projects-pattern denote-directory)
-   #'qk-denote--get-projects-process-events))
+  (when qk-denote-get-projects--lock
+    (setq qk-denote-get-projects--lock nil)
+    (set-process-sentinel
+     (start-process
+      qk-denote-get-projects-name
+      qk-denote-get-projects-buffer
+      qk-rg-command "-l" qk-denote-get-projects-pattern denote-directory)
+     #'qk-denote--get-projects-process-events)))
 
 (defun qk-denote--get-projects-process-events (process event)
   "Process the events for the rg program getting the `project' tagged files."
@@ -83,7 +87,8 @@
 
 (defun qk-denote--get-projects-cleanup ()
   "Cleanup the buffer that was created for the async process."
-  (kill-buffer qk-denote-get-projects-buffer))
+  (kill-buffer qk-denote-get-projects-buffer)
+  (setq qk-denote-get-projects--lock t))
 
 (defun qk-denote--get-projects-rg ()
   "Return the parsed project tagged files list.
@@ -112,10 +117,13 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
       (org-archive-subtree))))
 (add-hook! org-after-todo-state-change 'qk-denote--dailies-archive)
 
+(defvar qk-denote--rename-file-refile (concat qk-notes-directory "refile.org"))
+(defvar qk-denote--rename-file-block-list `(,qk-denote--rename-file-refile))
 (defun qk-denote--rename-file-on-tags-change ()
   "If the filetags property on the file changes, rename the current
 file following `denote''s title best practices, to contain the new filetags."
   (when (and (not (bound-and-true-p org-capture-mode))
+             (not (-contains-p qk-denote--rename-file-block-list (buffer-file-name)))
              (s-contains-p denote-directory (file-name-directory (buffer-file-name))))
     (let* ((file-name (file-name-nondirectory buffer-file-name))
            (directory (file-name-directory buffer-file-name))
@@ -128,7 +136,7 @@ file following `denote''s title best practices, to contain the new filetags."
       (unless (string= name-tags current-tags)
         (rename-file (buffer-file-name) new-name t)
         (set-visited-file-name new-name t t)))))
-(add-hook! (find-file before-save) 'qk-denote--rename-file-on-tags-change)
+(add-hook! before-save 'qk-denote--rename-file-on-tags-change)
 
 (defvar qk-denote--migrate-blocklisted `(,(concat denote-directory ".DS_Store")))
 (defun qk-denote--migrate ()
@@ -177,6 +185,110 @@ tasks."
           (file-name-directory buffer-file-name))))
   (add-hook! org-agenda-finalize 'qk-denote--get-projects)
   (add-hook! (find-file before-save) 'vulpea-project-update-tag))
+
+(after! org-refile
+  (defun org-refile-get-targets (&optional default-buffer)
+    "Produce a table with refile targets."
+    (let ((case-fold-search nil)
+	      ;; otherwise org confuses "TODO" as a kw and "Todo" as a word
+	      (entries (or org-refile-targets '((nil . (:level . 1)))))
+	      targets tgs files desc descre)
+      (message "Getting targets...")
+      (with-current-buffer (or default-buffer (current-buffer))
+        (dolist (entry entries)
+	      (setq files (car entry) desc (cdr entry))
+	      (cond
+	       ((null files) (setq files (list (current-buffer))))
+	       ((eq files 'org-agenda-files)
+	        (setq files org-agenda-files))
+	       ((and (symbolp files) (fboundp files))
+	        (setq files (funcall files)))
+	       ((and (symbolp files) (boundp files))
+	        (setq files (symbol-value files))))
+	      (when (stringp files) (setq files (list files)))
+	      (cond
+	       ((eq (car desc) :tag)
+	        (setq descre (concat "^\\*+[ \t]+.*?:" (regexp-quote (cdr desc)) ":")))
+	       ((eq (car desc) :todo)
+	        (setq descre (concat "^\\*+[ \t]+" (regexp-quote (cdr desc)) "[ \t]")))
+	       ((eq (car desc) :regexp)
+	        (setq descre (cdr desc)))
+	       ((eq (car desc) :level)
+	        (setq descre (concat "^\\*\\{" (number-to-string
+					                        (if org-odd-levels-only
+					                            (1- (* 2 (cdr desc)))
+					                          (cdr desc)))
+			                     "\\}[ \t]")))
+	       ((eq (car desc) :maxlevel)
+	        (setq descre (concat "^\\*\\{1," (number-to-string
+					                          (if org-odd-levels-only
+						                          (1- (* 2 (cdr desc)))
+					                            (cdr desc)))
+			                     "\\}[ \t]")))
+	       (t (error "Bad refiling target description %s" desc)))
+	      (dolist (f files)
+	        (with-current-buffer (if (bufferp f) f (org-get-agenda-file-buffer f))
+	          (or
+	           (setq tgs (org-refile-cache-get (buffer-file-name) descre))
+	           (progn
+	             (when (bufferp f)
+		           (setq f (buffer-file-name (buffer-base-buffer f))))
+	             (setq f (and f (expand-file-name f)))
+	             (when (eq org-refile-use-outline-path 'file)
+		           (push (list (and f (file-name-nondirectory f)) f nil nil) tgs))
+	             (when (eq org-refile-use-outline-path 'buffer-name)
+		           (push (list (buffer-name (buffer-base-buffer)) f nil nil) tgs))
+	             (when (eq org-refile-use-outline-path 'full-file-path)
+		           (push (list (and (buffer-file-name (buffer-base-buffer))
+                                    (file-truename (buffer-file-name (buffer-base-buffer))))
+                               f nil nil) tgs))
+	             (org-with-wide-buffer
+		          (goto-char (point-min))
+		          (setq org-outline-path-cache nil)
+		          (while (re-search-forward descre nil t)
+		            (beginning-of-line)
+		            (let ((case-fold-search nil))
+		              (looking-at org-complex-heading-regexp))
+		            (let ((begin (point))
+			              (heading (match-string-no-properties 4)))
+		              (unless (or (and
+				                   org-refile-target-verify-function
+				                   (not
+				                    (funcall org-refile-target-verify-function)))
+				                  (not heading))
+		                (let ((re (format org-complex-heading-regexp-format
+					                      (regexp-quote heading)))
+			                  (target
+			                   (if (not org-refile-use-outline-path) heading
+			                     (mapconcat
+				                  #'identity
+				                  (append
+				                   (pcase org-refile-use-outline-path
+				                     (`file (list
+                                             (and (buffer-file-name (buffer-base-buffer))
+                                                  (file-name-nondirectory
+                                                   (buffer-file-name (buffer-base-buffer))))))
+				                     (`full-file-path
+				                      (list (buffer-file-name
+					                         (buffer-base-buffer))))
+				                     (`buffer-name
+				                      (list (buffer-name
+					                         (buffer-base-buffer))))
+				                     (_ nil))
+				                   (mapcar (lambda (s) (replace-regexp-in-string
+						                                "/" "\\/" s nil t))
+					                       (org-get-outline-path t t)))
+				                  "/"))))
+			              (push (list target f re (org-refile-marker (point)))
+			                    tgs)))
+		              (when (= (point) begin)
+		                ;; Verification function has not moved point.
+		                (end-of-line)))))))
+	          (when org-refile-use-cache
+	            (org-refile-cache-put tgs (buffer-file-name) descre))
+	          (setq targets (append tgs targets))))))
+      (message "Getting targets...done")
+      (delete-dups (nreverse targets)))))
 
 (provide 'qk-denote)
 ;; qk-denote.el ends here.

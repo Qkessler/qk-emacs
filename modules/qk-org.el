@@ -51,7 +51,7 @@
   (setq
    org-directory "~/Documents/org_files"
    org-return-follows-link t
-   org-default-notes-file (concat qk-notes-directory "pages/refile.org")
+   org-default-notes-file (concat qk-notes-directory "refile.org")
    org-archive-location (concat qk-notes-directory "../archive/%s_archive::")
    org-src-fontify-natively t
    org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
@@ -72,9 +72,7 @@
    org-confirm-babel-evaluate nil
    org-log-repeat nil
    safe-local-variable-values '((eval org-content 2) (eval org-content 3))
-   org-refile-targets (quote ((nil :maxlevel . 5)
-                              (org-agenda-files :maxlevel . 5)
-                              (org-book-list-file :maxlevel . 2)))
+   org-refile-targets (quote ((org-agenda-files :todo . "PROJECT")))
    org-todo-keywords
    (quote ((sequence "TODO(t)" "|" "DONE(d)")
            (sequence "PROJECT(p)" "|" "DONE(d)" "CANCELLED(c)")
@@ -153,12 +151,6 @@
    'org-mode
    '(("^ *\\([-]\\) "
       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
-  (defun qk-org-refile-target-verify-function ()
-    "Function to be assigned to the `org-refile-target-verify-function'.
-Show only refile targets if they are tagged with PROJECT."
-    (string= (nth 2 (org-heading-components)) "PROJECT"))
-  (setq org-refile-target-verify-function 'qk-org-refile-target-verify-function)
 
   (defun qk-org-remove-inherited-tag-strings ()
     "Removes inherited tags from the headline-at-point's tag string.

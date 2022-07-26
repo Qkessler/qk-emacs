@@ -61,7 +61,7 @@
     (use-package mu4e-icalendar
       :demand t)
     (mu4e-icalendar-setup)
-    (setq gnus-icalendar-org-capture-file (concat qk-notes-directory "/pages/meetings.org"))
+    (setq gnus-icalendar-org-capture-file (concat qk-notes-directory "meetings.org"))
     (setq gnus-icalendar-org-capture-headline '("Meetings"))
     (gnus-icalendar-org-setup))
 

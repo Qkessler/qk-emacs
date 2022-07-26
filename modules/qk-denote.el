@@ -139,7 +139,8 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
 (add-hook! org-after-todo-state-change 'qk-denote--dailies-archive)
 
 (defvar qk-denote--rename-file-refile (concat qk-notes-directory "refile.org"))
-(defvar qk-denote--rename-file-block-list `(,qk-denote--rename-file-refile))
+(defvar qk-denote--rename-file-block-list
+  `(,qk-denote--rename-file-refile ,(concat qk-notes-directory "meetings.org")))
 (defun qk-denote--rename-file-on-tags-change ()
   "If the filetags property on the file changes, rename the current
 file following `denote''s title best practices, to contain the new filetags."

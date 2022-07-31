@@ -19,11 +19,20 @@
 ;; and literal matches are enabled.
 (use-package orderless
   :straight t
+  :hook (lsp-completion-mode . qk-lsp-mode-setup-completion)
   :init
   (setq
-   completion-styles '(orderless)
+   completion-styles '(orderless partial-completion basic)
    completion-category-defaults nil
-   completion-category-overrides '((file (styles . (partial-completion))))))
+   completion-category-overrides nil)
+  :config
+  (defun qk-orderless-dispatch-flex-first (_pattern index _total)
+    (and (eq index 0) 'orderless-flex))
+
+  (defun qk-lsp-mode-setup-completion ()
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless)))
+  (add-hook 'orderless-style-dispatchers #'qk-orderless-dispatch-flex-first nil 'local))
 
 ;; Marginalia are marks or annotations placed at the margin of the page of a book
 ;; or in this case helpful colorful annotations placed at the margin of the minibuffer
@@ -54,7 +63,13 @@
    corfu-auto-delay 0.25
    corfu-auto-prefix 1
    )
-  (global-corfu-mode))
+  (global-corfu-mode)
+  :config
+  (defun corfu-enable-in-minibuffer ()
+    "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+    (when (where-is-internal #'completion-at-point (list (current-local-map)))
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer))
 
 (use-package corfu-doc
   :straight t
@@ -78,7 +93,6 @@
   :straight t
   :hook
   ((text-mode prog-mode) . qk-update-completion-functions)
-  (lsp-completion-mode . d9-update-completions-lsp)
   :init
   (setq cape-dabbrev-min-length 3)
   :config
@@ -86,11 +100,7 @@
     "Add the file and dabbrev backends to `completion-at-point-functions'"
     (dolist (backend '(cape-file cape-dabbrev))
       (add-to-list 'completion-at-point-functions backend t)))
-  (defun d9-update-completions-lsp ()
-    (progn
-      (fset 'non-greedy-lsp (cape-capf-properties #'lsp-completion-at-point :exclusive 'no))
-      (setq-local completion-at-point-functions
-                  (cons #'non-greedy-lsp completion-at-point-functions)))))
+  (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
 
 ;; Use tempel instead of using yasnippet. It uses the local templates file, which I have
 ;; added to the `user-emacs-directory'. It's much more lightweight than yasnippet, and

@@ -62,6 +62,7 @@
     "t" '(qk-silently-open-todo-agenda :which-key "day/week agenda")
     "c" 'org-capture
     "s" 'org-save-all-org-buffers)
+  (:keymaps '(org-agenda-mode-map) "x" 'org-agenda-bulk-action)
   :config
   (defun qk-silently-open-agenda ()
     "Using the `with-silent-modifications' macro, open the agenda on the 'd' view

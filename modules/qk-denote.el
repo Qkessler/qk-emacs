@@ -15,14 +15,15 @@
    denote-allow-multi-word-keywords t
    denote-date-format nil
    denote-link-fontify-backlinks t
-   denote-dired-rename-expert nil)
+   denote-dired-rename-expert nil
+
+   denote-org-capture-specifiers "%l\n%i\n%?")
   :general
   (+general-global-notes
+    "c" 'qk-denote-org-capture
     "f" 'qk-denote-find-notes
     "i" 'denote-link
     "d" 'qk-denote-find-dailies)
-  ;; (+general-global-org
-  ;;   "a" 'qk-denote-open-agenda)
   :config
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
@@ -36,45 +37,18 @@
     (with-current-directory! denote-directory (call-interactively 'find-file))
     (cd denote-directory))
 
-  (defun qk-denote--get-projects-process-events-for-agenda (process event)
-    "Process the events for the rg program getting the `project' tagged files,
- for building the agenda."
-    (cond ((string= event "finished\n")
-           (qk-denote--get-projects-set-agenda)
-           (after! qk-org-agenda
-             (call-interactively 'qk-silently-open-agenda)))
-          ((string= event "exited abnormally with code 1\n")
-           (message "qk-denote: rg didn't find any files."))
-          ((string= event "exited abnormally with code 2\n")
-           (message
-            (format "qk-denote: error. Check the %s"
-                    qk-denote-get-projects-buffer)))))
-
-  (defun qk-denote-open-agenda ()
-    "Silently open agenda after"
-    (interactive)
-    (qk-denote--get-projects #'qk-denote--get-projects-process-events-for-agenda)))
-
-(use-package denote-org-capture
-  :init
-  (setq denote-org-capture-specifiers "%l\n%i\n%?")
-  :general
-  (+general-global-notes
-    "c" 'qk-denote-org-capture)
-  :config
   (defvar qk-denote-capture-template
     '(("n" "New note (with denote.el)" plain
-        (file denote-last-path)
-        #'denote-org-capture
-        :no-save t
-        :immediate-finish nil
-        :kill-buffer t
-        :jump-to-captured t)))
+       (file denote-last-path)
+       #'denote-org-capture
+       :no-save t
+       :immediate-finish nil
+       :kill-buffer t
+       :jump-to-captured t)))
 
   ;; I wonder whether this affects performance. This :config block is only run
   ;; when the `qk-denote-org-capture' is computed, and that's kind of my intention.
   (require 'org-capture)
-
   (defun qk-denote-org-capture ()
     "Org-capture with only the denote template."
     (interactive)

@@ -9,13 +9,10 @@
 ;; according to the theme that you want loaded.
 (setq qk-themes-index 1)
 
-;; (straight-use-package 'autothemer)
-;; (use-package gruvbox-theme
-;;   :straight t
-;;   :init (add-to-list 'qk-themes-list 'gruvbox-dark-medium))
-(use-package doom-themes
+(straight-use-package 'autothemer)
+(use-package gruvbox-theme
   :straight t
-  :init (add-to-list 'qk-themes-list 'doom-oceanic-next))
+  :init (add-to-list 'qk-themes-list 'gruvbox-dark-medium))
 
 ;; Light theme
 (add-to-list 'qk-themes-list 'modus-operandi)

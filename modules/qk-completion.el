@@ -19,20 +19,11 @@
 ;; and literal matches are enabled.
 (use-package orderless
   :straight t
-  :hook (lsp-completion-mode . qk-lsp-mode-setup-completion)
   :init
   (setq
    completion-styles '(orderless partial-completion basic)
    completion-category-defaults nil
-   completion-category-overrides nil)
-  :config
-  (defun qk-orderless-dispatch-flex-first (_pattern index _total)
-    (and (eq index 0) 'orderless-flex))
-
-  (defun qk-lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless)))
-  (add-hook 'orderless-style-dispatchers #'qk-orderless-dispatch-flex-first nil 'local))
+   completion-category-overrides nil))
 
 ;; Marginalia are marks or annotations placed at the margin of the page of a book
 ;; or in this case helpful colorful annotations placed at the margin of the minibuffer

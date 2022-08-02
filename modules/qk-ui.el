@@ -22,24 +22,16 @@
   :straight t
   :hook (after-init . doom-modeline-mode)
   :init
-  (defface egoge-display-time
-    '((((type x w32 mac))
-       (:inherit highlight))
-      (((type tty))
-       (:foreground "blue")))
-    "Face used to display the time in the mode line.")
   (setq
    doom-modeline-mu4e t
    doom-modeline-project-detection 'project
    doom-modeline-modal-icon nil
    doom-modeline-window-width-limit fill-column
    doom-modeline-buffer-file-name-style 'truncate-with-project
-   display-time-string-forms
-   '((propertize (concat " " 24-hours ":" minutes " ")
-                 'face 'egoge-display-time)))
-  :config
+   display-time-string-forms '((concat " " 24-hours ":" minutes " ")))
   (display-time-mode)
   (display-time-update))
+
 
 (provide 'qk-ui)
 ;; qk-ui.el ends here.

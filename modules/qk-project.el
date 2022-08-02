@@ -20,9 +20,7 @@
              :branch "master")
   :hook (harpoon-mode . auto-revert-mode)
   :init
-  (setq
-   harpoon-cache-file (concat no-littering-var-directory "harpoon/")
-   harpoon-without-project-function 'persp-scratch-buffer)
+  (setq harpoon-cache-file (concat no-littering-var-directory "harpoon/"))
   :general
   (+general-global-jump
     "c" 'harpoon-clear

@@ -1,23 +1,5 @@
 ;;; qk-window.el -*- lexical-binding: t; -*-
 
-;; The Perspective package provides multiple named workspaces (or "perspectives") in Emacs,
-;; similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on
-;; the Mac. Each perspective has its own buffer list and its own window layout,
-;; along with some other isolated niceties, like the xref ring.
-(use-package perspective
-  :straight t
-  :defer 1
-  :general
-  (+general-global-project
-    "s" 'persp-switch
-    "l" 'persp-switch-last)
-  :custom
-  (persp-sort 'created)
-  (persp-state-default-file (concat persp-save-dir "persp-save-state.el"))
-  (persp-initial-frame-name "base")
-  (persp-suppress-no-prefix-key-warning t)
-  :config (persp-mode))
-
 ;; Olivetti is a mode for better writting, putting the buffer in a similar way as Quip
 ;; does. We need to make sure that some of the modes that we enable for other modes,
 ;; i.e. Display number lines mode, needs to be disabled when olivetti-mode is turned on.

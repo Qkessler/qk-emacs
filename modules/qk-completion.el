@@ -84,6 +84,7 @@
   :straight t
   :hook
   ((text-mode prog-mode) . qk-update-completion-functions)
+  (lsp-completion-mode . qk-update-lsp-completion-functions)
   :init
   (setq cape-dabbrev-min-length 3)
   :config
@@ -91,7 +92,9 @@
     "Add the file and dabbrev backends to `completion-at-point-functions'"
     (dolist (backend '(cape-file cape-dabbrev))
       (add-to-list 'completion-at-point-functions backend t)))
-  (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+  (defun qk-update-lsp-completion-functions ()
+    "Bust the capf for `lsp-completion-mode'. To be used in a hook."
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))))
 
 ;; Use tempel instead of using yasnippet. It uses the local templates file, which I have
 ;; added to the `user-emacs-directory'. It's much more lightweight than yasnippet, and

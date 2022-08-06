@@ -23,7 +23,8 @@
     "c" 'qk-denote-org-capture
     "f" 'qk-denote-find-notes
     "i" 'denote-link
-    "d" 'qk-denote-find-dailies)
+    "d" 'qk-denote-find-dailies
+    "s" 'qk-denote-open-standup-agenda)
   :config
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
@@ -36,6 +37,17 @@
     (interactive)
     (with-current-directory! denote-directory (call-interactively 'find-file))
     (cd denote-directory))
+
+  (defun qk-denote-open-standup-agenda ()
+    "Open the entries that are present in the daily notes for yesterday
+and today. You'll find DONE items, but you'll benefit from having the scheduled
+times for the entries."
+    (interactive)
+    (let* ((yesterday (format-time-string "%F" (time-add nil (- (* 3600 24)))))
+           (today (format-time-string "%F"))
+           (org-agenda-files `(,(concat qk-notes-dailies-directory yesterday)
+                               ,(concat qk-notes-dailies-directory today))))
+      (qk-silently-open-todo-agenda)))
 
   (defvar qk-denote-capture-template
     '(("n" "New note (with denote.el)" plain

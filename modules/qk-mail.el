@@ -3,7 +3,7 @@
 ;; Adding mu4e configuration that was configured with mbsync.
 ;; We have installed it with the package manager, in order to make sure
 ;; that the mu4e version is in sync with the mu binary from my distro.
-(add-to-list 'load-path "/usr/local/Cellar/mu/1.6.10/share/emacs/site-lisp/mu/mu4e")
+(add-to-list 'load-path "/opt/homebrew/Cellar/mu/1.8.8/share/emacs/site-lisp/mu/mu4e/")
 
 (use-package mu4e
   :defer 2

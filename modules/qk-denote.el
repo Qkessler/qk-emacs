@@ -29,14 +29,14 @@
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
     (interactive)
-    (with-current-directory! qk-notes-dailies-directory (call-interactively 'find-file))
-    (cd qk-notes-dailies-directory))
+    (let ((default-directory qk-notes-dailies-directory))
+      (call-interactively 'find-file)))
 
   (defun qk-denote-find-notes ()
     "Find notes in the current `denote-directory'."
     (interactive)
-    (with-current-directory! denote-directory (call-interactively 'find-file))
-    (cd denote-directory))
+    (let ((default-directory denote-directory))
+      (call-interactively 'find-file)))
 
   (defun qk-denote-open-standup-agenda ()
     "Open the entries that are present in the daily notes for yesterday

@@ -20,6 +20,9 @@
   (general-nmap
     :keymaps '(mu4e-main-mode-map)
     "q" 'quit-window)
+  (general-nmap
+    :keymaps '(mu4e-view-mode-map)
+    "F" 'mu4e-compose-forward)
   (+general-global-applications
     "m" 'mu4e)
   (general-vmap
@@ -211,7 +214,7 @@
 
 (use-package message
   :custom
-  (sendmail-program "/usr/local/bin/msmtp")
+  (sendmail-program "/opt/homebrew/bin/msmtp")
   (message-sendmail-f-is-evil t)
   (message-sendmail-extra-arguments '("--read-envelope-from"))
   (send-mail-function 'smtpmail-send-it)

@@ -201,6 +201,11 @@ Note this does not change the inherited tags for a headline, just the tag string
       "* PROJECT %? :@home:REFILING:PROJECT:\n")
      ("b" "Book" entry (file org-book-list-file)
       "* %^{TITLE}\n:PROPERTIES:\n:ADDED: %<[%Y-%02m-%02d]>\n:END:%^{AUTHOR}p\n%^{URL}p\n")))
+  :general
+  (major-mode-definer
+    :major-modes '(org-mode)
+    :keymaps '(org-mode-map)
+    "h" 'qk-org-capture-here)
   :config
   (defun qk-org-capture-here ()
     "Org-capture in the current buffer, passing the 0 prefix

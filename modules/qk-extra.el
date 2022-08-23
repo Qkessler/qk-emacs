@@ -39,12 +39,17 @@
   (major-mode-definer
     :major-modes '(org-mode)
     :keymaps '(org-mode-map)
-    "p" (lambda () (interactive) (anki-editor-push-notes '(4)))))
+    "p" 'qk-push-anki-notes)
+  :config
+  (defun qk-push-anki-notes ()
+    "Push anki notes to the server under heading."
+    (interactive)
+    (anki-editor-push-notes '(4))))
 
 (after! org-capture
   (add-to-list 'org-capture-templates
-               '("a" "Anki basic" entry (file org-default-notes-file)
-                 (concat
+               `("a" "Anki basic" entry (file org-default-notes-file)
+                 ,(concat
                   "* %<%H:%M>   %^g\n:PROPERTIES:\n"
                   ":ANKI_NOTE_TYPE: Basic\n"
                   ":ANKI_DECK: %?\n"

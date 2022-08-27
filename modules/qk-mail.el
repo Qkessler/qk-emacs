@@ -24,7 +24,8 @@
     :keymaps '(mu4e-view-mode-map)
     "F" 'mu4e-compose-forward)
   (+general-global-applications
-    "m" 'mu4e)
+    "m" 'mu4e
+    "s" 'mu4e-headers-search)
   (general-vmap
     :keymaps '(mu4e-headers-mode-map)
     "!" 'mu4e-headers-mark-for-read)

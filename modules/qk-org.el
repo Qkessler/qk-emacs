@@ -27,7 +27,8 @@
     "l" 'ar-org-insert-link-dwim
     "s" 'org-schedule
     "t" 'org-todo
-    "r" 'org-refile)
+    "r" 'org-refile
+    "f" 'org-fold-hide-sublevels)
   (general-nmap
     :keymaps '(org-mode-map)
     "gx" 'org-return)

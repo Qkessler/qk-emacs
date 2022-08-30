@@ -80,7 +80,7 @@ killing and opening many LSP/eglot-powered buffers.")
    lsp-enable-file-watchers nil
    lsp-completion-show-detail nil
    lsp-completion-provider :none
-
+   lsp-enable-snippet nil
    lsp-enable-folding nil
    lsp-enable-text-document-color nil
    lsp-enable-on-type-formatting nil

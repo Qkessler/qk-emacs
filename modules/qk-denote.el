@@ -116,7 +116,7 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
 
 (defun qk-denote--dailies-archive ()
   "If moved to DONE state, move to the daily note for the day."
-  (when (and (string= org-state "DONE") (not (qk-denote--dailies-project-p)))
+  (when (and (seq-contains-p '("DONE" "CANCELLED") org-state) (not (qk-denote--dailies-project-p)))
     (let ((org-archive-location
            (concat qk-notes-dailies-directory (format-time-string "%F") "::")))
       (when (org-get-repeat)

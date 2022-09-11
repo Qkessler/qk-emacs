@@ -229,5 +229,28 @@ to the org-capture function."
              (org-export-format-code-default example-block info))
             "```")))
 
+(use-package org-refile
+  :hook (org-after-refile-insert 'qk-refile-save-project-path)
+  :config
+  (defun qk-org-toggle-properties ()
+    "Toggles visibility of :PROPERTIES: if point is on an org-mode header."
+    (interactive)
+    (save-excursion
+      (when (not (org-at-heading-p))
+        (org-previous-visible-heading 1))
+      (when (org-get-property-block)
+        (let* ((a (re-search-forward "\n\\:" nil t)))
+          (if (outline-invisible-p (point))
+              (outline-show-entry)
+            (org-cycle-hide-drawers 'all))))))
+
+  (defun qk-refile-save-project-path ()
+    "Store the project the header was refiled to into the header's properties."
+    (save-window-excursion
+      (org-refile-goto-last-stored)
+      (org-set-property "PROJECT_NAME" (cl-first org-refile-history))
+      (qk-org-toggle-properties)))
+  )
+
 (provide 'qk-org)
 ;; qk-org.el ends here.

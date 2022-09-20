@@ -168,20 +168,6 @@ Intended as :after advice for `delete-file'."
   (+general-global-applications
     "s" 'eww))
 
-(use-package tramp
-  :init
-  (setq
-   tramp-use-ssh-controlmaster-options 'nil
-   tramp-default-remote-shell "/bin/bash")
-  :config
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (connection-local-set-profile-variables
-   'remote-bash
-   '((shell-file-name . "/bin/bash")
-     (shell-command-switch . "-ic")))
-  (connection-local-set-profiles
-   '(:application tramp :protocol "ssh" :machine "*.aka.corp.amazon.com")
-   'remote-bash))
 
 (provide 'qk-defaults)
 ;; qk-defaults.el ends here.

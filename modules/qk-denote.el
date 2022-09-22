@@ -43,10 +43,17 @@
 and today. You'll find DONE items, but you'll benefit from having the scheduled
 times for the entries."
     (interactive)
-    (let* ((yesterday (format-time-string "%F" (time-add nil (- (* 3600 24)))))
+    (let* ((time-minus-one (time-add nil (- (* 3600 24))))
+           (day-of-week (format-time-string "%A" time-minus-one))
+           (sunday-p (string= day-of-week "Sunday"))
+           (yesterday-time (if sunday-p 
+                               (time-add (- (* 3600 24 2)) time-minus-one)
+                             time-minus-one))
+           (yesterday (format-time-string "%F" yesterday-time))
            (today (format-time-string "%F"))
            (org-agenda-files `(,(concat qk-notes-dailies-directory yesterday)
                                ,(concat qk-notes-dailies-directory today))))
+      (setq org-agenda-start-on-weekday (if sunday-p 5 1))
       (qk-silently-open-todo-agenda)))
 
   (defvar qk-denote-capture-template

@@ -13,7 +13,6 @@
     "s" 'tab-bar-switch-to-tab
     "l" 'qk-tab-bar-switch-to-last-tab)
   :config
-  (add-hook! server-after-make-frame (tab-rename qk-tab-bar-initial-tab-name))
   (defun qk-tab-bar-get-tab-name (tab)
     "Return the `name' property of TAB."
     (alist-get 'name tab))

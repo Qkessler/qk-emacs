@@ -46,7 +46,8 @@
   (+general-global-magit
     "s" 'magit-status
     "f" 'magit-find-file
-    "l" 'magit-log-buffer-file)
+    "l" 'magit-log-buffer-file
+    "d" 'magit-diff-buffer-file)
   :init 
   (setq
    git-commit-summary-max-length 50

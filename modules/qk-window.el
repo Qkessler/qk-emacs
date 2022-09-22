@@ -71,20 +71,10 @@
     "r" 'winner-redo)
   :config (winner-mode))
 
-;; Bufler is a command that lists the buffers per project, which is useful when some buffers
-;; that might have expensive hooks running (i.e. lsp) are active in the background, and you
-;; want to have a fresh go at Emacs.
-(use-package bufler
-  :straight t
+(use-package ibuffer
   :general
   (+general-global-buffer
-    "l" 'bufler-list)
-  (general-nmap
-    :keymaps '(bufler-list-mode-map)
-    "x" 'bufler-list-buffer-kill
-    "s" 'bufler-list-buffer-save
-    "RET" 'bufler-list-buffer-switch
-    "gr" 'bufler-list))
+    "l" 'ibuffer))
 
 (provide 'qk-window)
 ;; qk-window.el ends here.

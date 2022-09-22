@@ -1,7 +1,7 @@
 * qk-emacs
 qk-emacs is a pre-configured, evil-like, and modular configuration with sane defaults, and a preference for built-in packages in nature.
 
-// TODO: Photo of gruvbox theme with the configuration. Org-agenda and elisp code.
+[[file:images/gruvbox-config.png]]
 
 ** Keybinding scheme
 With the intention of keeping the user experience as consistent as possible, =qk-emacs= follows different principles across the modules, with the intention that irrespectively of the mode the user is in, the same keybindings will perform DWIM-like behaviours.

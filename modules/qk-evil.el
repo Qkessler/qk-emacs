@@ -89,6 +89,13 @@
     "t" 'org-agenda-todo
     "C" 'org-agenda-capture))
 
+(use-package dired
+  :general
+  (general-nmap
+    :keymaps '(dired-mode-map)
+    "l" 'dired-find-file
+    "h" 'dired-up-directory))
+
 (use-package evil-matchit
   :straight t
   :defer 3

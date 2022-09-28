@@ -208,9 +208,6 @@ server getting expensively restarted when reverting buffers."
            :dap-compilation "brazil-build"
            :dap-compilation-dir "${workspaceFolder}"))))
 
-(use-package dap-cpptools
-  :straight dap-mode
-  :config )
 ;; Swift and Objective-C lsp with sourcekit. It's the same lsp that Xcode uses.
 (after! lsp-mode
   (defvar lsp-sourcekit-executable "sourcekit-lsp"
@@ -234,6 +231,10 @@ server getting expensively restarted when reverting buffers."
 
 ;; Metals language server for Scala development. 
 (use-package lsp-metals
+  :straight t)
+
+;; Python language server, pyright.
+(use-package lsp-pyright
   :straight t)
 
 (provide 'qk-lsp)

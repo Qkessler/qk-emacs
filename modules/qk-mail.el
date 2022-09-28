@@ -55,9 +55,10 @@
      (:subject))
    mu4e-view-show-addresses t
    mu4e-display-update-status-in-modeline t
-   mu4e-view-show-images nil
+   mu4e-view-show-images t
    mu4e-context-policy 'pick-first
-   mu4e-compose-format-flowed t)
+   mu4e-compose-format-flowed t
+   )
   :config
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
   (defvar org-agenda-archives-mode nil)
@@ -248,6 +249,17 @@
            ;; " OR "
            ;; "g:uNread maildir:/UMU/Inbox to:enrique.kesslerm@um.es"
            )))
+
+;;; Org-mime
+
+;; Send messages in org-mode and html format.
+
+(use-package org-mime
+  :straight t
+  :hook
+  (message-send . org-mime-htmlize)
+  :init
+  (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
 
 (provide 'qk-mail)
 ;;; qk-mail.el ends here.

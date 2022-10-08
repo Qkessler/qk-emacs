@@ -67,5 +67,3 @@
 
 (provide 'qk-project)
 ;; qk-project.el ends here.
-
-

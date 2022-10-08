@@ -57,6 +57,7 @@
 (require 'qk-lang)
 (require 'qk-mail)
 (require 'qk-lsp)
+;; (require 'qk-eglot)
 (require 'qk-amz)
 (require 'qk-vterm)
 (require 'qk-extra)

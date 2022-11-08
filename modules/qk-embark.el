@@ -14,11 +14,7 @@
   ("M-o" 'embark-act)
   :config
   (after! consult
-    (add-hook! 'embark-collect-mode-hook 'consult-preview-at-point-mode)
-    (use-package embark-consult
-      :straight t
-      :demand t))
-
+    (add-hook! 'embark-collect-mode-hook 'consult-preview-at-point-mode))
   (add-to-list 'display-buffer-alist
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
@@ -31,6 +27,11 @@
   (setq
    wgrep-auto-save-buffer t
    wgrep-change-readonly-file t))
+
+(after! consult
+  (use-package embark-consult
+    :straight t
+    :demand t))
 
 (provide 'qk-embark)
 ;; qk-embark.el ends here.

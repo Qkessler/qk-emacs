@@ -12,7 +12,7 @@
   :init
   (setq
    vterm-max-scrollback 10000
-   vterm-timer-delay 0.01)
+   vterm-timer-delay nil)
   :config
   (add-hook! 'vterm-mode-hook
     (display-fill-column-indicator-mode -1)

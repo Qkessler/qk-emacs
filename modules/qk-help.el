@@ -36,10 +36,9 @@
   (defun qk-helpful-at-point-dwim ()
     "Show help for symbol at point. If `lsp-ui-doc-mode' is t, show the doc from the lsp."
     (interactive)
-    (if (bound-and-true-p lsp-ui-doc-mode)
-        (after! lsp-ui
-          (lsp-ui-doc-show))
-      (helpful-at-point)))
+    (cond ((bound-and-true-p lsp-ui-doc-mode) (lsp-ui-doc-show))
+          ((bound-and-true-p eglot--managed-mode) (eldoc-box-eglot-help-at-point))
+          (t (helpful-at-point))))
 
   (transient-define-prefix qk/help-transient ()
     "help commands that i use. a subset of c-h with others thrown in."

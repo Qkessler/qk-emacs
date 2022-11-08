@@ -19,6 +19,7 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(font . "Source Code Pro for Powerline-16") default-frame-alist)
 (push '(cursor . "#ebdbb2") default-frame-alist)
+(push '(undecorated . t) default-frame-alist)
 
 ;; Faster to disable these here (before they've been initialized)
 (setq tool-bar-mode nil

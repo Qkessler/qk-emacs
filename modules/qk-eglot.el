@@ -44,39 +44,80 @@ killing and opening many LSP/eglot-powered buffers.")
       (setq +lsp--optimization-init-p t))))
 
 (use-package eglot
-  :straight t
   :commands eglot eglot-ensure
-  :hook (eglot-managed-mode . +lsp-optimization-mode)
+  :hook
+  (eglot-managed-mode . +lsp-optimization-mode)
+  ((cc-mode
+    c++-mode
+    c-mode
+    objc-mode
+    swift-mode
+    java-mode
+    LaTeX-mode
+    python-mode
+    js-mode
+    json-mode
+    rustic-mode
+    kotlin-mode
+    scala-mode
+    ) . eglot-ensure)
   :init
   (setq eglot-sync-connect 1
         eglot-connect-timeout 10
         eglot-autoshutdown t
         eglot-send-changes-idle-time 0.5
         eglot-auto-display-help-buffer nil
-        eglot-stay-out-of '(flymake))
+        rustic-lsp-client 'eglot)
+  :general
+  (minor-mode-definer
+    :keymaps 'flymake-mode
+    "n" 'flymake-goto-next-error
+    "p" 'flymake-goto-prev-error)
+  (minor-mode-definer
+    :keymaps 'eglot--managed-mode
+    "a" 'eglot-code-actions
+    "r" 'eglot-rename
+    "R" 'xref-find-references
+    "f" 'eglot-format-buffer
+    "e" 'consult-flymake)
+  (general-nmap
+    :major-modes '(eglot--managed-mode)
+    "gi" 'eglot-find-implementation)
   :config
-  (require 'flycheck-eglot)
-
+  (add-hook! eglot-managed-mode (eldoc-mode -1))
   (defadvice! +lsp--defer-server-shutdown-a (fn &optional server)
-              "Defer server shutdown for a few seconds.
+    "Defer server shutdown for a few seconds.
 This gives the user a chance to open other project files before the server is
 auto-killed (which is a potentially expensive process). It also prevents the
 server getting expensively restarted when reverting buffers."
-              :around #'eglot--managed-mode
-              (letf! (defun eglot-shutdown (server)
-                       (if (or (null +lsp-defer-shutdown)
-                               (eq +lsp-defer-shutdown 0))
-                           (prog1 (funcall eglot-shutdown server)
-                             (+lsp-optimization-mode -1))
-                         (run-at-time
-                          (if (numberp +lsp-defer-shutdown) +lsp-defer-shutdown 3)
-                          nil (lambda (server)
-                                (unless (eglot--managed-buffers server)
-                                  (prog1 (funcall eglot-shutdown server)
-                                    (+lsp-optimization-mode -1))))
-                          server)))
-                     (funcall fn server))))
+    :around #'eglot--managed-mode
+    (letf! (defun eglot-shutdown (server)
+             (if (or (null +lsp-defer-shutdown)
+                     (eq +lsp-defer-shutdown 0))
+                 (prog1 (funcall eglot-shutdown server)
+                   (+lsp-optimization-mode -1))
+               (run-at-time
+                (if (numberp +lsp-defer-shutdown) +lsp-defer-shutdown 3)
+                nil (lambda (server)
+                      (unless (eglot--managed-buffers server)
+                        (prog1 (funcall eglot-shutdown server)
+                          (+lsp-optimization-mode -1))))
+                server)))
+      (funcall fn server)))
+  (add-to-list 'eglot-server-programs
+               '(java-mode
+                 . ("jdtls"
+                    "-noverify"
+                    "--illegal-access=warn"
+                    "-Xmx8G"
+                    "-XX:+UseG1GC"
+                    "-XX:+UseStringDeduplication"
+                    "-javaagent:/Users/enrikes/.lombok/lombok.jar")))
+  (add-to-list 'eglot-server-programs '(json-mode . ("vscode-json-languageserver" "--stdio"))))
+
+(use-package eldoc-box
+  :straight t
+  :commands eldoc-box-eglot-help-at-point)
 
 (provide 'qk-eglot)
 ;;; qk-eglot.el ends here.
-

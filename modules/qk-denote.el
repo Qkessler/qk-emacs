@@ -25,6 +25,8 @@
     "i" 'denote-link
     "d" 'qk-denote-find-dailies
     "s" 'qk-denote-open-standup-agenda)
+  (+general-global-org
+    "a" 'qk-denote--get-projects)
   :config
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
@@ -80,6 +82,7 @@ times for the entries."
 (defvar qk-denote-get-projects--lock t)
 (defun qk-denote--get-projects (&rest _)
   "Run `rg' process to get the projects that have the file tag."
+  (interactive)
   (when qk-denote-get-projects--lock
     (setq qk-denote-get-projects--lock nil)
     (set-process-sentinel
@@ -88,11 +91,13 @@ times for the entries."
       qk-denote-get-projects-buffer
       qk-rg-command "-l" qk-denote-get-projects-pattern denote-directory)
      #'qk-denote--get-projects-process-events)))
+;; (add-hook! after-init 'qk-denote--get-projects)
 
 (defun qk-denote--get-projects-process-events (process event)
   "Process the events for the rg program getting the `project' tagged files."
   (cond ((string= event "finished\n")
-         (qk-denote--get-projects-set-agenda))
+         (qk-denote--get-projects-set-agenda)
+         (qk-silently-open-agenda))
         ((string= event "exited abnormally with code 1\n")
          (message "qk-denote: rg didn't find any files."))
         ((string= event "exited abnormally with code 2\n")
@@ -199,7 +204,7 @@ tasks."
          (string-prefix-p
           (expand-file-name (file-name-as-directory qk-notes-directory))
           (file-name-directory buffer-file-name))))
-  (add-hook! org-agenda-finalize 'qk-denote--get-projects)
+  ;; (add-hook! org-agenda-finalize 'qk-denote--get-projects)
   (add-hook! (find-file before-save) 'vulpea-project-update-tag))
 
 (after! org-refile

@@ -26,7 +26,7 @@
     "d" 'qk-denote-find-dailies
     "s" 'qk-denote-open-standup-agenda)
   (+general-global-org
-    "a" 'qk-denote--get-projects)
+    "a" 'qk-denote-get-projects)
   :config
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
@@ -80,8 +80,17 @@ times for the entries."
 (defvar qk-denote-get-projects-buffer "*qk-denote-get-projects*")
 (defvar qk-denote-get-projects-pattern "\\+filetags: .*project")
 (defvar qk-denote-get-projects--lock t)
-(defun qk-denote--get-projects (&rest _)
-  "Run `rg' process to get the projects that have the file tag."
+(defun qk-denote-get-projects (&rest _)
+  "Run `rg' process to get the projects that have the file tag,
+and compose the org-agenda with those files.
+
+You can override the `qk-denote--get-projects-process-events'
+to update the behaviour of this high level function. It returns
+the list of files on the `denote-directory' variable that contain
+the `:project:' tag.
+
+This could easily be extended to be able to abstract the search,
+and build lists of files with patterns."
   (interactive)
   (when qk-denote-get-projects--lock
     (setq qk-denote-get-projects--lock nil)
@@ -91,7 +100,6 @@ times for the entries."
       qk-denote-get-projects-buffer
       qk-rg-command "-l" qk-denote-get-projects-pattern denote-directory)
      #'qk-denote--get-projects-process-events)))
-;; (add-hook! after-init 'qk-denote--get-projects)
 
 (defun qk-denote--get-projects-process-events (process event)
   "Process the events for the rg program getting the `project' tagged files."
@@ -204,7 +212,6 @@ tasks."
          (string-prefix-p
           (expand-file-name (file-name-as-directory qk-notes-directory))
           (file-name-directory buffer-file-name))))
-  ;; (add-hook! org-agenda-finalize 'qk-denote--get-projects)
   (add-hook! (find-file before-save) 'vulpea-project-update-tag))
 
 (after! org-refile

@@ -109,14 +109,14 @@ server getting expensively restarted when reverting buffers."
                 server)))
       (funcall fn server)))
   (add-to-list 'eglot-server-programs
-               '(java-mode
+               `(java-mode
                  . ("jdtls"
                     "-noverify"
                     "--illegal-access=warn"
                     "-Xmx8G"
                     "-XX:+UseG1GC"
                     "-XX:+UseStringDeduplication"
-                    "-javaagent:/Users/enrikes/.lombok/lombok.jar"))))
+                    ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") ".lombok/lombok.jar"))))
 
 (use-package eldoc-box
   :straight t

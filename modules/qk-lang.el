@@ -204,8 +204,7 @@
 (use-package apheleia
   :straight t
   :hook
-  (rustic-mode . apheleia-mode)
-  (kotlin-mode . apheleia-mode))
+  (rustic-mode . apheleia-mode))
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

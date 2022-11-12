@@ -57,17 +57,21 @@ killing and opening many LSP/eglot-powered buffers.")
     python-mode
     js-mode
     json-mode
+    yaml-mode
     rustic-mode
     kotlin-mode
     scala-mode
     ) . eglot-ensure)
   :init
-  (setq eglot-sync-connect 1
-        eglot-connect-timeout 10
-        eglot-autoshutdown t
-        eglot-send-changes-idle-time 0.5
-        eglot-auto-display-help-buffer nil
-        rustic-lsp-client 'eglot)
+  (setq
+   eglot-sync-connect 1
+   eglot-connect-timeout 10
+   eglot-autoshutdown t
+   eglot-send-changes-idle-time 0.5
+   eglot-auto-display-help-buffer nil
+   rustic-lsp-client 'eglot
+   eglot-workspace-configuration
+   '(:vscode-json-language-server (:provideFormatter t)))
   :general
   (minor-mode-definer
     :keymaps 'flymake-mode
@@ -112,8 +116,7 @@ server getting expensively restarted when reverting buffers."
                     "-Xmx8G"
                     "-XX:+UseG1GC"
                     "-XX:+UseStringDeduplication"
-                    "-javaagent:/Users/enrikes/.lombok/lombok.jar")))
-  (add-to-list 'eglot-server-programs '(json-mode . ("vscode-json-languageserver" "--stdio"))))
+                    "-javaagent:/Users/enrikes/.lombok/lombok.jar"))))
 
 (use-package eldoc-box
   :straight t

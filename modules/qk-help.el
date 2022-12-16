@@ -14,6 +14,9 @@
   (global-definer
     "h" 'qk/help-transient)
   (general-nmap
+    :keymaps 'eglot-mode-map
+    "K" 'qk-helpful-at-point-dwim)
+  (general-nmap
     :keymaps '(helpful-mode-map)
     "gx" 'push-button)
   :config
@@ -56,9 +59,6 @@
       ]
      ]
     [
-     ["dwim"
-      ("." "at point   " qk-helpful-at-point-dwim)
-      ]
      ["info manuals"
       ("i" "info" info)
       ("4" "other window " info-other-window)

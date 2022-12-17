@@ -14,11 +14,10 @@
   (global-definer
     "h" 'qk/help-transient)
   (general-nmap
-    :keymaps 'eglot-mode-map
-    "K" 'qk-helpful-at-point-dwim)
-  (general-nmap
     :keymaps '(helpful-mode-map)
     "gx" 'push-button)
+  (general-nmap
+    "K" 'qk-helpful-at-point-dwim)
   :config
   (defun helpful--autoloaded-p (sym buf)
     "Return non-nil if function SYM is autoloaded."

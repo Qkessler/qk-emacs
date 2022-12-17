@@ -101,5 +101,16 @@
     "f" 'emacs-everywhere-finish
     "c" '(emacs-everywhere-abort :which-key "emacs-everywhere-abort")))
 
+(use-package chatgpt
+  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+  :init
+  (setq
+   chatgpt-repo-path "~/.emacs.d/straight/repos/ChatGPT.el/"
+   python-interpreter "python3")
+  :general
+  (major-mode-definer
+    :major-modes '(prog-mode text-mode org-mode)
+    "q" 'chatgpt-query))
+
 (provide 'qk-extra)
 ;; qk-extra.el ends here. 

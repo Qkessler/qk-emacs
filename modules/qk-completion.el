@@ -1,6 +1,5 @@
 ;;; qk-completion.el -*- lexical-binding: t; -*-
 
-
 ;; Vertico provides a minimalistic vertical completion UI, which is based on the default
 ;; completion system. By reusing the default system, Vertico achieves full compatibility
 ;; with built-in Emacs commands and completion tables. Vertico is pretty bare-bone and
@@ -36,7 +35,8 @@
   (marginalia-mode))
 
 (use-package corfu
-  :straight t
+  :straight (:host github 
+             :repo "minad/corfu")
   :general
   (:keymaps
    '(corfu-map)
@@ -62,15 +62,17 @@
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer))
 
-(use-package corfu-doc
-  :straight t
-  :hook (corfu-mode . corfu-doc-mode)
+(use-package corfu-popupinfo
+  :straight (:host github 
+             :repo "minad/corfu"
+             :files ("extensions/corfu-popupinfo.el"))
+  :hook (corfu-mode . corfu-popupinfo-mode)
   :init
-  (setq corfu-doc-delay 1)
+  (setq corfu-popupinfo-delay 1)
   :general
   (:keymaps
    'corfu-map
-   "C-h" 'corfu-doc-toggle))
+   "C-h" 'corfu-popupinfo-toggle))
 
 (after! corfu
   (setq kind-icon-default-face 'corfu-default)

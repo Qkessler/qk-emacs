@@ -121,11 +121,12 @@ server getting expensively restarted when reverting buffers."
 (use-package eldoc-box
   :straight t
   :commands eldoc-box-eglot-help-at-point
-  :hook (eglot--managed-mode . qk-add-eglot-keys)
+  :hook (eglot-managed-mode . qk-add-eglot-keys)
   :config
   (defun qk-add-eglot-keys ()
     "Add eglot bindings after a buffer has been managed."
     (general-nmap
+      :keymaps 'eglot-mode-map
       "K" 'eldoc-box-eglot-help-at-point)))
 
 

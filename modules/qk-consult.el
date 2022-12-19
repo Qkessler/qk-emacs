@@ -10,8 +10,9 @@
   :general
   (+general-global-file
     "r" 'consult-recent-file)
-  (+general-global-search
-    "l" 'consult-line)
+  (general-nmap
+    :prefix "SPC"
+    "s" 'consult-line)
   (+general-global-buffer
     "b" 'consult-buffer
     "o" '(consult-buffer-other-window :which-key "other-window"))

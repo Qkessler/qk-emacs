@@ -116,7 +116,9 @@ server getting expensively restarted when reverting buffers."
                     "-Xmx8G"
                     "-XX:+UseG1GC"
                     "-XX:+UseStringDeduplication"
-                    ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar")))))
+                    ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar"))))
+  (add-to-list 'eglot-server-programs
+               `(toml-ts-mode . ("taplo" "lsp" "stdio"))))
 
 (use-package eldoc-box
   :straight t

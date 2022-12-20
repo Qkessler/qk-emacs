@@ -79,5 +79,42 @@
          ;; Replace built in completion of sessions with `consult'
          ([remap detached-open-session] . detached-consult-session)))
 
+(defun qk-run-dyncomp (&optional command)
+  "Run `dyncomp' CLI with `COMMAND' passed as argument.
+If `COMMAND' is not provided, the user will be prompted to enter a command.
+The `dyncomp' command and its argument will be passed to `compile' to be run.
+The `command' argument is added to the `compile-history' list.
+The current directory is set to the root directory of the current project before running `dyncomp'."
+  (interactive)
+  (with-current-directory! (expand-file-name (project-root (project-current)))
+    (let* ((argument-command (or command (consult--read compile-history)))
+           (dyncomp-command (concat "dyncomp " argument-command)))
+      (compile dyncomp-command)
+      (add-to-list 'compile-history argument-command))))
+
+(use-package consult
+  :general
+  (major-mode-definer
+    :keymaps '(prog-mode-map)
+    :major-modes '(prog-mode)
+    "r" 'qk-dyncomp-run 
+    "t" 'qk-dyncomp-test
+    "C" 'qk-consult-compile)
+  :config
+  (defun qk-consult-compile (&optional command)
+    "Run compile commands with consult history completion."
+    (interactive)
+    (compile (or command (consult--read compile-history))))
+
+  (defun qk-dyncomp-run ()
+    "Run `dyncomp run' using the `qk-run-dyncomp' function."
+    (interactive)
+    (qk-run-dyncomp "run"))
+
+  (defun qk-dyncomp-test ()
+    "Run `dyncomp run' using the `qk-run-dyncomp' function."
+    (interactive)
+    (qk-run-dyncomp "test")))
+
 (provide 'qk-project)
 ;; qk-project.el ends here.

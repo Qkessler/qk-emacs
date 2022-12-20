@@ -15,12 +15,6 @@
   (let ((shell-command-switch "-ic"))
     ad-do-it))
 
-;; Compile command using consult
-(defun qk-consult-compile ()
-  "Run compile commands with consult history completion."
-  (interactive)
-  (compile (consult--read compile-history)))
-
 ;; Tree-sitter is a parser generator tool and an incremental parsing library.
 ;; It can build a concrete syntax tree for a source file and efficiently update the
 ;; syntax tree as the source file is edited. It could be the next generation of sintax

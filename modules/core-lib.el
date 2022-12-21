@@ -836,5 +836,10 @@ Restore the current buffer to its original directory on exit."
   :straight t
   :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)
 
+(setq safe-local-variable-values
+      '((eval defun file-symlink-p
+              (FILENAME)
+              "Avoid resolving symlinks." nil)))
+
 (provide 'core-lib)
 ;;; core-lib.el ends here

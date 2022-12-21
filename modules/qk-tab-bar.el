@@ -2,17 +2,17 @@
 
 (defvar qk-tab-bar-initial-tab-name "base")
 (use-package tab-bar
+  :defer 2
   :init
   (setq
    tab-bar-show nil
-   harpoon-without-project-function 'qk-tab-bar-get-current-tab-name
    )
-  (tab-bar-mode)
   :general
   (+general-global-project
     "s" 'tab-bar-switch-to-tab
     "l" 'qk-tab-bar-switch-to-last-tab)
   :config
+  (tab-bar-mode)
   (defun qk-tab-bar-get-tab-name (tab)
     "Return the `name' property of TAB."
     (alist-get 'name tab))
@@ -35,3 +35,4 @@
   (advice-add 'tab-bar-switch-to-tab :before #'qk-tab-bar--set-last-tab))
 
 (provide 'qk-tab-bar)
+;; qk-tab-bar.el ends here.

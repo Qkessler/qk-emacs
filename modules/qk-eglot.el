@@ -77,6 +77,9 @@ killing and opening many LSP/eglot-powered buffers.")
     :keymaps 'flymake-mode
     "n" 'flymake-goto-next-error
     "p" 'flymake-goto-prev-error)
+  (:keymaps 'flymake-mode-map
+    "M-n" 'flymake-goto-next-error
+    "M-p" 'flymake-goto-prev-error)
   (minor-mode-definer
     :keymaps 'eglot--managed-mode
     "a" 'eglot-code-actions
@@ -86,7 +89,8 @@ killing and opening many LSP/eglot-powered buffers.")
     "e" 'consult-flymake)
   (general-nmap
     :major-modes '(eglot--managed-mode)
-    "gi" 'eglot-find-implementation)
+    "gi" 'eglot-find-implementation
+    "gr" 'xref-find-references)
   :config
   (add-hook! eglot-managed-mode (eldoc-mode -1))
   (defadvice! +lsp--defer-server-shutdown-a (fn &optional server)
@@ -130,7 +134,6 @@ server getting expensively restarted when reverting buffers."
     (general-nmap
       :keymaps 'eglot-mode-map
       "K" 'eldoc-box-eglot-help-at-point)))
-
 
 (provide 'qk-eglot)
 ;;; qk-eglot.el ends here.

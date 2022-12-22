@@ -1,7 +1,6 @@
 ;;; qk-evil.el  -*- lexical-binding: t; -*-
 
-(use-package evil
-  :straight t
+(elpaca-use-package evil
   :demand t
   :init 
   (setq
@@ -33,11 +32,9 @@
      minibuffer-local-isearch-map)
    [escape] 'minibuffer-keyboard-quit)
   :config
-  ;; stop copying each visual state move to the clipboard:
-  ;; https://github.com/emacs-evil/evil/issues/336
-  ;; grokked from:
-  ;; http://stackoverflow.com/questions/15873346/elisp-rename-macro
+  ;; Stop copying each visual state move to the clipboard.
   (advice-add #'evil-visual-update-x-selection :override #'ignore)
+  (fset 'evil-redirect-digit-argument 'ignore)
 
   (evil-set-initial-state 'messages-buffer-mode 'normal)
   (evil-set-initial-state 'magit-status-mode 'normal)
@@ -46,34 +43,112 @@
   (evil-set-initial-state 'org-agenda-mode 'motion)
   (evil-mode t))
 
-(use-package evil-collection
-  :straight t
-  :demand t
+(elpaca-use-package evil-collection
+  :commands evil-collection-init
   :init
   (setq
    evil-collection-outline-bind-tab-p nil
-   evil-collection-setup-minibuffer t)
-  :config (evil-collection-init))
+   evil-collection-setup-minibuffer t))
 
-(fset 'evil-redirect-digit-argument 'ignore)
+(defvar +evil-collection-disabled-list
+  '(anaconda-mode buff-menu calc comint company custom eldoc elisp-mode
+    ert free-keys helm help indent image kotlin-mode outline replace
+    shortdoc simple slime lispy)
+  "A list of `evil-collection' modules to ignore. See the definition of this
+variable for an explanation of the defaults (in comments). See
+`evil-collection-mode-list' for a list of available options.")
 
-(use-package evil-commentary
-  :straight t
-  :defer 5
-  :config (evil-commentary-mode))
+(defvar evil-collection-mode-list
+  `(
+    2048-game ag alchemist anaconda-mode apropos arc-mode atomic-chrome
+    auto-package-update beginend bluetooth bm bookmark
+    (buff-menu "buff-menu") calc calendar cider cmake-mode comint
+    company compile consult corfu (custom cus-edit) cus-theme daemons
+    dashboard deadgrep debbugs debug devdocs dictionary diff-hl
+    diff-mode dired dired-sidebar disk-usage doc-view docker ebib ebuku
+    edbi edebug ediff eglot explain-pause-mode elfeed eldoc elisp-mode
+    elisp-refs elisp-slime-nav embark emms epa ert eshell eval-sexp-fu
+    evil-mc eww ,@(if (> emacs-major-version 28) '(emoji)) fanyi finder
+    flycheck flymake forge free-keys geiser ggtags git-timemachine gnus
+    go-mode grep guix hackernews helm help helpful hg-histedit hungry-delete
+    ibuffer image image-dired image+ imenu imenu-list
+    (indent "indent") indium info ivy js2-mode leetcode lispy log-edit
+    log-view lsp-ui-imenu lua-mode kotlin-mode macrostep man
+    (magit magit-repos magit-submodule) magit-section magit-todos
+    markdown-mode monky mpc mu4e mu4e-conversation neotree newsticker
+    notmuch nov omnisharp org org-present org-roam osx-dictionary outline
+    p4 (package-menu package) pass (pdf pdf-tools) popup proced prodigy
+    profiler python quickrun racer racket-describe realgud reftex replace
+    restclient rg ripgrep rjsx-mode robe rtags ruby-mode scheme scroll-lock
+    selectrum sh-script ,@(if (> emacs-major-version 27) '(shortdoc))
+    simple simple-mpc slime sly snake so-long speedbar tablist tar-mode
+    telega (term term ansi-term multi-term) tetris thread tide timer-list
+    transmission trashed tuareg typescript-mode vc-annotate vc-dir vc-git
+    vdiff vertico view vlf vterm vundo w3m wdired wgrep which-key woman
+    xref xwidget yaml-mode youtube-dl zmusic (ztree ztree-diff)))
 
-(use-package evil-org
-  :straight t
-  :hook (org-mode . evil-org-mode)
-  :init (setq evil-org-special-o/O '(table-row item))
-  :config
-  (evil-org-set-key-theme '(textobjects insert additional shift)))
+(defun +evil-collection-init (module &optional disabled-list)
+  "Initialize evil-collection-MODULE.
 
-(use-package org-agenda
-  :general
-  (:keymaps '(org-agenda-mode-map)
-   "TAB" nil
-   "<tab>" nil)
+Unlike `evil-collection-init', this respects `+evil-collection-disabled-list',
+and complains if a module is loaded too early (during startup)."
+  (unless (memq (or (car-safe module) module) disabled-list)
+    (doom-log "editor:evil: loading evil-collection-%s %s"
+              (or (car-safe module) module)
+              (if doom-init-time "" "(too early!)"))
+    (with-demoted-errors "evil-collection error: %s"
+      (evil-collection-init (list module)))))
+
+(after! evil-collection
+  (mapc #'+evil-collection-init '(comint custom)))
+
+(after! evil
+  (add-transient-hook! 'help-mode
+    (+evil-collection-init 'help))
+  (add-transient-hook! 'Buffer-menu-mode
+    (+evil-collection-init '(buff-menu "buff-menu")))
+  (add-transient-hook! 'calc-mode
+    (+evil-collection-init 'calc))
+  (add-transient-hook! 'image-mode
+    (+evil-collection-init 'image))
+  (add-transient-hook! 'emacs-lisp-mode
+    (+evil-collection-init 'elisp-mode))
+  (add-transient-hook! 'occur-mode
+    (+evil-collection-init 'replace))
+  (add-transient-hook! 'indent-rigidly
+    (+evil-collection-init '(indent "indent")))
+  (add-transient-hook! 'minibuffer-setup-hook
+    (when evil-collection-setup-minibuffer
+      (+evil-collection-init 'minibuffer)
+      (evil-collection-minibuffer-insert)))
+  (add-transient-hook! 'process-menu-mode
+    (+evil-collection-init '(process-menu simple)))
+  (add-transient-hook! 'shortdoc-mode
+    (+evil-collection-init 'shortdoc))
+  (add-transient-hook! 'tabulated-list-mode
+    (+evil-collection-init 'tabulated-list))
+  (add-transient-hook! 'tab-bar-mode
+    (+evil-collection-init 'tab-bar))
+
+  (dolist (mode evil-collection-mode-list)
+    (dolist (req (or (cdr-safe mode) (list mode)))
+      (with-eval-after-load req
+        (+evil-collection-init mode +evil-collection-disabled-list)))))
+
+(elpaca-use-package evil-commentary
+ :hook (doom-first-input . evil-commentary-mode))
+
+(elpaca-use-package evil-org
+ :hook (org-mode . evil-org-mode)
+ :init (setq evil-org-special-o/O '(table-row item))
+ :config
+ (evil-org-set-key-theme '(textobjects insert additional shift)))
+
+(after! org-agenda
+  (general-def
+    :keymaps 'org-agenda-mode-map
+    "TAB" nil
+    "<tab>" nil)
   (general-mmap
     :keymaps '(org-agenda-mode-map)
     "s" 'org-agenda-schedule
@@ -89,36 +164,28 @@
     "t" 'org-agenda-todo
     "C" 'org-agenda-capture))
 
-(use-package dired
-  :general
+(after! dired
   (general-nmap
     :keymaps '(dired-mode-map)
     "l" 'dired-find-file
     "h" 'dired-up-directory))
 
-(use-package evil-matchit
-  :straight t
-  :defer 3
-  :config
-  (global-evil-matchit-mode t))
+(elpaca-use-package evil-matchit
+ :hook (doom-first-input . global-evil-matchit-mode))
 
-(use-package avy
-  :straight t
-  :general
-  (general-mmap
-    "gl" 'avy-goto-line))
+(elpaca-use-package avy
+ :general
+ (general-mmap
+   "gl" 'avy-goto-line))
 
-(use-package evil-surround
-  :straight t
-  :defer 3
-  :config (global-evil-surround-mode t))
+(elpaca-use-package evil-surround
+ :hook (doom-first-input . global-evil-surround-mode))
 
-(use-package evil-numbers
-  :straight t
-  :general
-  (general-nmap
-    "C-a" 'evil-numbers/inc-at-pt
-    "C-x" 'evil-numbers/dec-at-pt))
+(elpaca-use-package evil-numbers
+ :general
+ (general-nmap
+   "C-a" 'evil-numbers/inc-at-pt
+   "C-x" 'evil-numbers/dec-at-pt))
 
 (provide 'qk-evil)
 ;;; qk-evil.el ends here.

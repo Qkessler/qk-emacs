@@ -22,7 +22,8 @@
     "dm" 'helpful-macro
     "dk" 'helpful-key
     "e" 'info-emacs-manual
-    "i" 'info)
+    "i" 'info
+    "m" 'describe-mode)
   :config
   (defun helpful--autoloaded-p (sym buf)
     "Return non-nil if function SYM is autoloaded."

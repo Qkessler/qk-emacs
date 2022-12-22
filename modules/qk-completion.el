@@ -4,11 +4,10 @@
 ;; completion system. By reusing the default system, Vertico achieves full compatibility
 ;; with built-in Emacs commands and completion tables. Vertico is pretty bare-bone and
 ;; comes with only a minimal set of commands.
-(use-package vertico
-  :straight t
-  :init
-  (setq vertico-cycle t)
-  (vertico-mode))
+(elpaca-use-package vertico
+ :hook (doom-first-buffer . vertico-mode)
+ :init
+ (setq vertico-cycle t))
 
 ;; Orderless is one of the same emacs packages that works modularly, using the basic emacs
 ;; API. This package provides an orderless completion style that divides the pattern
@@ -16,8 +15,7 @@
 ;; in any order. Each component can match in any one of several ways: literally, as a regexp,
 ;; as an initialism, in the flex style, or as multiple word prefixes. By default, regexp
 ;; and literal matches are enabled.
-(use-package orderless
-  :straight t
+(elpaca-use-package orderless
   :init
   (setq
    completion-styles '(orderless partial-completion basic)
@@ -29,14 +27,11 @@
 ;; for your completion candidates. Marginalia can only add annotations to be displayed
 ;; with the completion candidates. It cannot modify the appearance of the candidates themselves,
 ;; which are shown as supplied by the original commands.
-(use-package marginalia
-  :straight t
-  :init
-  (marginalia-mode))
+(elpaca-use-package marginalia
+                    :hook (doom-first-buffer . marginalia-mode))
 
-(use-package corfu
-  :straight (:host github 
-             :repo "minad/corfu")
+(elpaca-use-package (corfu :host github :repo "minad/corfu")
+ :hook (doom-first-input . global-corfu-mode)
   :general
   (:keymaps
    '(corfu-map)
@@ -54,7 +49,6 @@
    corfu-auto-delay 0.25
    corfu-auto-prefix 1
    )
-  (global-corfu-mode)
   :config
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
@@ -62,28 +56,30 @@
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer))
 
-(use-package corfu-popupinfo
-  :straight (:host github 
-             :repo "minad/corfu"
-             :files ("extensions/corfu-popupinfo.el"))
-  :hook (corfu-mode . corfu-popupinfo-mode)
-  :init
-  (setq corfu-popupinfo-delay 1)
-  :general
-  (:keymaps
-   'corfu-map
-   "C-h" 'corfu-popupinfo-toggle))
+;; (elpaca-use-package (corfu-popupinfo
+;;                      :host github 
+;;                      :repo "minad/corfu"
+;;                      :main "extensions/corfu-popupinfo.el")
+;;   :hook (corfu-mode . corfu-popupinfo-mode)
+;;   :init
+;;   (setq corfu-popupinfo-delay 1)
+;;   :general
+;;   (:keymaps
+;;    'corfu-map
+;;    "C-h" 'corfu-popupinfo-toggle))
+
+(elpaca-use-package kind-icon
+ :commands kind-icon-margin-formatter
+ :init
+ (setq kind-icon-default-face 'corfu-default))
 
 (after! corfu
-  (setq kind-icon-default-face 'corfu-default)
-  (straight-use-package 'kind-icon)
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;; Cape provides a bunch of Completion At Point Extensions which can be used in
 ;; combination with my Corfu completion UI or the default completion UI. The completion
 ;; backends used by completion-at-point are so called completion-at-point-functions (Capfs).
-(use-package cape
-  :straight t
+(elpaca-use-package cape
   :hook
   ((text-mode prog-mode) . qk-update-completion-functions)
   (lsp-completion-mode . qk-update-lsp-completion-functions)
@@ -101,30 +97,20 @@
 ;; Use tempel instead of using yasnippet. It uses the local templates file, which I have
 ;; added to the `user-emacs-directory'. It's much more lightweight than yasnippet, and
 ;; we can always add more snippets if we need to.
-(use-package tempel
-  :straight t
+(elpaca-use-package tempel
   :hook
-  (prog-mode . tempel-setup-capf)
-  (prog-mode . tempel-abbrev-mode)
+  (prog-mode . (tempel-setup-capf tempel-abbrev-mode))
   (text-mode . tempel-setup-capf)
   :general
   (:keymaps
    '(tempel-map)
    "C-n" 'tempel-next
    "C-p" 'tempel-previous)
-  :custom-face
-  (tempel-field ((t nil)))
   :config
   (defun tempel-setup-capf ()
-    ;; Add the Tempel Capf to `completion-at-point-functions'. `tempel-expand'
-    ;; only triggers on exact matches. Alternatively use `tempel-complete' if
-    ;; you want to see all matches, but then Tempel will probably trigger too
-    ;; often when you don't expect it.
-    ;; NOTE: We add `tempel-expand' *before* the main programming mode Capf,
-    ;; such that it will be tried first.
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      completion-at-point-functions))))
+    (setq-local
+     completion-at-point-functions (cons #'tempel-expand
+                                         completion-at-point-functions))))
 
 (provide 'qk-completion)
 ;; qk-completion.el ends here.

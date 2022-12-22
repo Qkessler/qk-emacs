@@ -19,7 +19,6 @@
   "Load theme without slip-through, disable and enable
   the theme completely. I believe this should be modified
   in the next versions of Emacs; keeping this for now." 
-  (message "calling qk-load-theme with %s" theme)
   (unless (eq theme (car custom-enabled-themes))
     (mapc #'disable-theme custom-enabled-themes)
     (when theme

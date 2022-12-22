@@ -9,9 +9,7 @@
 ;; according to the theme that you want loaded.
 (setq qk-themes-index 1)
 
-(straight-use-package 'autothemer)
-(use-package gruvbox-theme
-  :straight t
+(elpaca-use-package gruvbox-theme
   :init (add-to-list 'qk-themes-list 'gruvbox-dark-medium))
 
 ;; Light theme

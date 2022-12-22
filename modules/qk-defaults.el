@@ -4,20 +4,16 @@
 ;; in the box, but probably could be thought over. On the other hand, add defaults
 ;; that seem interesting for the modern user.
 
-(use-package no-littering
-  :straight t
+(elpaca-use-package no-littering
   :init
   (setq
    backup-directory-alist `(("." . ,(no-littering-expand-var-file-name "backups/")))
    auto-save-list-file-prefix (no-littering-expand-var-file-name "auto-saves/sessions/")
    auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-saves/") t))
-   url-cookie-file (no-littering-expand-var-file-name "cookies/cookies")))
+   url-cookie-file (no-littering-expand-var-file-name "cookies/cookies")
+   eww-bookmarks-directory (concat no-littering-var-directory "eww-bookmarks/")))
 
 (use-package emacs
-  :general
-  (+general-global-zoom
-    "i" 'text-scale-increase
-    "o" 'text-scale-decrease)
   :init
   (setq
    auto-revert-interval 1
@@ -42,13 +38,11 @@
    minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)
    tab-always-indent 'complete
    x-select-enable-clipboard t
-   x-select-enable-primary t
-   )
+   x-select-enable-primary t)
   (setq-default
    indent-tabs-mode nil
    tab-width 4
-   fill-column 80
-   )
+   fill-column 80)
 
   (fset 'yes-or-no-p 'y-or-n-p)
   (pixel-scroll-precision-mode)
@@ -110,8 +104,7 @@ Intended as :after advice for `delete-file'."
    dired-listing-switches "-aBhl"
    dired-use-ls-dired nil))
 
-(use-package dired-subtree
-  :straight t
+(elpaca-use-package dired-subtree
   :after dired
   :init (setq dired-subtree-use-backgrounds nil)
   :general 
@@ -157,16 +150,12 @@ Intended as :after advice for `delete-file'."
    eww-header-line-format nil
    eww-download-directory (expand-file-name "~/Downloads/eww-downloads")
    eww-suggest-uris '(eww-links-at-point thing-at-point-url-at-point)
-   eww-bookmarks-directory (concat no-littering-var-directory "eww-bookmarks/")
    eww-history-limit 150
    eww-use-external-browser-for-content-type "\\`\\(video/\\|audio\\)"
    eww-browse-url-new-window-is-tab nil
    eww-form-checkbox-selected-symbol "[X]"
    eww-form-checkbox-symbol "[ ]"
-   eww-retrieve-command nil)
-  :general
-  (+general-global-applications
-    "s" 'eww))
+   eww-retrieve-command nil))
 
 
 (provide 'qk-defaults)

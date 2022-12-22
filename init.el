@@ -50,8 +50,8 @@
 ;; Modules
 (require 'qk-general)
 (require 'qk-evil)
-;; (require 'qk-theme)
-;; (require 'qk-defaults)
+(require 'qk-theme)
+(require 'qk-defaults)
 ;; (require 'qk-help)
 ;; (require 'qk-window)
 ;; (require 'qk-completion)

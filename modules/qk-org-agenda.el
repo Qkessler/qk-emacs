@@ -14,6 +14,9 @@
    org-agenda-use-tag-inheritance nil
    org-agenda-ignore-drawer-properties '(effort appt category)
    org-agenda-block-separator ?—
+   org-agenda-skip-scheduled-if-deadline-is-shown t)
+  :config
+  (setq
    org-agenda-custom-commands
    '(("d" "Agenda"
       ((agenda ""
@@ -54,16 +57,9 @@
                    ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
                     (outline-next-heading) (1- (point)))
                    (t (org-agenda-skip-entry-if 'todo 'done))))
-                (org-agenda-todo-ignore-deadlines nil))))))
-   org-agenda-skip-scheduled-if-deadline-is-shown t)
-  :general
-  (+general-global-org
-    "a" '(qk-silently-open-agenda :which-key "project agenda")
-    "t" '(qk-silently-open-todo-agenda :which-key "day/week agenda")
-    "c" 'org-capture
-    "s" 'org-save-all-org-buffers)
-  (:keymaps '(org-agenda-mode-map) "x" 'org-agenda-bulk-action)
-  :config
+                (org-agenda-todo-ignore-deadlines nil))))))))
+
+(after! general
   (defun qk-silently-open-agenda ()
     "Using the `with-silent-modifications' macro, open the agenda on the 'd' view
 which is the one that contains all the projects I follow."
@@ -74,7 +70,18 @@ which is the one that contains all the projects I follow."
     "Using the `with-silent-modifications' macro, open the agenda on the 'a' view
 which is the one that contains the todos for the day/week."
     (interactive)
-    (with-silent-modifications (org-agenda nil "a"))))
+    (with-silent-modifications (org-agenda nil "a")))
+
+  (+general-global-org
+    "a" '(qk-silently-open-agenda :which-key "project agenda")
+    "t" '(qk-silently-open-todo-agenda :which-key "day/week agenda")
+    "c" 'org-capture
+    "s" 'org-save-all-org-buffers))
+
+(after! org-agenda
+  (general-def
+    :keymaps 'org-agenda-mode-map
+    "x" 'org-agenda-bulk-action))
 
 (provide 'qk-org-agenda)
 ;; qk-org-agenda.el ends here.

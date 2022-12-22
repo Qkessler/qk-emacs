@@ -9,12 +9,6 @@
 ;; according to the theme that you want loaded.
 (setq qk-themes-index 1)
 
-(elpaca-use-package gruvbox-theme
-  :init (add-to-list 'qk-themes-list 'gruvbox-dark-medium))
-
-;; Light theme
-(add-to-list 'qk-themes-list 'modus-operandi)
-
 (defun qk-cycle-theme ()
   "Change the theme to the next index in the `qk-themes-list'. I would normally use this for switching from light to dark modes."
   (interactive)
@@ -25,6 +19,7 @@
   "Load theme without slip-through, disable and enable
   the theme completely. I believe this should be modified
   in the next versions of Emacs; keeping this for now." 
+  (message "calling qk-load-theme with %s" theme)
   (unless (eq theme (car custom-enabled-themes))
     (mapc #'disable-theme custom-enabled-themes)
     (when theme
@@ -33,10 +28,16 @@
         (load-theme theme :no-confirm)))))
 
 (defun qk-load-indexed-theme ()
-  "Load the active indexed theme in the `qk-themeslist'"
+  "Load the active indexed theme in the `qk-themes-list'"
   (qk-load-theme (nth qk-themes-index qk-themes-list)))
 
-(qk-load-indexed-theme)
+(elpaca-use-package
+ gruvbox-theme
+ :init
+ (add-to-list 'qk-themes-list 'gruvbox-dark-medium)
+ (add-to-list 'qk-themes-list 'modus-operandi)
+
+ (qk-load-indexed-theme))
 
 ;; Emacs does not have an =after-load-theme-hook=, which a I find key for adding
 ;; or changing some of the faces dinamically. Not everything is lost, we still

@@ -3,8 +3,7 @@
 ;; Olivetti is a mode for better writting, putting the buffer in a similar way as Quip
 ;; does. We need to make sure that some of the modes that we enable for other modes,
 ;; i.e. Display number lines mode, needs to be disabled when olivetti-mode is turned on.
-(use-package olivetti
-  :straight t
+(elpaca-use-package olivetti
   :general
   (+general-global-toggle
     "o" 'qk-toggle-olivetti-mode)
@@ -25,8 +24,8 @@
 ;; with every iteration or message. popper.el puts an end to the madness by managing
 ;; the buffers defined by the `popper-reference-buffers' variable inside its own groups.
 ;; You can toggle and cycle through them, to avoid losing your place and your window configuration.
-(use-package popper
-  :straight t
+(elpaca-use-package popper
+ :hook (doom-first-input . popper-mode)
   :general
   (+general-global-toggle
     "p" 'popper-toggle-latest
@@ -47,12 +46,10 @@
      "\\*pytest\\*.*"
      help-mode
      helpful-mode
-     "^.*\\/harpoon\\/.*\\#.*$" harpoon-mode))
-  (popper-mode t))
+     "^.*\\/harpoon\\/.*\\#.*$" harpoon-mode)))
 
 ;; Switch between windows using the keys in the home-row.
-(use-package ace-window
-  :straight t
+(elpaca-use-package ace-window
   :general
   (+general-global-window
     "o" 'ace-window)
@@ -64,15 +61,14 @@
 ;; Winner Mode is a global minor mode that allows you to “undo” and “redo” changes
 ;; in Window configuration. It is included in GNU Emacs, and documented as winner-mode.
 (use-package winner
-  :defer 3
-  :general
+  :hook (doom-first-buffer . winner-mode))
+
+(after! winner
   (+general-global-window
     "u" 'winner-undo
-    "r" 'winner-redo)
-  :config (winner-mode))
+    "r" 'winner-redo))
 
-(use-package ibuffer
-  :general
+(after! general
   (+general-global-buffer
     "l" 'ibuffer))
 

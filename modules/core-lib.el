@@ -837,8 +837,23 @@ Restore the current buffer to its original directory on exit."
   :type 'hook
   :local 'permanent-local
   :group 'doom)
+(defcustom doom-first-buffer-hook ()
+  "Transient hooks run before the first interactively opened buffer."
+  :type 'hook
+  :local 'permanent-local
+  :group 'doom)
 
-(doom-run-hook-on 'doom-first-input-hook  '(pre-command-hook))
+(defvar doom-switch-buffer-hook nil
+  "A list of hooks run after changing the current buffer.")
+(defun doom-run-switch-buffer-hooks-h (&optional _)
+  (let ((gc-cons-threshold most-positive-fixnum)
+        (inhibit-redisplay t))
+    (run-hooks 'doom-switch-buffer-hook)))
+(add-hook 'window-buffer-change-functions #'doom-run-switch-buffer-hooks-h)
+
+(doom-run-hook-on 'doom-first-input-hook '(pre-command-hook))
+(doom-run-hook-on 'doom-first-buffer-hook '(find-file-hook doom-switch-buffer-hook))
+
 
 (elpaca-use-package vulpea
   :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)

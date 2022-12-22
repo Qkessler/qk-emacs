@@ -53,7 +53,7 @@
 (require 'qk-theme)
 (require 'qk-defaults)
 (require 'qk-help)
-;; (require 'qk-window)
+(require 'qk-window)
 ;; (require 'qk-completion)
 ;; (require 'qk-consult)
 ;; (require 'qk-embark)

@@ -63,7 +63,7 @@
 (use-package winner
   :hook (doom-first-buffer . winner-mode))
 
-(after! winner
+(after! (winner general)
   (+general-global-window
     "u" 'winner-undo
     "r" 'winner-redo))

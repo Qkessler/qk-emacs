@@ -62,7 +62,6 @@
 ;; like .profile and such. Installing the package exec-path-from-shell, we make sure
 ;; that those important config files are loaded.
 (elpaca-use-package exec-path-from-shell
-  :straight t
   :defer 3
   :init (setq exec-path-from-shell-arguments '("-l"))
   :config 

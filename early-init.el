@@ -46,4 +46,4 @@
 (setq vc-follow-symlinks t)
 
 ;; Set `load-prefer-newer' to non-nil value, to avoid emacs using older byte-compiled files. Using newer files, we force emacs to "byte-compile" the files that it is trying to use.
-(setq load-prefer-newer t)
+(setq load-prefer-newer noninteractive)

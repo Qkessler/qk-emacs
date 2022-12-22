@@ -840,8 +840,7 @@ Restore the current buffer to its original directory on exit."
 
 (doom-run-hook-on 'doom-first-input-hook  '(pre-command-hook))
 
-(use-package vulpea
-  :straight t
+(elpaca-use-package vulpea
   :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)
 
 (setq safe-local-variable-values

@@ -2,7 +2,6 @@
 
 (defvar qk-notes-directory (expand-file-name "~/Documents/slipbox/"))
 (use-package org
-  :straight (:type built-in)
   :hook
   (org-clock-in-hook . org-save-all-org-buffers)
   (org-clock-out-hook . org-save-all-org-buffers)
@@ -17,32 +16,6 @@
                                   (langs org-babel-load-languages))
                              (unless (alist-get lang langs)
                                (indent-to 4))))))
-  :general
-  (major-mode-definer
-    :major-modes '(org-mode)
-    :keymaps '(org-mode-map)
-    "c" '(org-edit-special :which-key "open source block")
-    "d" 'org-deadline
-    "e" 'org-export-dispatch
-    "l" 'ar-org-insert-link-dwim
-    "s" 'org-schedule
-    "t" 'org-todo
-    "r" 'org-refile
-    "f" 'org-fold-hide-sublevels)
-  (general-nmap
-    :keymaps '(org-mode-map)
-    "gx" 'org-return)
-  (minor-mode-definer
-    :keymaps 'org-src-mode
-    "f" 'org-edit-src-exit
-    "c" 'org-edit-src-abort)
-  (+general-global-org
-    "l" 'org-store-link)
-  (+general-global-insert
-    "d" (lambda ()
-          (interactive)
-          (forward-char)
-          (insert (format-time-string "%F"))))
   :init
   (setq
    org-directory "~/Documents/org_files"
@@ -195,8 +168,26 @@ Note this does not change the inherited tags for a headline, just the tag string
      ("ph" "@home Project entry" entry (file+headline org-default-notes-file "Refile items")
       "* PROJECT %? :@home:REFILING:PROJECT:\n")
      ("b" "Book" entry (file org-book-list-file)
-      "* %^{TITLE}\n:PROPERTIES:\n:ADDED: %<[%Y-%02m-%02d]>\n:END:%^{AUTHOR}p\n%^{URL}p\n")))
-  :general
+      "* %^{TITLE}\n:PROPERTIES:\n:ADDED: %<[%Y-%02m-%02d]>\n:END:%^{AUTHOR}p\n%^{URL}p\n"))))
+
+(after! org
+  (defun org-md-example-block (example-block _contents info)
+    "Transcode EXAMPLE-BLOCK element into Markdown format.
+  CONTENTS is nil.  INFO is a plist used as a communication
+  channel."
+    (concat "```\n"
+            (org-remove-indentation
+             (org-export-format-code-default example-block info))
+            "```"))
+  (add-to-list 'org-export-backends 'md)
+
+  (defun qk-org-capture-here ()
+    "Org-capture in the current buffer, passing the 0 prefix
+to the org-capture function."
+    (interactive)
+    (setq current-prefix-arg 0) ; C-0
+    (call-interactively 'org-capture))
+
   (major-mode-definer
     :major-modes '(org-mode)
     :keymaps '(org-mode-map)
@@ -207,27 +198,32 @@ Note this does not change the inherited tags for a headline, just the tag string
     "c" '(org-capture-kill :which-key "org-capture cancel")
     "r" 'org-capture-refile
     "p" 'org-priority)
-  :config
-  (defun qk-org-capture-here ()
-    "Org-capture in the current buffer, passing the 0 prefix
-to the org-capture function."
-    (interactive)
-    (setq current-prefix-arg 0) ; C-0
-    (call-interactively 'org-capture)))
-
-(use-package ox-md
-  :init
-  (after! org (add-to-list 'org-export-backends 'md))
-  :config 
-  ;; Redefine the code block function to mimic the triple default in Quip.
-  (defun org-md-example-block (example-block _contents info)
-    "Transcode EXAMPLE-BLOCK element into Markdown format.
-  CONTENTS is nil.  INFO is a plist used as a communication
-  channel."
-    (concat "```\n"
-            (org-remove-indentation
-             (org-export-format-code-default example-block info))
-            "```")))
+  
+  (major-mode-definer
+    :major-modes '(org-mode)
+    :keymaps '(org-mode-map)
+    "c" '(org-edit-special :which-key "open source block")
+    "d" 'org-deadline
+    "e" 'org-export-dispatch
+    "l" 'ar-org-insert-link-dwim
+    "s" 'org-schedule
+    "t" 'org-todo
+    "r" 'org-refile
+    "f" 'org-fold-hide-sublevels)
+  (general-nmap
+    :keymaps '(org-mode-map)
+    "gx" 'org-return)
+  (minor-mode-definer
+    :keymaps 'org-src-mode
+    "f" 'org-edit-src-exit
+    "c" 'org-edit-src-abort)
+  (+general-global-org
+    "l" 'org-store-link)
+  (+general-global-insert
+    "d" (lambda ()
+          (interactive)
+          (forward-char)
+          (insert (format-time-string "%F")))))
 
 (provide 'qk-org)
 ;; qk-org.el ends here.

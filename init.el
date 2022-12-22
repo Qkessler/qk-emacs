@@ -52,7 +52,7 @@
 (require 'qk-evil)
 (require 'qk-theme)
 (require 'qk-defaults)
-;; (require 'qk-help)
+(require 'qk-help)
 ;; (require 'qk-window)
 ;; (require 'qk-completion)
 ;; (require 'qk-consult)

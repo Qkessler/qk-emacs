@@ -96,6 +96,7 @@
 
   ;; Search commands, currently using `consult' and `affe'.
   (+general-global-menu! "org" "o")
+  (+general-global-menu! "help" "h")
   (+general-global-menu! "toggle" "t")
   (+general-global-menu! "notes" "n")
   (+general-global-menu! "applications" "a")

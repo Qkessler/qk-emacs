@@ -832,6 +832,14 @@ Restore the current buffer to its original directory on exit."
              ,@body)
          (cd ,olddirvar)))))
 
+(defcustom doom-first-input-hook ()
+  "Transient hooks run before the first user input."
+  :type 'hook
+  :local 'permanent-local
+  :group 'doom)
+
+(doom-run-hook-on 'doom-first-input-hook  '(pre-command-hook))
+
 (use-package vulpea
   :straight t
   :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)

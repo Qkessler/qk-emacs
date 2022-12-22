@@ -1,32 +1,43 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; Reduce the checks for modifications on packages from straight, which
-;; slows the configuration extensively. There are multiple options, but
-;; I find `check-on-save' the most interesting, considering there are no
-;; external dependencies, nor additional CPU or memory impact.
-(setq straight-check-for-modifications '(check-on-save))
-
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(add-to-list 'straight-recipes-gnu-elpa-ignored-packages 'seq)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil
+                              :build (:not elpaca--activate-package)))
+(when-let ((repo  (expand-file-name "repos/elpaca/" elpaca-directory))
+           (build (expand-file-name "elpaca/" elpaca-builds-directory))
+           (order (cdr elpaca-order))
+           ((add-to-list 'load-path (if (file-exists-p build) build repo)))
+           ((not (file-exists-p repo)))
+           (buffer (get-buffer-create "*elpaca-bootstrap*")))
+  (condition-case-unless-debug err
+      (if-let (((pop-to-buffer buffer '((display-buffer-reuse-window
+                                         display-buffer-same-window))))
+               ((zerop (call-process "git" nil buffer t "clone"
+                                     (plist-get order :repo) repo)))
+               (default-directory repo)
+               ((zerop (call-process "git" nil buffer t "checkout"
+                                     (or (plist-get order :ref) "--")))))
+          (progn
+            (byte-recompile-directory repo 0 'force)
+            (require 'elpaca)
+            (and (fboundp 'elpaca-generate-autoloads)
+                 (elpaca-generate-autoloads "elpaca" repo))
+            (kill-buffer buffer))
+        (error "%s" (with-current-buffer buffer (buffer-string))))
+    ((error)
+     (warn "%s" err)
+     (delete-directory repo 'recursive))))
+(require 'elpaca-autoloads)
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
 
 ;; Always defer use-package packages. This means that if I really need
 ;; a package, I will go to my config and edit the use-package recipe
 ;;to lazy load it. This reduces my startup time significantly.
 (setq use-package-always-defer t)
-(straight-use-package 'use-package)
-(eval-when-compile
-  (require 'use-package))
+(elpaca use-package (require 'use-package))
 
 ;; Add modules directory.
 (add-to-list 'load-path (concat user-emacs-directory "modules"))

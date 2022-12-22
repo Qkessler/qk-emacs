@@ -48,8 +48,7 @@
 ;; strategy to minimize GC interference with user activity. During normal use a high GC
 ;; threshold is set. When idling GC is triggered and a low threshold is set.
 ;; A more detailed explanation can be found at http://akrl.sdf.org/
-(use-package gcmh
-  :straight t
+(elpaca-use-package gcmh
   :demand t
   :init
   (setq
@@ -62,20 +61,18 @@
 ;; Emacs daemon doesn't seem to look for environment variables in the usual places
 ;; like .profile and such. Installing the package exec-path-from-shell, we make sure
 ;; that those important config files are loaded.
-(use-package exec-path-from-shell
+(elpaca-use-package exec-path-from-shell
   :straight t
-  :custom (exec-path-from-shell-arguments '("-l"))
-  :init 
-  (when (daemonp)
-    (exec-path-from-shell-initialize))
-  (when (memq window-system '(mac ns x))
+  :defer 3
+  :init (setq exec-path-from-shell-arguments '("-l"))
+  :config 
+  (when (or (daemonp) (memq window-system '(mac ns x)))
     (exec-path-from-shell-initialize)))
 
 ;; Benchmark Emacs Startup time without ever leaving your Emacs.
-(use-package esup
-  :straight t
+(elpaca-use-package esup
   :commands esup
-  :custom (esup-user-init-file (file-truename "~/.emacs.d/init.el")))
+  :init (setq esup-user-init-file (file-truename "~/.emacs.d/init.el")))
 
 (provide 'core)
 ;;; core.el ends here.

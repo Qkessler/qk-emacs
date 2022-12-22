@@ -7,9 +7,7 @@
 ;; - In the minibuffer, the target is the current best completion candidate.
 ;; - In the *Completions* buffer the target is the completion at point.
 ;; - In a regular buffer, the target is the region if active, or else the file, symbol or URL at point.
-(use-package embark
-  :straight t
-  :defer 3
+(elpaca-use-package embark
   :general
   ("M-o" 'embark-act)
   :config
@@ -20,18 +18,14 @@
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-(use-package wgrep
-  :straight t
+(elpaca-use-package wgrep
   :commands wgrep-change-to-wgrep-mode
   :init 
   (setq
    wgrep-auto-save-buffer t
    wgrep-change-readonly-file t))
 
-(after! consult
-  (use-package embark-consult
-    :straight t
-    :demand t))
+(elpaca-use-package embark-consult :after consult)
 
 (provide 'qk-embark)
 ;; qk-embark.el ends here.

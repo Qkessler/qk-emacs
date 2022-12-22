@@ -56,7 +56,7 @@
 (require 'qk-window)
 (require 'qk-completion)
 (require 'qk-consult)
-;; (require 'qk-embark)
+(require 'qk-embark)
 ;; (require 'qk-ui)
 ;; ;; (require 'qk-org-roam)
 ;; (require 'qk-org)

@@ -60,7 +60,7 @@
 (require 'qk-ui)
 (require 'qk-org)
 (require 'qk-org-agenda)
-;; (require 'qk-denote)
+(require 'qk-denote)
 ;; (require 'qk-git)
 ;; (require 'qk-project)
 ;; (require 'qk-tab-bar)

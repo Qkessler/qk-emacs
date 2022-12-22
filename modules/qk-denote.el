@@ -1,9 +1,6 @@
 ;;; qk-denote.el -*- lexical-binding: t; -*-
 
-(defvar qk-local-repo (expand-file-name "~/.emacs.d/local/"))
-(pushnew! load-path qk-local-repo)
-(use-package denote
-  :straight `(denote :local-repo ,(concat qk-local-repo "denote"))
+(elpaca-use-package denote
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
@@ -16,7 +13,6 @@
    denote-date-format nil
    denote-link-fontify-backlinks t
    denote-dired-rename-expert nil
-
    denote-org-capture-specifiers "%l\n%i\n%?")
   :general
   (+general-global-notes
@@ -166,15 +162,6 @@ file following `denote''s title best practices, to contain the new filetags."
         (rename-file (buffer-file-name) new-name t)
         (set-visited-file-name new-name t t)))))
 (add-hook! before-save 'qk-denote--rename-file-on-tags-change)
-
-(defvar qk-denote--migrate-blocklisted `(,(concat denote-directory ".DS_Store")))
-(defun qk-denote--migrate ()
-  "Visit and open all files in a directory."
-  (cl-loop for file in (directory-files denote-directory) collect
-           (unless (or
-                    (member (concat denote-directory file) qk-denote--migrate-blocklisted)
-                    (file-directory-p file))
-             (find-file (concat denote-directory file)))))
 
 (after! org-agenda
   (defun vulpea-project-p ()

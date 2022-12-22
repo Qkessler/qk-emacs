@@ -5,9 +5,9 @@
 ;; with built-in Emacs commands and completion tables. Vertico is pretty bare-bone and
 ;; comes with only a minimal set of commands.
 (elpaca-use-package vertico
- :hook (doom-first-buffer . vertico-mode)
- :init
- (setq vertico-cycle t))
+  :hook (doom-first-buffer . vertico-mode)
+  :init
+  (setq vertico-cycle t))
 
 ;; Orderless is one of the same emacs packages that works modularly, using the basic emacs
 ;; API. This package provides an orderless completion style that divides the pattern
@@ -28,10 +28,11 @@
 ;; with the completion candidates. It cannot modify the appearance of the candidates themselves,
 ;; which are shown as supplied by the original commands.
 (elpaca-use-package marginalia
-                    :hook (doom-first-buffer . marginalia-mode))
+  :hook (doom-first-buffer . marginalia-mode))
 
-(elpaca-use-package (corfu :host github :repo "minad/corfu")
- :hook (doom-first-input . global-corfu-mode)
+(elpaca-use-package corfu
+  :hook
+  (doom-first-input . global-corfu-mode)
   :general
   (:keymaps
    '(corfu-map)
@@ -53,25 +54,23 @@
   (defun corfu-enable-in-minibuffer ()
     "Enable Corfu in the minibuffer if `completion-at-point' is bound."
     (when (where-is-internal #'completion-at-point (list (current-local-map)))
-      (corfu-mode 1)))
+      (corfu-mode t)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer))
 
-;; (elpaca-use-package (corfu-popupinfo
-;;                      :host github 
-;;                      :repo "minad/corfu"
-;;                      :main "extensions/corfu-popupinfo.el")
-;;   :hook (corfu-mode . corfu-popupinfo-mode)
-;;   :init
-;;   (setq corfu-popupinfo-delay 1)
-;;   :general
-;;   (:keymaps
-;;    'corfu-map
-;;    "C-h" 'corfu-popupinfo-toggle))
+;; (elpaca-use-package
+ ;; (corfu-popupinfo :host github :repo "minad/corfu" :files (:defaults "extensions"))
+ ;; ;; :hook (corfu-mode . corfu-popupinfo-mode)
+ ;;  :init
+ ;;  (setq corfu-popupinfo-delay 1)
+ ;;  :general
+ ;;  (:keymaps
+ ;;   'corfu-map
+ ;;   "C-h" 'corfu-popupinfo-toggle))
 
 (elpaca-use-package kind-icon
- :commands kind-icon-margin-formatter
- :init
- (setq kind-icon-default-face 'corfu-default))
+  :commands kind-icon-margin-formatter
+  :init
+  (setq kind-icon-default-face 'corfu-default))
 
 (after! corfu
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
@@ -99,7 +98,8 @@
 ;; we can always add more snippets if we need to.
 (elpaca-use-package tempel
   :hook
-  (prog-mode . (tempel-setup-capf tempel-abbrev-mode))
+  (prog-mode . tempel-setup-capf)
+  (prog-mode . tempel-abbrev-mode)
   (text-mode . tempel-setup-capf)
   :general
   (:keymaps
@@ -108,9 +108,9 @@
    "C-p" 'tempel-previous)
   :config
   (defun tempel-setup-capf ()
-    (setq-local
-     completion-at-point-functions (cons #'tempel-expand
-                                         completion-at-point-functions))))
+    (setq-local completion-at-point-functions
+                (cons #'tempel-expand
+                      completion-at-point-functions))))
 
 (provide 'qk-completion)
 ;; qk-completion.el ends here.

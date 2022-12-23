@@ -40,9 +40,9 @@
    x-select-enable-clipboard t
    x-select-enable-primary t)
   (setq-default
-   indent-tabs-mode nil
-   tab-width 4
-   fill-column 80)
+   indent-tabs-mode qk-indent-tabs-mode
+   tab-width qk-tab-width
+   fill-column qk-fill-column)
 
   (fset 'yes-or-no-p 'y-or-n-p)
   (pixel-scroll-precision-mode)
@@ -101,7 +101,7 @@ Intended as :after advice for `delete-file'."
 (use-package dired
   :init 
   (setq
-   dired-listing-switches "-aBhl"
+   dired-listing-switches qk-dired-listing-switches
    dired-use-ls-dired nil))
 
 (elpaca-use-package dired-subtree
@@ -134,7 +134,7 @@ Intended as :after advice for `delete-file'."
   (setq
    shr-use-colors nil
    shr-use-fonts nil            
-   shr-max-image-proportion 0.6
+   shr-max-image-proportion qk-shr-max-image-proportion
    shr-image-animate nil
    shr-width nil              
    shr-discard-aria-hidden t
@@ -148,9 +148,9 @@ Intended as :after advice for `delete-file'."
    eww-restore-desktop t
    eww-desktop-remove-duplicates t
    eww-header-line-format nil
-   eww-download-directory (expand-file-name "~/Downloads/eww-downloads")
+   eww-download-directory qk-eww-downloads-directory
    eww-suggest-uris '(eww-links-at-point thing-at-point-url-at-point)
-   eww-history-limit 150
+   eww-history-limit qk-eww-history-limit
    eww-use-external-browser-for-content-type "\\`\\(video/\\|audio\\)"
    eww-browse-url-new-window-is-tab nil
    eww-form-checkbox-selected-symbol "[X]"

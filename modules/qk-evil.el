@@ -52,8 +52,8 @@
 
 (defvar +evil-collection-disabled-list
   '(anaconda-mode buff-menu calc comint company custom eldoc elisp-mode
-    ert free-keys helm help indent image kotlin-mode outline replace
-    shortdoc simple slime lispy)
+                  ert free-keys helm help indent image kotlin-mode outline replace
+                  shortdoc simple slime lispy)
   "A list of `evil-collection' modules to ignore. See the definition of this
 variable for an explanation of the defaults (in comments). See
 `evil-collection-mode-list' for a list of available options.")
@@ -136,13 +136,13 @@ and complains if a module is loaded too early (during startup)."
         (+evil-collection-init mode +evil-collection-disabled-list)))))
 
 (elpaca-use-package evil-commentary
- :hook (doom-first-input . evil-commentary-mode))
+  :hook (doom-first-input . evil-commentary-mode))
 
 (elpaca-use-package evil-org
- :hook (org-mode . evil-org-mode)
- :init (setq evil-org-special-o/O '(table-row item))
- :config
- (evil-org-set-key-theme '(textobjects insert additional shift)))
+  :hook (org-mode . evil-org-mode)
+  :init (setq evil-org-special-o/O '(table-row item))
+  :config
+  (evil-org-set-key-theme '(textobjects insert additional shift)))
 
 (after! (evil elpaca)
   (general-nmap
@@ -194,21 +194,21 @@ and complains if a module is loaded too early (during startup)."
     "h" 'dired-up-directory))
 
 (elpaca-use-package evil-matchit
- :hook (doom-first-input . global-evil-matchit-mode))
+  :hook (doom-first-input . global-evil-matchit-mode))
 
 (elpaca-use-package avy
- :general
- (general-mmap
-   "gl" 'avy-goto-line))
+  :general
+  (general-mmap
+    "gl" 'avy-goto-line))
 
 (elpaca-use-package evil-surround
- :hook (doom-first-input . global-evil-surround-mode))
+  :hook (doom-first-input . global-evil-surround-mode))
 
 (elpaca-use-package evil-numbers
- :general
- (general-nmap
-   "C-a" 'evil-numbers/inc-at-pt
-   "C-x" 'evil-numbers/dec-at-pt))
+  :general
+  (general-nmap
+    "C-a" 'evil-numbers/inc-at-pt
+    "C-x" 'evil-numbers/dec-at-pt))
 
 (provide 'qk-evil)
 ;;; qk-evil.el ends here.

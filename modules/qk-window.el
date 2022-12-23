@@ -25,28 +25,13 @@
 ;; the buffers defined by the `popper-reference-buffers' variable inside its own groups.
 ;; You can toggle and cycle through them, to avoid losing your place and your window configuration.
 (elpaca-use-package popper
- :hook (doom-first-input . popper-mode)
+  :hook (doom-first-input . popper-mode)
   :general
   (+general-global-toggle
     "p" 'popper-toggle-latest
     "c" 'popper-cycle
     "T" 'popper-toggle-type)
-  :init
-  (setq
-   popper-reference-buffers
-   '("\\*Messages\\*"
-     "\\*Warnings\\*"
-     "Output\\*$"
-     "\\*Async Shell Command\\*"
-     ("\\*Asing-native-compile-log\\*" . hide)
-     "^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
-     "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
-     "^\\*term.*\\*$"   term-mode   ;term as a popup
-     "^\\*vterm.*\\*$"  vterm-mode  ;vterm as a popup
-     "\\*pytest\\*.*"
-     help-mode
-     helpful-mode
-     "^.*\\/harpoon\\/.*\\#.*$" harpoon-mode)))
+  :init (setq popper-reference-buffers qk-popper-reference-buffers))
 
 ;; Switch between windows using the keys in the home-row.
 (elpaca-use-package ace-window
@@ -55,7 +40,7 @@
     "o" 'ace-window)
   :init
   (setq
-   aw-keys '(?h ?j ?k ?l ?a ?o ?e ?i ?u)
+   aw-keys qk-aw-keys
    aw-background nil))
 
 ;; Winner Mode is a global minor mode that allows you to “undo” and “redo” changes

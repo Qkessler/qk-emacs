@@ -48,6 +48,7 @@
 (require 'core-lib)
 
 ;; Modules
+(require 'qk-constants)
 (require 'qk-general)
 (require 'qk-evil)
 (require 'qk-theme)

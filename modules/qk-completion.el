@@ -6,8 +6,7 @@
 ;; comes with only a minimal set of commands.
 (elpaca-use-package vertico
   :hook (doom-first-buffer . vertico-mode)
-  :init
-  (setq vertico-cycle t))
+  :init (setq vertico-cycle t))
 
 ;; Orderless is one of the same emacs packages that works modularly, using the basic emacs
 ;; API. This package provides an orderless completion style that divides the pattern
@@ -31,8 +30,7 @@
   :hook (doom-first-buffer . marginalia-mode))
 
 (elpaca-use-package corfu
-  :hook
-  (doom-first-input . global-corfu-mode)
+  :hook (doom-first-input . global-corfu-mode)
   :general
   (:keymaps
    '(corfu-map)
@@ -46,26 +44,27 @@
    corfu-cycle t
    corfu-quit-no-match t
    corfu-quit-at-boundary t
-   corfu-auto t
-   corfu-auto-delay 0.25
-   corfu-auto-prefix 1
-   )
+   corfu-auto qk-corfu-auto
+   corfu-auto-delay qk-corfu-auto-delay
+   corfu-auto-prefix qk-corfu-auto-prefix)
   :config
-  (defun corfu-enable-in-minibuffer ()
-    "Enable Corfu in the minibuffer if `completion-at-point' is bound."
-    (when (where-is-internal #'completion-at-point (list (current-local-map)))
-      (corfu-mode t)))
-  (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer))
+  (when qk-corfu-in-minibuffer
+    (defun corfu-enable-in-minibuffer ()
+      "Enable Corfu in the minibuffer if `completion-at-point' is bound."
+      (when (where-is-internal #'completion-at-point
+                               (list (current-local-map)))
+        (corfu-mode t)))
+    (add-hook! minibuffer-setup 'corfu-enable-in-minibuffer)))
 
 ;; (elpaca-use-package
- ;; (corfu-popupinfo :host github :repo "minad/corfu" :files (:defaults "extensions"))
- ;; ;; :hook (corfu-mode . corfu-popupinfo-mode)
- ;;  :init
- ;;  (setq corfu-popupinfo-delay 1)
- ;;  :general
- ;;  (:keymaps
- ;;   'corfu-map
- ;;   "C-h" 'corfu-popupinfo-toggle))
+;; (corfu-popupinfo :host github :repo "minad/corfu" :files (:defaults "extensions"))
+;; ;; :hook (corfu-mode . corfu-popupinfo-mode)
+;;  :init
+;;  (setq corfu-popupinfo-delay 1)
+;;  :general
+;;  (:keymaps
+;;   'corfu-map
+;;   "C-h" 'corfu-popupinfo-toggle))
 
 (elpaca-use-package kind-icon
   :commands kind-icon-margin-formatter
@@ -83,7 +82,7 @@
   ((text-mode prog-mode) . qk-update-completion-functions)
   (lsp-completion-mode . qk-update-lsp-completion-functions)
   :init
-  (setq cape-dabbrev-min-length 3)
+  (setq cape-dabbrev-min-length qk-cape-dabbrev-min-length)
   :config
   (defun qk-update-completion-functions ()
     "Add the file and dabbrev backends to `completion-at-point-functions'"

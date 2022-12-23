@@ -47,9 +47,9 @@
 ;; second the minibuffer will expand with all of the available key bindings that
 ;; follow C-x (or as many as space allows given your settings).
 (elpaca-use-package which-key
- :hook (doom-first-input . (lambda ()
-                             (which-key-setup-minibuffer)
-                             (which-key-mode))))
+  :hook (doom-first-input . (lambda ()
+                              (which-key-setup-minibuffer)
+                              (which-key-mode))))
 
 (provide 'qk-help)
 ;; qk-help.el ends here.

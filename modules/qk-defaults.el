@@ -45,18 +45,8 @@
    fill-column qk-fill-column)
 
   (fset 'yes-or-no-p 'y-or-n-p)
-  (pixel-scroll-precision-mode)
-  (savehist-mode)
-  (recentf-mode)
-  (add-function :after after-focus-change-function #'(lambda () (save-some-buffers t)))
-  (add-hook! 'minibuffer-setup-hook #'cursor-intangible-mode)
 
-  ;; Add prompt indicator to `completing-read-multiple'.
-  (defun crm-indicator (args)
-    (cons (concat "[CRM] " (car args)) (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-  ;; Use UTF-8 everywhere.
+    ;; Use UTF-8 everywhere.
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
   (set-terminal-coding-system 'utf-8)
@@ -95,8 +85,19 @@ Intended as :after advice for `delete-file'."
     (when-let ((buffer (get-file-buffer file)))
       (kill-buffer buffer))))
 
-(advice-add 'rename-file :after 'visiting-buffer-rename)
-(advice-add 'delete-file :after 'visiting-buffer-kill)
+(add-hook! doom-first-input
+  (pixel-scroll-precision-mode)
+  (savehist-mode)
+  (recentf-mode)
+  (add-function :after after-focus-change-function #'(lambda () (save-some-buffers t)))
+  (add-hook! 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Add prompt indicator to `completing-read-multiple'.
+  (defun crm-indicator (args)
+    (cons (concat "[CRM] " (car args)) (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+  (advice-add 'rename-file :after 'visiting-buffer-rename)
+  (advice-add 'delete-file :after 'visiting-buffer-kill))
 
 (use-package dired
   :init 

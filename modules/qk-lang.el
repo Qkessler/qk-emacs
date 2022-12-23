@@ -1,8 +1,7 @@
 ;;; qk-lang.el -*- lexical-binding: t; -*-
 
 ;; Display line width indicator.
-(use-package emacs
-  :hook (prog-mode . display-fill-column-indicator-mode))
+(add-hook! prog-mode 'display-fill-column-indicator-mode)
 
 ;; Invoke bashrc / zshrc loading when using the compile function.
 (defadvice compile (around use-zshrc activate)
@@ -20,15 +19,13 @@
 ;; syntax tree as the source file is edited. It could be the next generation of sintax
 ;; parsers, as it has been really accepted by the community and the Github's Atom
 ;; team has been working on implementing a ton of languages.
-(use-package tree-sitter
-  :straight t
-  :defer 2
-  :hook (tree-sitter-after-on . tree-sitter-hl-mode)
-  :config (global-tree-sitter-mode))
+(elpaca-use-package tree-sitter
+                    :hook
+                    (doom-first-buffer . global-tree-sitter-mode)
+                    (tree-sitter-after-on . tree-sitter-hl-mode))
 
-(use-package tree-sitter-langs
-  :straight t
-  :defer 3
+(elpaca-use-package tree-sitter-langs
+  :after tree-sitter
   :config
   (defun suppress-messages (old-fun &rest args)
     (cl-flet ((silence (&rest args1) (ignore)))
@@ -49,8 +46,7 @@
          (line-beginning-position))
        (point)))))
 
-(use-package prog-mode
-  :general
+(after! general
   (major-mode-definer
     :keymaps '(prog-mode-map)
     :major-modes '(prog-mode)
@@ -58,9 +54,7 @@
 
 (use-package c++-mode
   :mode ("\\.cpp\\'" "\\.c\\'")
-  :init (setq c-basic-offset 4)
-  :general
-  (:keymaps '(c-mode-base-map c-mode-map c++-mode-map) "TAB" nil))
+  :init (setq c-basic-offset 4))
 
 (use-package python
   :init
@@ -68,29 +62,30 @@
    python-shell-interpreter "python3"
    compilation-ask-about-save nil
    python-indent-guess-indent-offset-verbose nil
-   compilation-scroll-output t)
-  :general
-  (major-mode-definer
-    :keymaps '(python-mode-map)
-    :major-modes '(python-mode)
-    "c" 'mk-compile-python-buffer)
-  :config
+   compilation-scroll-output t))
+
+(after! python
   (defun mk-compile-python-buffer ()
     "Use compile to run python programs."
     (interactive)
-    (compile (concat "python3 " (buffer-name)))))
+    (compile (concat python-shell-interpreter " " (buffer-name))))
+
+  (major-mode-definer
+    :keymaps '(python-mode-map)
+    :major-modes '(python-mode)
+    "c" 'mk-compile-python-buffer))
 
 ;; This is a simple global minor mode which will replicate the changes done by
 ;; virtualenv activation inside Emacs. The main entry points are
 ;; pyvenv-activate, which queries the user for a virtual environment directory
 ;; to activate, and pyvenv-workon.
-(use-package pyvenv
-  :straight t
+(elpaca-use-package pyvenv
   :hook (python-mode . rh-pyvenv-autoload)
   :config
+  (elpaca f)
   (defun rh-pyvenv-autoload ()
     (interactive)
-    "auto activate venv directory if exists"
+    "Auto activate .env directory if it exists"
     (f-traverse-upwards
      (lambda (path)
        (let ((venv-path (f-expand ".env" path)))
@@ -99,8 +94,7 @@
 
 ;; Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that
 ;; I intend to use rainbow-mode, which may be enabled with M-x `rainbow-mode'.
-(use-package rainbow-mode
-  :straight t
+(elpaca-use-package rainbow-mode
   :commands rainbow-mode)
 
 (use-package mhtml-mode
@@ -109,12 +103,10 @@
 (use-package js-mode
   :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'"))
 
-(use-package json-mode
-  :straight t
-  :mode "\\.json\\'")
+(elpaca-use-package json-mode
+                    :mode "\\.json\\'")
 
-(use-package yaml-mode
-  :straight t
+(elpaca-use-package yaml-mode
   :mode "\\.yml\\'")
 
 ;; Configure some emacs packages to reach the IDE level experience
@@ -122,28 +114,16 @@
 ;; rust-mode. I won't be using the hydras the support, but having
 ;; some cargo commands implemented is nice. The lsp configuration is
 ;; also seamless, pretty good package.
-(use-package rustic
-  :straight t
+(elpaca-use-package rustic
+                    :mode ("\\.rs\\'" . rustic-mode)
   :init
   (setq
    rustic-format-on-save nil
-   rustic-lsp-client nil)
-  :general
-  (major-mode-definer
-    :major-modes '(rustic-mode)
-    :keymaps '(rustic-mode-map)
-    "c" 'rustic-cargo-run
-    "t" 'rustic-cargo-test-dwim))
-
-;; Kotlin still doesn't have full support inside emacs. To add the kotlin major
-;; mode, use the kotlin-mode package.
-(use-package kotlin-mode
-  :straight t)
+   rustic-lsp-client nil))
 
 ;; Emacs, as always has its own integration of the key functions. I just use the
 ;; `cheat-sh-search', which is safe to say to be great.
-(use-package cheat-sh
-  :straight t
+(elpaca-use-package cheat-sh
   :general
   (major-mode-definer
     :keymaps '(prog-mode-map)
@@ -153,10 +133,9 @@
 ;; Using the hl-todo package, we are able to highlight keywords
 ;; related to the working environment, like: TODO, FIXME and some
 ;; more.
-(use-package hl-todo
-  :straight t
-  :hook ((prog-mode gfm-mode) . hl-todo-mode)
-  :init 
+(elpaca-use-package hl-todo
+  :hook ((prog-mode gfm-mode org-mode) . hl-todo-mode)
+  :config 
   (setq
    hl-todo-highlight-punctuation ":"
    hl-todo-keyword-faces
@@ -170,18 +149,15 @@
 ;; Markdown configuration, which I use specially often when editing README files
 ;; on Github. The are some interesting options like the change of the markdown-command
 ;; to pandoc which is way better at compiling html5. 
-(use-package markdown-mode
+(elpaca-use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode)
+  :hook (markdown-mode . visual-line-mode)
   :init (setq markdown-command "pandoc -t html5")
   :general
   (major-mode-definer
     :keymaps '(markdown-mode-map)
     :major-modes '(gfm-mode markdown-mode)
-    "c" 'markdown-insert-code)
-  :hook (markdown-mode . visual-line-mode))
-
-(use-package swift-mode
-  :straight t)
+    "c" 'markdown-insert-code))
 
 ;; Make sure .h files default to Objective-C mode, since I don't really code
 ;; in C. There isn't a problem anyway to do this. If worried about LSP not working,
@@ -190,15 +166,14 @@
 (use-package objc-mode
   :mode "\\.h\\'")
 
-;; Tree sitter takes care of the grammar, and with that, we have scala syntax highlighting
-;; with tree sitter. We need this here because we need to recognize .scala files.
-(use-package scala-mode
-  :straight t)
+;; Kotlin still doesn't have full support inside emacs. To add the kotlin major
+;; mode, use the kotlin-mode package.
+(elpaca kotlin-mode)
+(elpaca swift-mode)
+(elpaca scala-mode)
 
-(use-package apheleia
-  :straight t
-  :hook
-  (rustic-mode . apheleia-mode))
+(elpaca-use-package apheleia
+  :hook (rustic-mode . apheleia-mode))
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

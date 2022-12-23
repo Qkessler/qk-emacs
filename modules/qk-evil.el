@@ -24,26 +24,7 @@
     [escape] 'keyboard-quit
     "J" (concat ":m '>+1" (kbd "RET") "gv=gv")
     "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
-  (general-nmap
-    :keymaps 'elpaca-ui-mode-map
-    "T" 'elpaca-ui-search-tried
-    "U" 'elpaca-ui-unmark
-    "b" 'elpaca-ui-browse-package
-    "d" 'elpaca-ui-mark-delete
-    "g" 'revert-buffer
-    "h" 'describe-mode
-    "i" 'elpaca-ui-mark-install
-    "l" 'elpaca-log
-    "m" 'elpaca-manager
-    "n" 'nil
-    "p" 'nil
-    "q" 'quit-window
-    "r" 'elpaca-ui-mark-rebuild
-    "s" 'elpaca-ui-search
-    "t" 'elpaca-status
-    "u" 'elpaca-ui-mark-update
-    "v" 'elpaca-visit
-    "x" 'elpaca-ui-execute-marks)
+  
   (:keymaps
    '(minibuffer-local-map
      minibuffer-local-ns-map
@@ -163,6 +144,28 @@ and complains if a module is loaded too early (during startup)."
  :init (setq evil-org-special-o/O '(table-row item))
  :config
  (evil-org-set-key-theme '(textobjects insert additional shift)))
+
+(after! (evil elpaca)
+  (general-nmap
+    :keymaps 'elpaca-ui-mode-map
+    "T" 'elpaca-ui-search-tried
+    "U" 'elpaca-ui-unmark
+    "b" 'elpaca-ui-browse-package
+    "d" 'elpaca-ui-mark-delete
+    "g" 'revert-buffer
+    "h" 'describe-mode
+    "i" 'elpaca-ui-mark-install
+    "l" 'elpaca-log
+    "m" 'elpaca-manager
+    "n" 'nil
+    "p" 'nil
+    "q" 'quit-window
+    "r" 'elpaca-ui-mark-rebuild
+    "s" 'elpaca-ui-search
+    "t" 'elpaca-status
+    "u" 'elpaca-ui-mark-update
+    "v" 'elpaca-visit
+    "x" 'elpaca-ui-execute-marks))
 
 (after! org-agenda
   (general-def

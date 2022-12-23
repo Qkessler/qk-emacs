@@ -8,11 +8,12 @@
   :commands ediff
   :init
   (setq 
-   ediff-window-setup-function 'ediff-setup-windows-plain
    ediff-diff-options "-w"
    ediff-split-window-function (if (> (frame-width) 150)
                                    'split-window-horizontally
-                                 'split-window-vertically)))
+                                 'split-window-vertically))
+  :config
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
 
 ;; `smerge-mode' is a minor mode included in Emacs that provides merging functionality.
 ;; There has been defined multiple funcions to navigate and act upon changes in files.
@@ -20,14 +21,6 @@
 ;; that you need. The following configuration provides the automatic activation.
 (use-package smerge-mode
   :hook (find-file . modi-enable-smerge-maybe)
-  :general
-  (minor-mode-definer
-    :keymaps 'smerge-mode
-    "u" 'smerge-keep-upper
-    "l" 'smerge-keep-lower
-    "n" 'smerge-next
-    "p" 'smerge-prev
-    "a" 'smerge-keep-all)
   :config
   (defun modi-enable-smerge-maybe ()
     "Auto-enable `smerge-mode' when merge conflict is detected."
@@ -36,8 +29,20 @@
       (when (re-search-forward "^<<<<<<< " nil :noerror)
         (smerge-mode 1)))))
 
-(use-package magit
-  :straight t
+(after! smerge-mode
+  (minor-mode-definer
+    :keymaps 'smerge-mode
+    "u" 'smerge-keep-upper
+    "l" 'smerge-keep-lower
+    "n" 'smerge-next
+    "p" 'smerge-prev
+    "a" 'smerge-keep-all))
+
+(elpaca-use-package magit
+  :init 
+  (setq
+   git-commit-summary-max-length 50
+   magit-diff-hide-trailing-cr-characters t)
   :general
   (minor-mode-definer
     :keymaps 'git-commit-mode
@@ -48,16 +53,11 @@
     "f" 'magit-find-file
     "l" 'magit-log-buffer-file
     "d" 'magit-diff-buffer-file)
-  :init 
-  (setq
-   git-commit-summary-max-length 50
-   magit-diff-hide-trailing-cr-characters t)
   :config
   (add-hook! 'git-commit-mode-hook (set-fill-column 72))
   (add-hook! 'magit-status-mode (display-line-numbers-mode -1)))
 
-(use-package magit-delta
-  :straight t
+(elpaca-use-package magit-delta
   :hook (magit-mode . magit-delta-mode)
   :init
   (setq magit-delta-default-dark-theme "gruvbox-dark"))

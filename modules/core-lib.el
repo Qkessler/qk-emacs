@@ -795,9 +795,9 @@ testing advice (when combined with `rotate-text').
 ;;
 
 ;; Personal lib.
-(defvar qk-fd-command (cl-find-if #'executable-find (list "fdfind" "fd"))
+(defvar qk-fd-command "fd"
   "Default command for using the fd command for file lookups.")
-(defvar qk-rg-command (cl-find-if #'executable-find (list "ripgrep" "rga" "rg"))
+(defvar qk-rg-command "rga"
   "Default command for using the rg command for line lookups.")
 
 (defun qk-real-insert (char)

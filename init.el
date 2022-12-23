@@ -65,7 +65,7 @@
 (require 'qk-project)
 (require 'qk-tab-bar)
 (require 'qk-lang)
-;; (require 'qk-mail)
+(require 'qk-mail)
 ;; ;; (require 'qk-lsp)
 ;; (require 'qk-eglot)
 ;; (require 'qk-amz)

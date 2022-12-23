@@ -6,30 +6,8 @@
 (add-to-list 'load-path "/opt/homebrew/Cellar/mu/1.8.11/share/emacs/site-lisp/mu/mu4e/")
 
 (use-package mu4e
-  :defer 2
-  :general
-  (major-mode-definer
-    :major-modes '(mu4e-compose-mode)
-    :keymaps '(mu4e-compose-mode-map) 
-    "f" 'message-send-and-exit
-    "c" 'message-dont-send
-    "a" 'mail-add-attachment)
-  (:keymaps
-   '(mu4e-main-mode-map)
-   "q" nil)
-  (general-nmap
-    :keymaps '(mu4e-main-mode-map)
-    "q" 'quit-window)
-  (general-nmap
-    :keymaps '(mu4e-view-mode-map)
-    "F" 'mu4e-compose-forward)
-  (+general-global-applications
-    "m" 'mu4e
-    "s" 'mu4e-headers-search)
-  (general-vmap
-    :keymaps '(mu4e-headers-mode-map)
-    "!" 'mu4e-headers-mark-for-read)
   :hook (mu4e-compose-mode . flyspell-mode)
+  :commands mu4e mu4e-headers-search
   :init
   (setq
    mu4e-maildir "~/.Mail"
@@ -68,15 +46,30 @@
     (mu4e-icalendar-setup)
     (setq gnus-icalendar-org-capture-file (concat qk-notes-directory "meetings.org"))
     (setq gnus-icalendar-org-capture-headline '("Meetings"))
-    (gnus-icalendar-org-setup))
+    (gnus-icalendar-org-setup)))
 
-  (defun qk-restart-mu ()
-    "Run the restart-mu command to unblock mu4e's indexing and querying."
-    (interactive)
-    (shell-command-to-string "restart-mu"))
+(after! general
+  (+general-global-applications
+    "m" 'mu4e
+    "s" 'mu4e-headers-search))
+
+(after! mu4e
+  (add-hook! mu4e-main-mode
+    (general-nmap
+      :keymaps 'mu4e-main-mode-map
+      "q" 'quit-window))
+  (major-mode-definer
+    :major-modes '(mu4e-compose-mode)
+    :keymaps '(mu4e-compose-mode-map) 
+    "f" 'message-send-and-exit
+    "c" 'message-dont-send
+    "a" 'mail-add-attachment)
   (general-nmap
-    :keymaps '(mu4e-main-mode-map)
-    "q" 'quit-window))
+    :keymaps '(mu4e-view-mode-map)
+    "F" 'mu4e-compose-forward)
+  (general-vmap
+    :keymaps '(mu4e-headers-mode-map)
+    "!" 'mu4e-headers-mark-for-read))
 
 ;;; Maildir and Bookmark shortcuts
 
@@ -136,57 +129,57 @@
 
 (use-package mu4e-context
   :after mu4e
-  :custom
-  (mu4e-contexts
-   (list
-    (make-mu4e-context
-     :name "Amazon"
-     :match-func
-     (lambda (msg)
-       (when msg
-         (string-prefix-p "/amazon" (mu4e-message-field msg :maildir))))
-     :vars '((user-mail-address . "enrikes@amazon.com")
-             (user-full-name    . "Quique Kessler Martínez")
-             (mu4e-drafts-folder  . "/amazon/Drafts")
-             (mu4e-sent-folder  . "/amazon/Sent Items")
-             (mu4e-refile-folder  . "/amazon/Archive")
-             (mu4e-trash-folder  . "/amazon/Deleted Items")
-             (smtpmail-smtp-user . "enrikes")
-             (smtpmail-default-smtp-server . "exch-eu.amazon.com")
-             (smtpmail-smtp-server . "exch-eu.amazon.com")
-             (smtpmail-smtp-service . 1587)))
-    (make-mu4e-context
-     :name "Personal"
-     :match-func
-     (lambda (msg)
-       (when msg
-         (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
-     :vars '((user-mail-address . "qkessler@gmail.com")
-             (user-full-name    . "Enrique Kessler Martínez")
-             (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
-             (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
-             (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
-             (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
-             (smtpmail-smtp-user . "qkessler@gmail.com")
-             (smtpmail-default-smtp-server . "smtp.gmail.com")
-             (smtpmail-smtp-server . "smtp.gmail.com")
-             (smtpmail-smtp-service . 587)))
-    (make-mu4e-context
-     :name "Work"
-     :match-func
-     (lambda (msg)
-       (when msg
-         (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
-     :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
-             (user-full-name    . "Enrique Kessler Martínez")
-             (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
-             (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
-             (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
-             (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
-             (smtpmail-default-smtp-server . "smtp.gmail.com")
-             (smtpmail-smtp-user . "enrique.kesslerm@gmail.com")
-             (smtpmail-smtp-server . "smtp.gmail.com")
-             (smtpmail-smtp-service . 587))))))
+  :config
+  (setq mu4e-contexts
+        (list
+         (make-mu4e-context
+          :name "Amazon"
+          :match-func
+          (lambda (msg)
+            (when msg
+              (string-prefix-p "/amazon" (mu4e-message-field msg :maildir))))
+          :vars '((user-mail-address . "enrikes@amazon.com")
+                  (user-full-name    . "Quique Kessler Martínez")
+                  (mu4e-drafts-folder  . "/amazon/Drafts")
+                  (mu4e-sent-folder  . "/amazon/Sent Items")
+                  (mu4e-refile-folder  . "/amazon/Archive")
+                  (mu4e-trash-folder  . "/amazon/Deleted Items")
+                  (smtpmail-smtp-user . "enrikes")
+                  (smtpmail-default-smtp-server . "exch-eu.amazon.com")
+                  (smtpmail-smtp-server . "exch-eu.amazon.com")
+                  (smtpmail-smtp-service . 1587)))
+         (make-mu4e-context
+          :name "Personal"
+          :match-func
+          (lambda (msg)
+            (when msg
+              (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
+          :vars '((user-mail-address . "qkessler@gmail.com")
+                  (user-full-name    . "Enrique Kessler Martínez")
+                  (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
+                  (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
+                  (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
+                  (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
+                  (smtpmail-smtp-user . "qkessler@gmail.com")
+                  (smtpmail-default-smtp-server . "smtp.gmail.com")
+                  (smtpmail-smtp-server . "smtp.gmail.com")
+                  (smtpmail-smtp-service . 587)))
+         (make-mu4e-context
+          :name "Work"
+          :match-func
+          (lambda (msg)
+            (when msg
+              (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
+          :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
+                  (user-full-name    . "Enrique Kessler Martínez")
+                  (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
+                  (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
+                  (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
+                  (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
+                  (smtpmail-default-smtp-server . "smtp.gmail.com")
+                  (smtpmail-smtp-user . "enrique.kesslerm@gmail.com")
+                  (smtpmail-smtp-server . "smtp.gmail.com")
+                  (smtpmail-smtp-service . 587))))))
 
 ;;; Sending mail: the message package
 
@@ -199,28 +192,31 @@
 ;; sends them all in batches when ready.
 
 (use-package message
-  :custom
-  (mail-user-agent 'mu4e-user-agent)
-  (compose-mail-user-agent-warnings nil)
-  (starttls-use-gnutls t)
-  (message-mail-user-agent nil)    ; default is `gnus'
-  (message-citation-line-format "On %Y-%m-%d, %R %z, %f wrote:\n")
-  (message-citation-line-function 'message-insert-formatted-citation-line)
-  (message-wide-reply-confirm-recipients t)
-  (send-mail-function 'smtpmail-send-it)
-  (message-send-mail-function 'smtpmail-send-it)
-  (message-default-charset 'utf-8)
-  :config (add-to-list 'mm-body-charset-encoding-alist '(utf-8 . base64)))
+  :init
+  (setq
+   compose-mail-user-agent-warnings nil
+   starttls-use-gnutls t
+   message-mail-user-agent nil    ; default is `gnus'
+   message-citation-line-format "On %Y-%m-%d, %R %z, %f wrote:\n"
+   message-citation-line-function 'message-insert-formatted-citation-line
+   message-wide-reply-confirm-recipients t
+   send-mail-function 'smtpmail-send-it
+   message-send-mail-function 'smtpmail-send-it
+   message-default-charset 'utf-8)
+  :config
+  (setq mail-user-agent 'mu4e-user-agent)
+  (add-to-list 'mm-body-charset-encoding-alist '(utf-8 . base64)))
 
 ;; If you don't want to use msmtp anymore, remove this config.
 
 (use-package message
-  :custom
-  (sendmail-program "/opt/homebrew/bin/msmtp")
-  (message-sendmail-f-is-evil t)
-  (message-sendmail-extra-arguments '("--read-envelope-from"))
-  (send-mail-function 'smtpmail-send-it)
-  (message-send-mail-function 'message-send-mail-with-sendmail))
+  :init
+  (setq
+   sendmail-program "/opt/homebrew/bin/msmtp"
+   message-sendmail-f-is-evil t
+   message-sendmail-extra-arguments '("--read-envelope-from")
+   send-mail-function 'smtpmail-send-it
+   message-send-mail-function 'message-send-mail-with-sendmail))
 
 ;;; Alerts for incoming mail: mu4e-alert
 
@@ -237,29 +233,21 @@
 ;; that I'm interested in. For the latter, I still need to define a clear set
 ;; of rules for reducing the amount of unneded email that I mark as read everyday. 
 
-(use-package mu4e-alert
-  :straight t
-  :defer 5
-  :hook (after-init . mu4e-alert-enable-mode-line-display)
-  :custom
-  (mu4e-alert-interesting-mail-query
-   (concat "((to:enrikes@amazon.com OR to:enrikes@amazon.es) AND g:unread AND NOT g:trashed)"
-           " OR "
-           "(g:unread AND g:trashed AND (from:josli@amazon.com OR from:josli@amazon.es))"
-           ;; " OR "
-           ;; "g:uNread maildir:/UMU/Inbox to:enrique.kesslerm@um.es"
-           )))
+(elpaca-use-package mu4e-alert
+                    :hook (mu4e-main-mode . mu4e-alert-enable-mode-line-display)
+                    :init
+                    (setq mu4e-alert-interesting-mail-query
+                          (concat "((to:enrikes@amazon.com OR to:enrikes@amazon.es) AND g:unread AND NOT g:trashed)"
+                                  " OR "
+                                  "(g:unread AND g:trashed AND (from:josli@amazon.com OR from:josli@amazon.es))")))
 
 ;;; Org-mime
 
 ;; Send messages in org-mode and html format.
 
-(use-package org-mime
-  :straight t
-  :hook
-  (message-send . org-mime-htmlize)
-  :init
-  (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
+(elpaca-use-package org-mime
+                    :hook (message-send . org-mime-htmlize)
+                    :init (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
 
 (provide 'qk-mail)
 ;;; qk-mail.el ends here.

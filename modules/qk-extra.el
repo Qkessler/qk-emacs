@@ -1,36 +1,33 @@
 ;;; qk-extra.el -*- lexical-binding: t; -*-
 
-(use-package pdf-tools
-  :straight t
+(elpaca-use-package pdf-tools
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
   (add-hook! 'pdf-view-mode-hook
     (display-line-numbers-mode -1)
     (auto-revert-mode)))
 
-(use-package org-pdftools
-  :straight t
-  :hook (org-mode . org-pdftools-setup-link))
+(after! pdf-tools
+  (elpaca org-pdftools (org-pdftools-setup-link)))
 
 ;; Instead of using the default authinfo password manager, which
 ;; defaults to the .authinfo.gpg file, configure Emacs to use
 ;; https://www.passwordstore.org/.
-(use-package auth-source-pass
-  :init (auth-source-pass-enable))
+
+;; (elpaca-use-package auth-source-pass
+;;   :init (auth-source-pass-enable))
 
 ;; The previous snippet configures Emacs to be able to access
 ;; the gpg files when a password is required. There is also a
 ;; pass major mode to insert and copy passwords from Emacs.
-(use-package pass
-  :straight t
+(elpaca-use-package pass
   :init (setq pass-username-field "login")
   :general
   (+general-global-applications
     "p" 'pass))
 
 ;; Emacs minor mode for making Anki cards with Org
-(use-package anki-editor
-  :straight t
+(elpaca-use-package anki-editor
   :init
   (setq
    anki-editor-create-decks t
@@ -50,19 +47,18 @@
   (add-to-list 'org-capture-templates
                `("a" "Anki basic" entry (file org-default-notes-file)
                  ,(concat
-                  "* %<%H:%M>   %^g\n:PROPERTIES:\n"
-                  ":ANKI_NOTE_TYPE: Basic\n"
-                  ":ANKI_DECK: %?\n"
-                  ":VISIBILITY: folded\n"
-                  ":END:\n"
-                  "** Front\n\n"
-                  "** Back\n\n"))))
+                   "* %<%H:%M>   %^g\n:PROPERTIES:\n"
+                   ":ANKI_NOTE_TYPE: Basic\n"
+                   ":ANKI_DECK: %?\n"
+                   ":VISIBILITY: folded\n"
+                   ":END:\n"
+                   "** Front\n\n"
+                   "** Back\n\n"))))
 
 ;; Thanks to the amazing Ledger command line tool, which is an double-entry
 ;; accounting system that allows for fast queries and reports we are able to
 ;; connect our emacs --and ledger files-- to the amazing ledger-mode.
-(use-package ledger-mode
-  :straight t
+(elpaca-use-package ledger-mode
   :mode "\\.ledger\\'"
   :init
   (setq
@@ -93,16 +89,10 @@
   :custom-face
   (ledger-occur-xact-face ((t (:background "#222324" :inherit nil)))))
 
-(use-package emacs-everywhere
-  :straight t
-  :general
-  (minor-mode-definer
-    :keymaps 'emacs-everywhere-mode
-    "f" 'emacs-everywhere-finish
-    "c" '(emacs-everywhere-abort :which-key "emacs-everywhere-abort")))
-
-(use-package chatgpt
-  :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
+(elpaca-use-package (chatgpt
+                     :host github
+                     :repo "joshcho/ChatGPT.el"
+                     :files ("dist" "*.el"))
   :init
   (setq
    chatgpt-repo-path "~/.emacs.d/straight/repos/ChatGPT.el/"

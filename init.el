@@ -68,7 +68,7 @@
 (require 'qk-mail)
 (require 'qk-eglot)
 (require 'qk-vterm)
-;; (require 'qk-extra)
+(require 'qk-extra)
 ;; (require 'qk-amz)
 
 (setq custom-file "~/.emacs.d/var/custom.el")

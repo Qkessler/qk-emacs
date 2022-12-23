@@ -72,25 +72,6 @@ killing and opening many LSP/eglot-powered buffers.")
    rustic-lsp-client 'eglot
    eglot-workspace-configuration
    '(:vscode-json-language-server (:provideFormatter t)))
-  :general
-  (minor-mode-definer
-    :keymaps 'flymake-mode
-    "n" 'flymake-goto-next-error
-    "p" 'flymake-goto-prev-error)
-  (:keymaps 'flymake-mode-map
-    "M-n" 'flymake-goto-next-error
-    "M-p" 'flymake-goto-prev-error)
-  (minor-mode-definer
-    :keymaps 'eglot--managed-mode
-    "a" 'eglot-code-actions
-    "r" 'eglot-rename
-    "R" 'xref-find-references
-    "f" 'eglot-format-buffer
-    "e" 'consult-flymake)
-  (general-nmap
-    :major-modes '(eglot--managed-mode)
-    "gi" 'eglot-find-implementation
-    "gr" 'xref-find-references)
   :config
   (add-hook! eglot-managed-mode (eldoc-mode -1))
   (defadvice! +lsp--defer-server-shutdown-a (fn &optional server)
@@ -99,18 +80,19 @@ This gives the user a chance to open other project files before the server is
 auto-killed (which is a potentially expensive process). It also prevents the
 server getting expensively restarted when reverting buffers."
     :around #'eglot--managed-mode
-    (letf! (defun eglot-shutdown (server)
-             (if (or (null +lsp-defer-shutdown)
-                     (eq +lsp-defer-shutdown 0))
-                 (prog1 (funcall eglot-shutdown server)
-                   (+lsp-optimization-mode -1))
-               (run-at-time
-                (if (numberp +lsp-defer-shutdown) +lsp-defer-shutdown 3)
-                nil (lambda (server)
-                      (unless (eglot--managed-buffers server)
-                        (prog1 (funcall eglot-shutdown server)
-                          (+lsp-optimization-mode -1))))
-                server)))
+    (letf!
+      (defun eglot-shutdown (server)
+        (if (or (null +lsp-defer-shutdown)
+                (eq +lsp-defer-shutdown 0))
+            (prog1 (funcall eglot-shutdown server)
+              (+lsp-optimization-mode -1))
+          (run-at-time
+           (if (numberp +lsp-defer-shutdown) +lsp-defer-shutdown 3)
+           nil (lambda (server)
+                 (unless (eglot--managed-buffers server)
+                   (prog1 (funcall eglot-shutdown server)
+                     (+lsp-optimization-mode -1))))
+           server)))
       (funcall fn server)))
   (add-to-list 'eglot-server-programs
                `(java-mode
@@ -124,8 +106,28 @@ server getting expensively restarted when reverting buffers."
   (add-to-list 'eglot-server-programs
                `(toml-ts-mode . ("taplo" "lsp" "stdio"))))
 
-(use-package eldoc-box
-  :straight t
+(after! eglot
+  (minor-mode-definer
+    :keymaps 'flymake-mode
+    "n" 'flymake-goto-next-error
+    "p" 'flymake-goto-prev-error)
+  (general-def
+    :keymaps 'flymake-mode-map
+    "M-n" 'flymake-goto-next-error
+    "M-p" 'flymake-goto-prev-error)
+  (minor-mode-definer
+    :keymaps 'eglot--managed-mode
+    "a" 'eglot-code-actions
+    "r" 'eglot-rename
+    "R" 'xref-find-references
+    "f" 'eglot-format-buffer
+    "e" 'consult-flymake)
+  (general-nmap
+    :major-modes '(eglot--managed-mode)
+    "gi" 'eglot-find-implementation
+    "gr" 'xref-find-references))
+
+(elpaca-use-package eldoc-box
   :hook (eglot-managed-mode . qk-add-eglot-keys)
   :config
   (defun qk-add-eglot-keys ()

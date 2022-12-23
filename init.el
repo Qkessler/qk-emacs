@@ -69,7 +69,7 @@
 (require 'qk-eglot)
 (require 'qk-vterm)
 (require 'qk-extra)
-;; (require 'qk-amz)
+(require 'qk-amz)
 
 (setq custom-file "~/.emacs.d/var/custom.el")
 (message "*** Emacs loaded in %s with %d garbage collections."

@@ -155,6 +155,7 @@ and complains if a module is loaded too early (during startup)."
     "g" 'revert-buffer
     "h" 'describe-mode
     "i" 'elpaca-ui-mark-install
+    "I" 'elpaca-ui-search-installed
     "l" 'elpaca-log
     "m" 'elpaca-manager
     "n" 'nil

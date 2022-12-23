@@ -67,9 +67,9 @@
 (require 'qk-lang)
 (require 'qk-mail)
 (require 'qk-eglot)
-;; (require 'qk-amz)
-;; (require 'qk-vterm)
+(require 'qk-vterm)
 ;; (require 'qk-extra)
+;; (require 'qk-amz)
 
 (setq custom-file "~/.emacs.d/var/custom.el")
 (message "*** Emacs loaded in %s with %d garbage collections."

@@ -24,7 +24,6 @@
     [escape] 'keyboard-quit
     "J" (concat ":m '>+1" (kbd "RET") "gv=gv")
     "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
-  
   (:keymaps
    '(minibuffer-local-map
      minibuffer-local-ns-map

@@ -10,6 +10,7 @@
   :general
   (general-nmap
     :prefix "SPC"
+    :keymaps 'global-map
     "s" 'consult-line)
   (+general-global-buffer
     "b" 'consult-buffer

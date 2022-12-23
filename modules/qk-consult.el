@@ -5,8 +5,8 @@
 ;; with completion. Consult offers in particular an advanced buffer switching command
 ;; consult-buffer to switch between buffers and recently opened files. 
 (elpaca-use-package consult
- :commands
- consult--read consult-xref consult-register-format consult-register-window
+  :commands
+  consult--read consult-xref consult-register-format consult-register-window
   :general
   (general-nmap
     :prefix "SPC"
@@ -21,8 +21,8 @@
     "h" 'consult-org-heading)
   :init
   (setq
-   consult-narrow-key "<"
-   consult-preview-key (list :debounce 0.5 'any)
+   consult-narrow-key qk-consult-narrow-key
+   consult-preview-key qk-consult-preview-key
    consult-ripgrep-args (concat qk-rg-command
                                 " --null"
                                 " --hidden"

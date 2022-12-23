@@ -4,11 +4,10 @@
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq
-   denote-directory (expand-file-name "~/Documents/slipbox/pages/")
+   denote-directory qk-denote-directory
    qk-notes-directory denote-directory
-   org-default-notes-file (concat qk-notes-directory "refile.org")
    denote-known-keywords '()
-   denote-prompts '(title keywords)
+   denote-prompts qk-denote-prompts
    denote-allow-multi-word-keywords t
    denote-date-format nil
    denote-link-fontify-backlinks t

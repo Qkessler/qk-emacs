@@ -17,11 +17,12 @@
    doom-modeline-project-detection 'project
    doom-modeline-modal-icon nil
    doom-modeline-window-width-limit fill-column
-   doom-modeline-buffer-file-name-style 'truncate-with-project
+   doom-modeline-buffer-file-name-style qk-doom-modeline-buffer-file-name-style
    display-time-string-forms '((concat " " 24-hours ":" minutes " ")))
-  (display-time-mode)
-  (display-time-update))
-
+  :config
+  (when qk-modeline-display-time
+    (display-time-mode)
+    (display-time-update)))
 
 (provide 'qk-ui)
 ;; qk-ui.el ends here.

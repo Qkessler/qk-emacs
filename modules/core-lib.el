@@ -795,11 +795,6 @@ testing advice (when combined with `rotate-text').
 ;;
 
 ;; Personal lib.
-(defvar qk-fd-command "fd"
-  "Default command for using the fd command for file lookups.")
-(defvar qk-rg-command "rga"
-  "Default command for using the rg command for line lookups.")
-
 (defun qk-real-insert (char)
   (cl-flet ((do-insert
               () (progn

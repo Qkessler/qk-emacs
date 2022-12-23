@@ -41,7 +41,7 @@
 (elpaca-use-package magit
   :init 
   (setq
-   git-commit-summary-max-length 50
+   git-commit-summary-max-length qk-git-commit-summary-max-length
    magit-diff-hide-trailing-cr-characters t)
   :general
   (minor-mode-definer
@@ -54,13 +54,12 @@
     "l" 'magit-log-buffer-file
     "d" 'magit-diff-buffer-file)
   :config
-  (add-hook! 'git-commit-mode-hook (set-fill-column 72))
+  (add-hook! 'git-commit-mode-hook (set-fill-column qk-git-commit-fill-column))
   (add-hook! 'magit-status-mode (display-line-numbers-mode -1)))
 
 (elpaca-use-package magit-delta
   :hook (magit-mode . magit-delta-mode)
-  :init
-  (setq magit-delta-default-dark-theme "gruvbox-dark"))
+  :init (setq magit-delta-default-dark-theme "gruvbox-dark"))
 
 (provide 'qk-git)
 ;; qk-git.el ends here.

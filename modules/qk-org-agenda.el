@@ -9,12 +9,12 @@
    org-agenda-skip-function nil
    org-agenda-hide-tags-regexp ".*"
    org-roam-v2-ack t
-   org-deadline-warning-days 3
+   org-deadline-warning-days qk-org-agenda-deadline-warning-days
    org-agenda-inhibit-startup t
    org-agenda-use-tag-inheritance nil
    org-agenda-ignore-drawer-properties '(effort appt category)
    org-agenda-block-separator ?—
-   org-agenda-skip-scheduled-if-deadline-is-shown t)
+   org-agenda-skip-scheduled-if-deadline-is-shown qk-org-agenda-skip-scheduled-if-deadline-is-shown)
   :config
   (setq
    org-agenda-custom-commands

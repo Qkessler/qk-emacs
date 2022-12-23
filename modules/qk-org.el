@@ -1,6 +1,5 @@
 ;;; qk-org.el -*- lexical-binding: t; -*-
 
-(defvar qk-notes-directory (expand-file-name "~/Documents/slipbox/"))
 (use-package org
   :hook
   (org-clock-in-hook . org-save-all-org-buffers)
@@ -18,10 +17,9 @@
                                (indent-to 4))))))
   :init
   (setq
-   org-directory "~/Documents/org_files"
    org-return-follows-link t
-   org-default-notes-file (concat qk-notes-directory "refile.org")
-   org-archive-location (concat qk-notes-directory "../archive/%s_archive::")
+   org-default-notes-file qk-org-default-notes-file
+   org-archive-location qk-org-archive-location
    org-src-fontify-natively t
    org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
    org-clock-out-remove-zero-time-clocks t

@@ -63,18 +63,7 @@
   :init
   (setq
    ledger-clear-whole-transactions t
-   ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
-                    ("reg" "%(binary) -f %(ledger-file) reg")
-                    ("reg this month" "%(binary) -f %(ledger-file) reg -p \"this month\"")
-                    ("reg last month" "%(binary) -f %(ledger-file) reg -p \"last month\"")
-                    ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                    ("account" "%(binary) -f %(ledger-file) reg %(account)")
-                    ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
-  \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
-                    ("expenses last month" "%(binary) -p \"last month\" -f %(ledger-file) bal Expenses and not \
-  \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
-                    ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")
-                    ("income last month" "%(binary) -f %(ledger-file) -p \"last month\" bal ^Income")))
+   ledger-reports qk-ledger-reports)
   :general
   (major-mode-definer
     :major-modes '(ledger-mode)
@@ -94,9 +83,7 @@
                      :repo "joshcho/ChatGPT.el"
                      :files ("dist" "*.el"))
   :init
-  (setq
-   chatgpt-repo-path "~/.emacs.d/straight/repos/ChatGPT.el/"
-   python-interpreter "python3")
+  (setq chatgpt-repo-path qk-chatgpt-repo-path)
   :general
   (major-mode-definer
     :major-modes '(prog-mode text-mode org-mode)

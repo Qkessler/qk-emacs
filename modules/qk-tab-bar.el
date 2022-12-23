@@ -2,11 +2,9 @@
 
 (use-package tab-bar
   :hook (doom-first-buffer . tab-bar-mode)
-  :init (setq tab-bar-show nil))
+  :init (setq tab-bar-show qk-tab-bar-show))
 
 (after! (tab-bar general)
-  (defvar qk-tab-bar-initial-tab-name "base")
-  (defvar qk-tab-bar--last-tab qk-tab-bar-initial-tab-name)
   (defun qk-tab-bar-switch-to-last-tab ()
     "Switch to the previously accessed tab. If there isn't a previous tab, do nothing."
     (interactive)

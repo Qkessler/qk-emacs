@@ -20,9 +20,9 @@
 ;; parsers, as it has been really accepted by the community and the Github's Atom
 ;; team has been working on implementing a ton of languages.
 (elpaca-use-package tree-sitter
-                    :hook
-                    (doom-first-buffer . global-tree-sitter-mode)
-                    (tree-sitter-after-on . tree-sitter-hl-mode))
+  :hook
+  (doom-first-buffer . global-tree-sitter-mode)
+  (tree-sitter-after-on . tree-sitter-hl-mode))
 
 (elpaca-use-package tree-sitter-langs
   :after tree-sitter
@@ -54,12 +54,12 @@
 
 (use-package c++-mode
   :mode ("\\.cpp\\'" "\\.c\\'")
-  :init (setq c-basic-offset 4))
+  :init (setq c-basic-offset qk-tab-width))
 
 (use-package python
   :init
   (setq
-   python-shell-interpreter "python3"
+   python-shell-interpreter qk-python-shell-interpreter
    compilation-ask-about-save nil
    python-indent-guess-indent-offset-verbose nil
    compilation-scroll-output t))
@@ -104,7 +104,7 @@
   :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'"))
 
 (elpaca-use-package json-mode
-                    :mode "\\.json\\'")
+  :mode "\\.json\\'")
 
 (elpaca-use-package yaml-mode
   :mode "\\.yml\\'")
@@ -115,7 +115,7 @@
 ;; some cargo commands implemented is nice. The lsp configuration is
 ;; also seamless, pretty good package.
 (elpaca-use-package rustic
-                    :mode ("\\.rs\\'" . rustic-mode)
+  :mode ("\\.rs\\'" . rustic-mode)
   :init
   (setq
    rustic-format-on-save nil
@@ -152,7 +152,7 @@
 (elpaca-use-package markdown-mode
   :mode ("\\.md\\'" . gfm-mode)
   :hook (markdown-mode . visual-line-mode)
-  :init (setq markdown-command "pandoc -t html5")
+  :init (setq markdown-command qk-markdown-command)
   :general
   (major-mode-definer
     :keymaps '(markdown-mode-map)

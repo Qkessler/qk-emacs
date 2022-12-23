@@ -3,22 +3,21 @@
 ;; Adding mu4e configuration that was configured with mbsync.
 ;; We have installed it with the package manager, in order to make sure
 ;; that the mu4e version is in sync with the mu binary from my distro.
-(add-to-list 'load-path "/opt/homebrew/Cellar/mu/1.8.11/share/emacs/site-lisp/mu/mu4e/")
-
+(add-to-list 'load-path qk-mu4e-load-path)
 (use-package mu4e
   :hook (mu4e-compose-mode . flyspell-mode)
   :commands mu4e mu4e-headers-search
   :init
   (setq
-   mu4e-maildir "~/.Mail"
-   mu4e-attachment-dir "~/Downloads"
-   mu4e-get-mail-command "mbsync amazon"
+   mu4e-maildir qk-mu4e-maildir
+   mu4e-attachment-dir qk-mu4e-attachment-dir
+   mu4e-get-mail-command qk-mu4e-get-mail-command
    mu4e-change-filenames-when-moving t
    mu4e-headers-show-threads nil
    mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout"
    mu4e-hide-index-messages t
-   mu4e-compose-signature "Enrique Kessler Martínez\n"
-   mu4e-update-interval (* 5 60)
+   mu4e-compose-signature qk-mu4e-compose-signature
+   mu4e-update-interval qk-mu4e-update-interval
    mu4e-compose-signature-auto-include t
    mu4e-confirm-quit nil
    mu4e-sent-messages-behavior 'sent
@@ -89,36 +88,11 @@
 ;; review order that would let me classify and create actionable tasks for the mail that
 ;; I receive, folling the GTD workflow.
 
-(defvar qk-notificator-team-mu-query "to:kindle-notifications-dev@amazon.com")
-(defvar qk-manager-mu-query "(from:josli@amazon.com OR from:josli@amazon.es)")
-(defvar qk-to-me-mu-query "(to:enrikes@amazon.com OR to:enrikes@amazon.es)")
-(defvar qk-unread-mu-query " AND g:unread AND NOT g:trashed")
-
 (use-package mu4e
   :init 
   (setq
-   mu4e-maildir-shortcuts
-   '( (:maildir "/amazon/CRs" :key ?c)
-      (:maildir "/amazon/Issues" :key ?i)
-      (:maildir "/amazon/Pipelines" :key ?P)
-      (:maildir "/Gmail/Work/Inbox" :key ?p)
-      (:maildir "/amazon/Quip" :key ?q)
-      (:maildir "/amazon/Asana" :key ?a)
-      )
-
-   mu4e-bookmarks
-   `(
-     (:name "All Unread" :query "g:unread" :key ?u)
-     (:name "Today's messages" :query "d:today..now" :key ?t)
-     (:name "Direct to Me" :query ,(concat qk-to-me-mu-query qk-unread-mu-query) :key ?m)
-     (:name "josli@" :query ,(concat qk-manager-mu-query qk-unread-mu-query) :key ?j)
-     (:name "CRs" :query ,(concat "maildir:/amazon/CRs" qk-unread-mu-query) :key ?c)
-     (:name "kindle-notifications-dev"
-            :query ,(concat qk-notificator-team-mu-query qk-unread-mu-query)
-            :key ?d)
-
-     (:name "qkessler" :query ,(concat "maildir:/Gmail/Personal/Inbox" qk-unread-mu-query) :key ?q)
-     (:name "enrique.kesslerm" :query ,(concat "maildir:/Gmail/Work/Inbox" qk-unread-mu-query) :key ?e))))
+   mu4e-maildir-shortcuts qk-mu4e-maildir-shortcuts
+   mu4e-bookmarks qk-mu4e-bookmarks))
 
 ;;; Mail contexts
 
@@ -129,57 +103,7 @@
 
 (use-package mu4e-context
   :after mu4e
-  :config
-  (setq mu4e-contexts
-        (list
-         (make-mu4e-context
-          :name "Amazon"
-          :match-func
-          (lambda (msg)
-            (when msg
-              (string-prefix-p "/amazon" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address . "enrikes@amazon.com")
-                  (user-full-name    . "Quique Kessler Martínez")
-                  (mu4e-drafts-folder  . "/amazon/Drafts")
-                  (mu4e-sent-folder  . "/amazon/Sent Items")
-                  (mu4e-refile-folder  . "/amazon/Archive")
-                  (mu4e-trash-folder  . "/amazon/Deleted Items")
-                  (smtpmail-smtp-user . "enrikes")
-                  (smtpmail-default-smtp-server . "exch-eu.amazon.com")
-                  (smtpmail-smtp-server . "exch-eu.amazon.com")
-                  (smtpmail-smtp-service . 1587)))
-         (make-mu4e-context
-          :name "Personal"
-          :match-func
-          (lambda (msg)
-            (when msg
-              (string-prefix-p "/Gmail/Personal" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address . "qkessler@gmail.com")
-                  (user-full-name    . "Enrique Kessler Martínez")
-                  (mu4e-drafts-folder  . "/Gmail/Personal/[Gmail]/Drafts")
-                  (mu4e-sent-folder  . "/Gmail/Personal/[Gmail]/Sent Mail")
-                  (mu4e-refile-folder  . "/Gmail/Personal/[Gmail]/All Mail")
-                  (mu4e-trash-folder  . "/Gmail/Personal/[Gmail]/Trash")
-                  (smtpmail-smtp-user . "qkessler@gmail.com")
-                  (smtpmail-default-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-service . 587)))
-         (make-mu4e-context
-          :name "Work"
-          :match-func
-          (lambda (msg)
-            (when msg
-              (string-prefix-p "/Gmail/Work" (mu4e-message-field msg :maildir))))
-          :vars '((user-mail-address . "enrique.kesslerm@gmail.com")
-                  (user-full-name    . "Enrique Kessler Martínez")
-                  (mu4e-drafts-folder  . "/Gmail/Work/[Gmail]/Drafts")
-                  (mu4e-sent-folder  . "/Gmail/Work/[Gmail]/Sent Mail")
-                  (mu4e-refile-folder  . "/Gmail/Work/[Gmail]/All Mail")
-                  (mu4e-trash-folder  . "/Gmail/Work/[Gmail]/Trash")
-                  (smtpmail-default-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-user . "enrique.kesslerm@gmail.com")
-                  (smtpmail-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-service . 587))))))
+  :config (setq mu4e-contexts qk-mu4e-contexts))
 
 ;;; Sending mail: the message package
 
@@ -212,7 +136,7 @@
 (use-package message
   :init
   (setq
-   sendmail-program "/opt/homebrew/bin/msmtp"
+   sendmail-program qk-sendmail-program
    message-sendmail-f-is-evil t
    message-sendmail-extra-arguments '("--read-envelope-from")
    send-mail-function 'smtpmail-send-it
@@ -234,20 +158,16 @@
 ;; of rules for reducing the amount of unneded email that I mark as read everyday. 
 
 (elpaca-use-package mu4e-alert
-                    :hook (mu4e-main-mode . mu4e-alert-enable-mode-line-display)
-                    :init
-                    (setq mu4e-alert-interesting-mail-query
-                          (concat "((to:enrikes@amazon.com OR to:enrikes@amazon.es) AND g:unread AND NOT g:trashed)"
-                                  " OR "
-                                  "(g:unread AND g:trashed AND (from:josli@amazon.com OR from:josli@amazon.es))")))
+  :hook (mu4e-main-mode . mu4e-alert-enable-mode-line-display)
+  :init (setq mu4e-alert-interesting-mail-query qk-mu4e-alert-interesting-mail-query))
 
 ;;; Org-mime
 
 ;; Send messages in org-mode and html format.
 
 (elpaca-use-package org-mime
-                    :hook (message-send . org-mime-htmlize)
-                    :init (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
+  :hook (message-send . org-mime-htmlize)
+  :init (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
 
 (provide 'qk-mail)
 ;;; qk-mail.el ends here.

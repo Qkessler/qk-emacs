@@ -3,8 +3,8 @@
 (elpaca-use-package vterm
   :init
   (setq
-   vterm-max-scrollback 10000
-   vterm-timer-delay nil)
+   vterm-max-scrollback qk-vterm-max-scrollback
+   vterm-timer-delay qk-vterm-timer-delay)
   :general
   (major-mode-definer
     :keymaps '(vterm-mode-map)

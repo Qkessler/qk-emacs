@@ -795,6 +795,21 @@ testing advice (when combined with `rotate-text').
 ;;
 
 ;; Personal lib.
+(cl-defstruct mu4e-context
+  name
+  (enter-func nil)
+  (leave-func nil)
+  (match-func nil)
+  vars)
+
+(defsubst mu4e-message-field (msg field)
+  (let ((val (mu4e-message-field-raw msg field)))
+    (cond (val val)   ;; non-nil -> just return it
+     ((member field '(:subject :message-id :path :maildir :in-reply-to)) "")    ;; string fields except body-txt, body-html: nil -> ""
+     ((member field '(:body-html :body-txt)) val)
+     ((member field '(:docid :size)) 0)     ;; numeric type: nil -> 0
+     (t val))))
+
 (defun qk-real-insert (char)
   (cl-flet ((do-insert
               () (progn

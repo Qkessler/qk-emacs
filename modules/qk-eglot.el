@@ -61,6 +61,7 @@ killing and opening many LSP/eglot-powered buffers.")
     rustic-mode
     kotlin-mode
     scala-mode
+    go-mode
     ) . eglot-ensure)
   :init
   (setq

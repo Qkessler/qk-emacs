@@ -171,9 +171,11 @@
 (elpaca kotlin-mode)
 (elpaca swift-mode)
 (elpaca scala-mode)
+(elpaca go-mode)
 
 (elpaca-use-package apheleia
-  :hook (rustic-mode . apheleia-mode))
+  :hook
+  ((rustic-mode go-mode) . apheleia-mode))
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

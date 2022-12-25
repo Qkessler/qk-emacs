@@ -104,7 +104,7 @@ The current directory is set to the root directory of the current project before
   (major-mode-definer
     :keymaps '(prog-mode-map conf-mode-map)
     :major-modes '(prog-mode conf-mode)
-    "r" 'qk-dyncomp-run 
+    "c" 'qk-dyncomp-run 
     "t" 'qk-dyncomp-test))
 
 (provide 'qk-project)

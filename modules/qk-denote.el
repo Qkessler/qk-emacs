@@ -122,7 +122,6 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
     (qk-denote--get-projects-cleanup)
     (setq org-agenda-files project-list)))
 
-(defvar qk-notes-dailies-directory (expand-file-name (concat qk-notes-directory "../dailies/")))
 (defun qk-denote--dailies-project-p ()
   "Return `t' if the current heading has the PROJECT tag."
   (let* ((element (org-element-at-point))

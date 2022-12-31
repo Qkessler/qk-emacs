@@ -53,15 +53,23 @@ killing and opening many LSP/eglot-powered buffers.")
     objc-mode
     swift-mode
     java-mode
+    java-ts-mode
     LaTeX-mode
     python-mode
     js-mode
+    js-ts-mode
+    typescript-ts-mode
+    tsx-ts-mode
     json-mode
     yaml-mode
-    rustic-mode
-    kotlin-mode
+    yaml-ts-mode
     scala-mode
+    kotlin-mode
+    kotlin-ts-mode
     go-mode
+    go-ts-mode
+    rustic-mode
+    rust-ts-mode
     ) . eglot-ensure)
   :init
   (setq
@@ -70,6 +78,7 @@ killing and opening many LSP/eglot-powered buffers.")
    eglot-autoshutdown t
    eglot-send-changes-idle-time 0.5
    eglot-auto-display-help-buffer nil
+   eglot-report-progress nil
    rustic-lsp-client 'eglot
    eglot-workspace-configuration
    '(:vscode-json-language-server (:provideFormatter t)))
@@ -104,8 +113,8 @@ server getting expensively restarted when reverting buffers."
                     "-XX:+UseG1GC"
                     "-XX:+UseStringDeduplication"
                     ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar"))))
-  (add-to-list 'eglot-server-programs
-               `(toml-ts-mode . ("taplo" "lsp" "stdio"))))
+  (add-to-list 'eglot-server-programs '(toml-ts-mode . ("taplo" "lsp" "stdio")))
+  (add-to-list 'eglot-server-programs '(kotlin-ts-mode . ("kotlin-language-server"))))
 
 (after! eglot
   (minor-mode-definer

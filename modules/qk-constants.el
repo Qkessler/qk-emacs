@@ -74,6 +74,9 @@ See `org-agenda-skip-scheduled-if-deadline-is-shown'")
 (defvar qk-denote-directory (concat qk-notes-directory "pages/")
   "Default: pages directory inside our `qk-notes-directory'.
 See `denote-directory'.")
+(defvar qk-notes-dailies-directory (expand-file-name (concat qk-denote-directory "../dailies/"))
+  "Default: directory where to store dailies, which contain DONE items when moving headers from
+TODO to DONE.")
 (defvar qk-org-default-notes-file (concat qk-denote-directory "refile.org")
   "Default: `qk-notes-directory' 's refile.org. See `org-default-notes-file'.")
 (defvar qk-denote-prompts '(title keywords)

@@ -52,17 +52,19 @@
     :major-modes '(prog-mode)
     "C" 'qk-consult-compile))
 
-(use-package c++-mode
-  :mode ("\\.cpp\\'" "\\.c\\'")
-  :init (setq c-basic-offset qk-tab-width))
+(setq c-basic-offset qk-tab-width)
+(if (treesit-available-p)
+    (use-package c++-ts-mode :mode "\\.cpp\\'")
+  (use-package c++-mode :mode ("\\.cpp\\'" "\\.c\\'")))
 
-(use-package python
-  :init
-  (setq
-   python-shell-interpreter qk-python-shell-interpreter
-   compilation-ask-about-save nil
-   python-indent-guess-indent-offset-verbose nil
-   compilation-scroll-output t))
+(setq
+ python-shell-interpreter qk-python-shell-interpreter
+ compilation-ask-about-save nil
+ python-indent-guess-indent-offset-verbose nil
+ compilation-scroll-output t)
+
+(unless (treesit-available-p)
+  (use-package python-ts-mode :mode "\\.python\\'"))
 
 (after! python
   (defun mk-compile-python-buffer ()
@@ -100,26 +102,44 @@
 (use-package mhtml-mode
   :mode ("\\.html\\'" "\\.hbs\\'"))
 
-(use-package js-mode
-  :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'"))
+(if (not (treesit-available-p))
+    (use-package js-mode
+      :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'"))
+  (progn
+    (use-package js-ts-mode :mode "\\.js\\'")
+    (use-package typescript-ts-mode :mode "\\.ts\\'"
+      :init (setq typescript-ts-mode-indent-offset qk-tab-width))
+    (use-package tsx-ts-mode :mode "\\.tsx\\'")))
 
-(elpaca-use-package json-mode
-  :mode "\\.json\\'")
+(if (not (treesit-available-p))
+    (elpaca-use-package json-mode
+      :mode "\\.json\\'")
+  (use-package json-ts-mode :mode "\\.json\\'"
+    :init (setq json-ts-mode-indent-offset qk-tab-width)))
 
-(elpaca-use-package yaml-mode
-  :mode "\\.yml\\'")
+(if (not (treesit-available-p))
+    (elpaca-use-package yaml-mode
+      :mode ("\\.yml\\'" "\\.yaml\\'"))
+  (use-package yaml-ts-mode
+    :mode ("\\.yaml\\'" "\\.yml\\'")))
 
-;; Configure some emacs packages to reach the IDE level experience
-;; when Rust programming. Testing =rustic=, which is a newer fork of
-;; rust-mode. I won't be using the hydras the support, but having
-;; some cargo commands implemented is nice. The lsp configuration is
-;; also seamless, pretty good package.
-(elpaca-use-package rustic
-  :mode ("\\.rs\\'" . rustic-mode)
-  :init
-  (setq
-   rustic-format-on-save nil
-   rustic-lsp-client nil))
+(unless (treesit-available-p)
+  (use-package java-ts-mode :mode "\\.java\\'"))
+
+(if (treesit-available-p)
+    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
+
+  ;; Configure some emacs packages to reach the IDE level experience
+  ;; when Rust programming. Testing =rustic=, which is a newer fork of
+  ;; rust-mode. I won't be using the hydras the support, but having
+  ;; some cargo commands implemented is nice. The lsp configuration is
+  ;; also seamless, pretty good package.
+  (elpaca-use-package rustic
+    :commands rustic-cargo-add rustic-cargo-run rustic-cargo-test rustic-cargo-build
+    :init
+    (setq
+     rustic-format-on-save nil
+     rustic-lsp-client nil)))
 
 ;; Emacs, as always has its own integration of the key functions. I just use the
 ;; `cheat-sh-search', which is safe to say to be great.
@@ -139,7 +159,7 @@
   (setq
    hl-todo-highlight-punctuation ":"
    hl-todo-keyword-faces
-   `(("TODO"       org-todo bold)
+   `(("TODO"       (or org-todo error) bold)
      ("FIXME"      error bold)
      ("HACK"       font-lock-constant-face bold)
      ("REVIEW"     font-lock-keyword-face bold)
@@ -168,14 +188,30 @@
 
 ;; Kotlin still doesn't have full support inside emacs. To add the kotlin major
 ;; mode, use the kotlin-mode package.
-(elpaca kotlin-mode)
+(if (treesit-available-p)
+    (elpaca-use-package
+        (kotlin-ts-mode :host gitlab :repo "bricka/emacs-kotlin-ts-mode")
+      :mode "\\.kt\\'")
+  (elpaca kotlin-mode))
+
 (elpaca swift-mode)
 (elpaca scala-mode)
-(elpaca go-mode)
 
-(elpaca-use-package apheleia
-  :hook
-  ((rustic-mode go-mode) . apheleia-mode))
+(if (not (treesit-available-p))
+    (elpaca go-mode)
+  (pushnew! auto-mode-alist
+            '("\\.go\\'" . go-ts-mode)
+            '("go.mod" . go-mod-ts-mode)))
+
+(if (not (treesit-available-p))
+    (elpaca-use-package apheleia
+      :hook
+      ((rustic-mode go-mode) . apheleia-mode))
+  (elpaca-use-package apheleia
+    :hook ((rust-ts-mode go-ts-mode) . apheleia-mode)
+    :config (add-to-list 'apheleia-mode-alist '(go-ts-mode . gofmt))
+    )
+  )
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

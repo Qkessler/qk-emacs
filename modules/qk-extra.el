@@ -78,16 +78,5 @@
   :custom-face
   (ledger-occur-xact-face ((t (:background "#222324" :inherit nil)))))
 
-(elpaca-use-package (chatgpt
-                     :host github
-                     :repo "joshcho/ChatGPT.el"
-                     :files ("dist" "*.el"))
-  :init
-  (setq chatgpt-repo-path qk-chatgpt-repo-path)
-  :general
-  (major-mode-definer
-    :major-modes '(prog-mode text-mode org-mode)
-    "q" 'chatgpt-query))
-
 (provide 'qk-extra)
 ;; qk-extra.el ends here. 

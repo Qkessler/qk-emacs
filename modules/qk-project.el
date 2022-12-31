@@ -28,6 +28,10 @@
     "," 'harpoon-go-to-2
     "." 'harpoon-go-to-3))
 
+(after! tab-bar
+  (defun qk-tab-bar-get-current-tab-name ()
+    (alist-get 'name (tab-bar--current-tab))))
+
 ;; Affe is another package from the great =minad=, which keeps coming out with these
 ;; amazing integrations to the emacs default functionality, improving the performance
 ;; out of the park. In this case, he is trying to come up with a replacement to the
@@ -78,16 +82,19 @@
     "C" 'qk-consult-compile))
 
 (after! general
-  (defun qk-run-dyncomp (&optional command)
+  (defun qk-run-dyncomp (&optional command should-run-in-project-root)
     "Run `dyncomp' CLI with `COMMAND' passed as argument.
 If `COMMAND' is not provided, the user will be prompted to enter a command.
 The `dyncomp' command and its argument will be passed to `compile' to be run.
 The `command' argument is added to the `compile-history' list.
 The current directory is set to the root directory of the current project before running `dyncomp'."
     (interactive)
-    (with-current-directory! (expand-file-name (project-root (project-current)))
-      (let* ((argument-command (or command (consult--read compile-history)))
-             (dyncomp-command (concat "dyncomp " argument-command)))
+    (let* ((directory (if should-run-in-project-root
+                          (expand-file-name (project-root (project-current)))
+                        default-directory))
+           (argument-command (or command (consult--read compile-history)))
+           (dyncomp-command (concat "dyncomp " argument-command)))
+      (with-current-directory! directory
         (compile dyncomp-command)
         (add-to-list 'compile-history argument-command))))
 
@@ -101,11 +108,25 @@ The current directory is set to the root directory of the current project before
     (interactive)
     (qk-run-dyncomp "test"))
 
+  (defun qk-dyncomp-project-run ()
+    "Run `dyncomp run' in `project-root'."
+    (interactive)
+    (qk-run-dyncomp "run" t))
+
+  (defun qk-dyncomp-project-test ()
+    "Run `dyncomp test' in `project-root'."
+    (interactive)
+    (qk-run-dyncomp "test" t))
+
   (major-mode-definer
     :keymaps '(prog-mode-map conf-mode-map)
     :major-modes '(prog-mode conf-mode)
     "c" 'qk-dyncomp-run 
-    "t" 'qk-dyncomp-test))
+    "t" 'qk-dyncomp-test)
+  (after! project
+    (+general-global-project
+      "c" 'qk-dyncomp-project-run
+      "t" 'qk-dyncomp-project-test)))
 
 (provide 'qk-project)
 ;; qk-project.el ends here.

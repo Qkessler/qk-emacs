@@ -41,6 +41,8 @@ See `corfu-auto'.")
 (defvar qk-corfu-auto-delay 0.25
   "Default: delay to pop-up `corfu' completion. Only valid if `qk-corfu-auto' is `t'.
 See `corfu-auto-delay'.")
+(defvar qk-corfu-popupinfo-delay 1
+  "Default: delay to show help on `corfu' completion candidates. See `corfu-popupinfo-delay'.")
 (defvar qk-corfu-in-minibuffer t
   "Default: `corfu' pop-up also happens on the minibuffer.")
 (defvar qk-cape-dabbrev-min-length 3

@@ -49,18 +49,23 @@ killing and opening many LSP/eglot-powered buffers.")
   (eglot-managed-mode . +lsp-optimization-mode)
   ((cc-mode
     c++-mode
+    c++-ts-mode
     c-mode
+    c-ts-mode
+    cmake-ts-mode
     objc-mode
     swift-mode
     java-mode
     java-ts-mode
     LaTeX-mode
     python-mode
+    python-ts-mode
     js-mode
     js-ts-mode
     typescript-ts-mode
     tsx-ts-mode
     json-mode
+    json-ts-mode
     yaml-mode
     yaml-ts-mode
     scala-mode
@@ -104,15 +109,22 @@ server getting expensively restarted when reverting buffers."
                      (+lsp-optimization-mode -1))))
            server)))
       (funcall fn server)))
-  (add-to-list 'eglot-server-programs
-               `(java-mode
-                 . ("jdtls"
-                    "-noverify"
-                    "--illegal-access=warn"
-                    "-Xmx8G"
-                    "-XX:+UseG1GC"
-                    "-XX:+UseStringDeduplication"
-                    ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar"))))
+
+  (cl-defmethod eglot-execute-command
+    (_server (_cmd (eql java.apply.workspaceEdit)) arguments)
+    "Eclipse JDT breaks spec and replies with edits as arguments."
+    (mapc #'eglot--apply-workspace-edit arguments))
+
+  (let ((jdtls-arguments `("jdtls"
+                           "-noverify"
+                           "--illegal-access=warn"
+                           "-Xmx8G"
+                           "-XX:+UseG1GC"
+                           "-XX:+UseStringDeduplication"
+                           ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar"))))
+    (add-to-list 'eglot-server-programs `(java-mode . ,jdtls-arguments))
+    (add-to-list 'eglot-server-programs `(java-ts-mode . ,jdtls-arguments)))
+  
   (add-to-list 'eglot-server-programs '(toml-ts-mode . ("taplo" "lsp" "stdio")))
   (add-to-list 'eglot-server-programs '(kotlin-ts-mode . ("kotlin-language-server"))))
 

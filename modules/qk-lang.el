@@ -19,21 +19,22 @@
 ;; syntax tree as the source file is edited. It could be the next generation of sintax
 ;; parsers, as it has been really accepted by the community and the Github's Atom
 ;; team has been working on implementing a ton of languages.
-(elpaca-use-package tree-sitter
-  :hook
-  (doom-first-buffer . global-tree-sitter-mode)
-  (tree-sitter-after-on . tree-sitter-hl-mode))
+(unless (treesit-available-p)
+  (elpaca-use-package tree-sitter
+    :hook
+    (doom-first-buffer . global-tree-sitter-mode)
+    (tree-sitter-after-on . tree-sitter-hl-mode))
 
-(elpaca-use-package tree-sitter-langs
-  :after tree-sitter
-  :config
-  (defun suppress-messages (old-fun &rest args)
-    (cl-flet ((silence (&rest args1) (ignore)))
-      (advice-add 'message :around #'silence)
-      (unwind-protect
-          (apply old-fun args)
-        (advice-remove 'message #'silence))))
-  (advice-add 'tree-sitter-langs-install-grammars :around #'suppress-messages))
+  (elpaca-use-package tree-sitter-langs
+    :after tree-sitter
+    :config
+    (defun suppress-messages (old-fun &rest args)
+      (cl-flet ((silence (&rest args1) (ignore)))
+        (advice-add 'message :around #'silence)
+        (unwind-protect
+            (apply old-fun args)
+          (advice-remove 'message #'silence))))
+    (advice-add 'tree-sitter-langs-install-grammars :around #'suppress-messages)))
 
 (use-package compile
   :hook (compilation-filter . colorize-compilation-buffer)
@@ -123,7 +124,7 @@
   (use-package yaml-ts-mode
     :mode ("\\.yaml\\'" "\\.yml\\'")))
 
-(unless (treesit-available-p)
+(when (treesit-available-p)
   (use-package java-ts-mode :mode "\\.java\\'"))
 
 (if (treesit-available-p)

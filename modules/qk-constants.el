@@ -25,7 +25,7 @@ See `dired-listing-switches'.")
     "^\\*term.*\\*$"   term-mode   ;term as a popup
     "^\\*vterm.*\\*$"  vterm-mode  ;vterm as a popup
     "\\*pytest\\*.*"
-    help-mode helpful-mode
+    help-mode helpful-mode compilation-mode
     "^.*\\/harpoon\\/.*\\#.*$" harpoon-mode
     ("\\*Asing-native-compile-log\\*" . hide))
   "Default: all buffers that would make sense with the loaded packages.

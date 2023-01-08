@@ -29,8 +29,9 @@
 (elpaca-use-package marginalia
   :hook (doom-first-buffer . marginalia-mode))
 
-(elpaca-use-package corfu
-  :hook (doom-first-input . global-corfu-mode)
+(elpaca-use-package (corfu :host github :repo "minad/corfu" :files (:defaults "extensions/*"))
+  :hook
+  (doom-first-input . global-corfu-mode)
   :general
   (:keymaps
    '(corfu-map)
@@ -47,7 +48,15 @@
    corfu-auto qk-corfu-auto
    corfu-auto-delay qk-corfu-auto-delay
    corfu-auto-prefix qk-corfu-auto-prefix)
+  (setq corfu-popupinfo-delay qk-corfu-popupinfo-delay)
   :config
+  (use-package corfu-popupinfo
+    :commands corfu-popupinfo-toggle
+    :hook (corfu-mode . corfu-popupinfo-mode)
+    :general (:keymaps 'corfu-map "C-h" 'corfu-popupinfo-toggle)
+    :custom-face (corfu-popupinfo ((t (:inherit corfu-default)))))
+
+  (setq kind-icon-default-face 'corfu-default)
   (when qk-corfu-in-minibuffer
     (defun corfu-enable-in-minibuffer ()
       "Enable Corfu in the minibuffer if `completion-at-point' is bound."
@@ -56,23 +65,8 @@
         (corfu-mode t)))
     (add-hook! minibuffer-setup 'corfu-enable-in-minibuffer)))
 
-;; (elpaca-use-package
-;; (corfu-popupinfo :host github :repo "minad/corfu" :files (:defaults "extensions"))
-;; ;; :hook (corfu-mode . corfu-popupinfo-mode)
-;;  :init
-;;  (setq corfu-popupinfo-delay 1)
-;;  :general
-;;  (:keymaps
-;;   'corfu-map
-;;   "C-h" 'corfu-popupinfo-toggle))
-
 (elpaca-use-package kind-icon
-  :commands kind-icon-margin-formatter
-  :init
-  (setq kind-icon-default-face 'corfu-default))
-
-(after! corfu
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+  :commands kind-icon-margin-formatter)
 
 ;; Cape provides a bunch of Completion At Point Extensions which can be used in
 ;; combination with my Corfu completion UI or the default completion UI. The completion

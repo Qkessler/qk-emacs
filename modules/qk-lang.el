@@ -64,7 +64,7 @@
  python-indent-guess-indent-offset-verbose nil
  compilation-scroll-output t)
 
-(unless (treesit-available-p)
+(when (treesit-available-p)
   (use-package python-ts-mode :mode "\\.python\\'"))
 
 (after! python
@@ -127,6 +127,9 @@
 (when (treesit-available-p)
   (use-package java-ts-mode :mode "\\.java\\'"))
 
+(when (treesit-available-p)
+  (use-package bash-ts-mode :mode ("\\.bash\\'" "\\.sh\\'")))
+
 (if (treesit-available-p)
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
 
@@ -165,6 +168,7 @@
      ("HACK"       font-lock-constant-face bold)
      ("REVIEW"     font-lock-keyword-face bold)
      ("NOTE"       success bold)
+     ("DONE"       success bold)
      ("DEPRECATED" font-lock-doc-face bold))))
 
 ;; Markdown configuration, which I use specially often when editing README files

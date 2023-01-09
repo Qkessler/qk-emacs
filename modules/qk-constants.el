@@ -79,7 +79,7 @@ See `denote-directory'.")
 (defvar qk-notes-dailies-directory (expand-file-name (concat qk-denote-directory "../dailies/"))
   "Default: directory where to store dailies, which contain DONE items when moving headers from
 TODO to DONE.")
-(defvar qk-org-default-notes-file (concat qk-denote-directory "refile.org")
+(defvar qk-org-default-notes-file (concat qk-denote-directory "20230109T114537--refile__learning_tasks.org")
   "Default: `qk-notes-directory' 's refile.org. See `org-default-notes-file'.")
 (defvar qk-denote-prompts '(title keywords)
   "Default: only prompt for the title and keywords on file creation.

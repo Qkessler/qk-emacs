@@ -17,7 +17,7 @@
 ;; Prevent the glimpse of un-styled Emacs by disabling these UI elements early.
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
-(push '(font . "Source Code Pro for Powerline-16") default-frame-alist)
+(push '(font . "SauceCodePro NFM-16") default-frame-alist)
 (push '(cursor . "#ebdbb2") default-frame-alist)
 (push '(undecorated . t) default-frame-alist)
 

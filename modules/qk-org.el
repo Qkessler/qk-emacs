@@ -207,7 +207,9 @@ to the org-capture function."
     "s" 'org-schedule
     "t" 'org-todo
     "r" 'org-refile
-    "f" 'org-fold-hide-sublevels)
+    "f" 'org-fold-hide-sublevels
+    "n" 'outline-next-heading
+    "p" 'outline-previous-heading)
   (general-nmap
     :keymaps '(org-mode-map)
     "gx" 'org-return)

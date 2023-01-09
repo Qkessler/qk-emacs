@@ -17,6 +17,8 @@
     "g" 'consult-ripgrep)
   (+general-global-org
     "h" 'consult-org-heading)
+  (+general-global-file
+    "r" 'consult-recent-file)
   :init
   (setq
    consult-narrow-key qk-consult-narrow-key

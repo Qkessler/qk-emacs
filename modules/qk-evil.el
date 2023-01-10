@@ -198,6 +198,9 @@ and complains if a module is loaded too early (during startup)."
 
 (elpaca-use-package avy
   :general
+  (global-definer
+    "k" 'avy-goto-line-above
+    "j" 'avy-goto-line-below)
   (general-mmap
     "gl" 'avy-goto-line))
 

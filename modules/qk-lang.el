@@ -214,9 +214,10 @@
       ((rustic-mode go-mode) . apheleia-mode))
   (elpaca-use-package apheleia
     :hook ((rust-ts-mode go-ts-mode) . apheleia-mode)
-    :config (add-to-list 'apheleia-mode-alist '(go-ts-mode . gofmt))
-    )
-  )
+    :config
+    (pushnew! apheleia-mode-alist
+              '(go-ts-mode . gofmt)
+              '(rust-ts-mode . rustfmt))))
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

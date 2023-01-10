@@ -16,10 +16,10 @@
   :init
   (defun qk-tab-bar-get-current-tab-name ())
   (setq
-   harpoon-cache-file (concat no-littering-var-directory "harpoon/")
-   harpoon-without-project-function 'qk-tab-bar-get-current-tab-name)
+   harpoon-cache-file (concat no-littering-var-directory "harpoon/"))
+   ; harpoon-without-project-function 'qk-tab-bar-get-current-tab-name)
   :general
-  (+general-global-jump
+  (+general-global-help
     "c" 'harpoon-clear
     "t" 'harpoon-toggle-file
     "a" 'harpoon-add-file)

@@ -16,8 +16,8 @@
   :init
   (defun qk-tab-bar-get-current-tab-name ())
   (setq
-   harpoon-cache-file (concat no-littering-var-directory "harpoon/"))
-   ; harpoon-without-project-function 'qk-tab-bar-get-current-tab-name)
+   harpoon-cache-file (concat no-littering-var-directory "harpoon/")
+   harpoon-without-project-function 'qk-tab-bar-get-current-tab-name)
   :general
   (+general-global-help
     "c" 'harpoon-clear
@@ -26,9 +26,8 @@
   (global-definer
     "'" 'harpoon-go-to-1
     "," 'harpoon-go-to-2
-    "." 'harpoon-go-to-3))
-
-(after! tab-bar
+    "." 'harpoon-go-to-3)
+  :config
   (defun qk-tab-bar-get-current-tab-name ()
     (alist-get 'name (tab-bar--current-tab))))
 
@@ -44,7 +43,7 @@
   :init
   (setq
    affe-find-command
-   (concat qk-rg-command " --null --color=never --files")
+   (concat qk-rg-command " --color=never --files")
    affe-grep-command
    (concat qk-rg-command " --null --color=never --max-columns=1000 --no-heading --line-number -v ^$ ."))
   :config

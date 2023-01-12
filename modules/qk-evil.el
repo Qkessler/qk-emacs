@@ -200,9 +200,7 @@ and complains if a module is loaded too early (during startup)."
   :general
   (global-definer
     "k" 'avy-goto-line-above
-    "j" 'avy-goto-line-below)
-  (general-mmap
-    "gl" 'avy-goto-line))
+    "j" 'avy-goto-line-below))
 
 (elpaca-use-package evil-surround
   :hook (doom-first-input . global-evil-surround-mode))

@@ -24,6 +24,9 @@
     [escape] 'keyboard-quit
     "J" (concat ":m '>+1" (kbd "RET") "gv=gv")
     "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
+  (general-mmap
+    "C-u" 'qk-center-scroll-half-page-up
+    "C-d" 'qk-center-scroll-half-page-down)
   (:keymaps
    '(minibuffer-local-map
      minibuffer-local-ns-map
@@ -32,6 +35,18 @@
      minibuffer-local-isearch-map)
    [escape] 'minibuffer-keyboard-quit)
   :config
+  (defun qk-center-scroll-half-page-down ()
+    "Center window after scrolling half page down."
+    (interactive)
+    (evil-scroll-down nil)
+    (evil-scroll-line-to-center nil))
+
+  (defun qk-center-scroll-half-page-up ()
+    "Center window after scrolling half page up."
+    (interactive)
+    (evil-scroll-up nil)
+    (evil-scroll-line-to-center nil))
+
   ;; Stop copying each visual state move to the clipboard.
   (advice-add #'evil-visual-update-x-selection :override #'ignore)
   (fset 'evil-redirect-digit-argument 'ignore)

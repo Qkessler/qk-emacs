@@ -37,7 +37,7 @@
 ;; a package, I will go to my config and edit the use-package recipe
 ;;to lazy load it. This reduces my startup time significantly.
 (setq use-package-always-defer t)
-(elpaca use-package (require 'use-package))
+(require 'use-package)
 
 ;; Add modules directory.
 (add-to-list 'load-path (concat user-emacs-directory "modules"))

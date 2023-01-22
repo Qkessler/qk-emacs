@@ -168,7 +168,7 @@
      ("HACK"       font-lock-constant-face bold)
      ("REVIEW"     font-lock-keyword-face bold)
      ("NOTE"       success bold)
-     ("DONE"       success bold)
+     ("DONE"       (or org-done success) bold)
      ("DEPRECATED" font-lock-doc-face bold))))
 
 ;; Markdown configuration, which I use specially often when editing README files

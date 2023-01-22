@@ -81,6 +81,8 @@ See `denote-directory'.")
 TODO to DONE.")
 (defvar qk-org-default-notes-file (concat qk-denote-directory "20230109T114537--refile__learning_tasks.org")
   "Default: `qk-notes-directory' 's refile.org. See `org-default-notes-file'.")
+(defvar qk-org-meetings-file (concat qk-denote-directory "20230112T171448--meetings__project_learning.org")
+  "Default: my personal meetings file, you can change it to the file that denote generates for you.")
 (defvar qk-denote-prompts '(title keywords)
   "Default: only prompt for the title and keywords on file creation.
 See `denote-prompts'.")

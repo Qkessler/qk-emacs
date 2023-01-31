@@ -18,10 +18,10 @@
     "k" 'evil-previous-visual-line
     "gD" 'xref-find-definitions-other-window)
   (general-nmap
-    [escape] 'keyboard-quit
+    [escape] 'qk-nohl-and-quit 
     "K" nil)
   (general-vmap
-    [escape] 'keyboard-quit
+    [escape] 'qk-nohl-and-quit
     "J" (concat ":m '>+1" (kbd "RET") "gv=gv")
     "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
   (general-mmap
@@ -35,6 +35,12 @@
      minibuffer-local-isearch-map)
    [escape] 'minibuffer-keyboard-quit)
   :config
+  (defun qk-nohl-and-quit ()
+    "Run nohighlight on escape, in normal mode."
+    (interactive)
+    (evil-ex-nohighlight)
+    (keyboard-quit))
+
   (defun qk-center-scroll-half-page-down ()
     "Center window after scrolling half page down."
     (interactive)

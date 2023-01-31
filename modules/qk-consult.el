@@ -19,6 +19,9 @@
     "h" 'consult-org-heading)
   (+general-global-file
     "r" 'consult-recent-file)
+  (+general-global-help
+    "g" `(,(cmd! (consult-ripgrep ".")) :which-key "Grep here")
+    "f" `(,(cmd! (consult-find ".")) :which-key "Find here"))
   :init
   (setq
    consult-narrow-key qk-consult-narrow-key
@@ -34,6 +37,7 @@
                                 " --smart-case"
                                 " --no-heading"
                                 " --line-number .")
+   consult-find-args (concat qk-fd-command " --color=never" " -H" " .")
    register-preview-delay 0)
   :config
   (consult-customize :preview-key (kbd "C-.")

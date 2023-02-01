@@ -16,8 +16,7 @@
     (display-fill-column-indicator-mode -1)
     (setq-local evil-move-cursor-back nil))
 
-  (define-key global-map (kbd "C-c") nil)
-  (pushnew! popper-reference-buffers '("^\\*vterm.*\\*$" vterm-mode)))
+  (define-key global-map (kbd "C-c") nil))
 
 (elpaca-use-package vterm-toggle
   :hook (vterm-toggle-show . evil-insert-state)

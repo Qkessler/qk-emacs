@@ -54,6 +54,13 @@
     "r" 'winner-redo))
 
 (after! general
+  (general-mmap
+    "C-l" 'windmove-right
+    "C-h" 'windmove-left
+    "C-k" 'windmove-up
+    "C-j" 'windmove-down))
+
+(after! general
   (+general-global-buffer
     "l" 'ibuffer))
 

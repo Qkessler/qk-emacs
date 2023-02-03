@@ -2,7 +2,9 @@
 
 (use-package tab-bar
   :hook (doom-first-buffer . tab-bar-mode)
-  :init (setq tab-bar-show qk-tab-bar-show))
+  :init
+  (setq tab-bar-show qk-tab-bar-show)
+  (defvar qk-tab-bar--last-tab nil))
 
 (after! (tab-bar general)
   (defun qk-tab-bar-switch-to-last-tab ()

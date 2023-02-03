@@ -13,14 +13,14 @@
   ;; Create SPC leader key, to be used in the macro.
   (general-create-definer global-definer
     :keymaps 'override
-    :states  '(emacs normal hybrid motion visual operator)
+    :states  '(normal hybrid motion visual operator)
     :prefix  "SPC"
     :non-normal-prefix "C-SPC")
 
   ;; Add a definer for each of the major-modes
   (general-create-definer major-mode-definer
     :keymaps 'override
-    :states '(emacs normal hybrid motion visual operator)
+    :states '(normal hybrid motion visual operator)
     :prefix "SPC m"
     "" '(:ignore t :which-key 'qk-which-key-mode-name))
 
@@ -30,7 +30,7 @@
   (general-create-definer minor-mode-definer
     :keymaps 'override
     :definer 'minor-mode
-    :states '(emacs normal hybrid motion visual operator)
+    :states '(normal hybrid motion visual operator)
     :prefix "SPC m")
 
   ;; Emulate different default Emacs keys, as I'm transitioning into evil.

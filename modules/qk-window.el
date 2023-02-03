@@ -54,11 +54,16 @@
     "r" 'winner-redo))
 
 (after! general
-  (general-mmap
-    "C-l" 'windmove-right
-    "C-h" 'windmove-left
-    "C-k" 'windmove-up
-    "C-j" 'windmove-down))
+  (general-define-key
+   :keymaps 'override
+   :states '(emacs motion insert)
+   "C-l" 'windmove-right
+   "C-h" 'windmove-left
+   "C-j" 'windmove-down)
+  (general-define-key
+   :keymaps 'override
+   :states '(motion insert)
+   "C-k" 'windmove-up))
 
 (after! general
   (+general-global-buffer

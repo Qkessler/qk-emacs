@@ -66,8 +66,10 @@
          ([remap compile] . detached-compile)
          ([remap recompile] . detached-compile-recompile)
          ;; Replace built in completion of sessions with `consult'
-         ([remap detached-open-session] . detached-consult-session)))
-
+         ([remap detached-open-session] . detached-consult-session))
+  :general
+  (global-definer
+    "C" 'detached-shell-command))
 
 (after! consult
   (defun qk-consult-compile (&optional command)

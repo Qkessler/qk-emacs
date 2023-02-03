@@ -99,22 +99,6 @@ Intended as :after advice for `delete-file'."
   (advice-add 'rename-file :after 'visiting-buffer-rename)
   (advice-add 'delete-file :after 'visiting-buffer-kill))
 
-(use-package dired
-  :init 
-  (setq
-   dired-listing-switches qk-dired-listing-switches
-   dired-use-ls-dired nil))
-
-(elpaca-use-package dired-subtree
-  :after dired
-  :init (setq dired-subtree-use-backgrounds nil)
-  :general 
-  (:keymaps
-   '(dired-mode-map)
-   "<tab>"  'dired-subtree-toggle
-   "<C-tab>" 'dired-subtree-cycle
-   "<backtab>" 'dired-subtree-remove))
-
 (defcustom display-line-numbers-exempt-modes
   '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode olivetti-mode)
   "Major modes on which to disable line numbers."

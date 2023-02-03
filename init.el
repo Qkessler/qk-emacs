@@ -53,6 +53,7 @@
 (require 'qk-evil)
 (require 'qk-theme)
 (require 'qk-defaults)
+(require 'qk-dired)
 (require 'qk-help)
 (require 'qk-window)
 (require 'qk-completion)
@@ -78,3 +79,4 @@
                  (float-time
                   (time-subtract after-init-time before-init-time))) gcs-done)
 (put 'narrow-to-region 'disabled nil)
+(put 'dired-find-alternate-file 'disabled nil)

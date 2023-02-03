@@ -9,6 +9,10 @@
 (defvar qk-dired-listing-switches "-aBhl"
   "Default: show hidden files with full information in human readable format.
 See `dired-listing-switches'.")
+(defvar qk-dired-all-the-icons t
+  "Default: show icons on dired buffers.")
+(defvar qk-dired-all-the-icons-show-colors t
+  "Default: show colors on the icons on dired buffers. Only works if `qk-dired-all-the-icons' is `t'.")
 (defvar qk-shr-max-image-proportion 0.6
   "Default: scale images to 0.6 when decoding. See `shr-max-image-proportion'.")
 (defvar qk-eww-downloads-directory (expand-file-name "/tmp/eww-downloads")
@@ -201,6 +205,8 @@ for modeline highlighting. See `mu4e-alert-interesting-mail-query'.")
 (defvar qk-vterm-timer-delay nil
   "Default: tweak this to your liking, to have vterm snappy but not too
  resource intensive. See `vterm-timer-delay'.")
+(defvar qk-vterm-tab "vterm"
+  "Default: vterm name for the tab to run vterm on.")
 (defvar qk-ledger-reports
   '(("bal" "%(binary) -f %(ledger-file) bal --real")
     ("reg" "%(binary) -f %(ledger-file) reg")

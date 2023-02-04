@@ -19,9 +19,11 @@
     "f" 'qk-denote-find-notes
     "i" 'denote-link
     "d" 'qk-denote-find-dailies
-    "s" 'qk-denote-open-standup-agenda)
-  (+general-global-org
-    "a" 'qk-denote-get-projects)
+    "s" 'qk-denote-open-weekly-standup-agenda)
+  (general-mmap
+    :keymaps '(org-agenda-mode-map)
+    "q" (cmd! (qk-denote-set-agenda-files-with-projects)
+              (org-agenda-quit)))
   :config
   (defun qk-denote-find-dailies ()
     "Find daily notes in the current `qk-notes-dailies-directory'."
@@ -35,23 +37,23 @@
     (let ((default-directory denote-directory))
       (call-interactively 'find-file)))
 
-  (defun qk-denote-open-standup-agenda ()
-    "Open the entries that are present in the daily notes for yesterday
-and today. You'll find DONE items, but you'll benefit from having the scheduled
+  (defun qk-denote-open-weekly-standup-agenda ()
+    "Open the entries that are present in the daily notes for the last week.
+You'll find DONE items, but you'll benefit from having the scheduled
 times for the entries."
     (interactive)
     (let* ((time-minus-one (time-add nil (- (* 3600 24))))
            (day-of-week (format-time-string "%A" time-minus-one))
            (sunday-p (string= day-of-week "Sunday"))
-           (yesterday-time (if sunday-p 
-                               (time-add (- (* 3600 24 2)) time-minus-one)
-                             time-minus-one))
-           (yesterday (format-time-string "%F" yesterday-time))
-           (today (format-time-string "%F"))
-           (org-agenda-files `(,(concat qk-notes-dailies-directory yesterday)
-                               ,(concat qk-notes-dailies-directory today))))
+           (org-agenda-files (qk-denote-dailies-between-times (time-add nil (- (* 3600 24 7))) (current-time))))
       (setq org-agenda-start-on-weekday (if sunday-p 5 1))
       (qk-silently-open-todo-agenda)))
+
+  (defun qk-denote-open-monthly-agenda ()
+    "Open an agenda buffer with the dailies from the past month"
+    (interactive)
+    (setq org-agenda-files (qk-denote-dailies-between-times (time-add nil (- (* 3600 24 30))) (current-time)))
+    (qk-silently-open-todo-agenda))
 
   (defvar qk-denote-capture-template
     '(("n" "New note (with denote.el)" plain
@@ -71,11 +73,23 @@ times for the entries."
     (let ((org-capture-templates qk-denote-capture-template))
       (org-capture nil "n"))))
 
+(defun qk-denote-dailies-between-times (start-time end-time)
+    "Returns the list of dailies between START-TIME and END-TIME."
+    (setq current-time start-time)
+    (setq agenda-files '())
+    (while (time-less-p current-time end-time)
+      (let* ((file-name (format-time-string "%F" current-time))
+             (file-path (concat qk-notes-dailies-directory file-name)))
+        (when (file-exists-p file-path)
+          (add-to-list 'agenda-files file-path)))
+      (setq current-time (time-add current-time (+ (* 3600 24)))))
+    agenda-files)
+
 (defvar qk-denote-get-projects-name "qk-denote-get-projects")
 (defvar qk-denote-get-projects-buffer "*qk-denote-get-projects*")
 (defvar qk-denote-get-projects-pattern "\\+filetags: .*project")
 (defvar qk-denote-get-projects--lock t)
-(defun qk-denote-get-projects (&rest _)
+(defun qk-denote-set-agenda-files-with-projects (&rest _)
   "Run `rg' process to get the projects that have the file tag,
 and compose the org-agenda with those files.
 
@@ -95,18 +109,16 @@ and build lists of files with patterns."
       qk-denote-get-projects-buffer
       qk-rg-command "-l" qk-denote-get-projects-pattern denote-directory)
      #'qk-denote--get-projects-process-events)))
+(add-hook! elpaca-after-init (run-with-timer 1 nil 'qk-denote-set-agenda-files-with-projects))
 
 (defun qk-denote--get-projects-process-events (process event)
   "Process the events for the rg program getting the `project' tagged files."
   (cond ((string= event "finished\n")
-         (qk-denote--get-projects-set-agenda)
-         (qk-silently-open-agenda))
+         (qk-denote--get-projects-set-agenda))
         ((string= event "exited abnormally with code 1\n")
          (message "qk-denote: rg didn't find any files."))
         ((string= event "exited abnormally with code 2\n")
-         (message
-          (format "qk-denote: error. Check the %s"
-                  qk-denote-get-projects-buffer)))))
+         (message (format "qk-denote: error. Check the %s" qk-denote-get-projects-buffer)))))
 
 (defun qk-denote--get-projects-cleanup ()
   "Cleanup the buffer that was created for the async process."
@@ -120,7 +132,7 @@ Consumes the buffer and takes the \n splitted paths to make the list. "
          (with-current-buffer qk-denote-get-projects-buffer
            (s-lines (buffer-string)))))
     (qk-denote--get-projects-cleanup)
-    (setq org-agenda-files project-list)))
+    (setq org-agenda-files (butlast project-list))))
 
 (defun qk-denote--dailies-project-p ()
   "Return `t' if the current heading has the PROJECT tag."

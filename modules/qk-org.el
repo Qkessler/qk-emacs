@@ -226,18 +226,11 @@ to the org-capture function."
           (insert (format-time-string "%F")))))
 
 (elpaca-use-package org-appear
-  :hook
-  (org-mode . org-appear-mode)
-  (org-mode . qk-toggle-org-appear-on-insert-mode)
+  :hook (org-mode . org-appear-mode)
   :init
   (setq
-   org-appear-trigger 'manual
-   org-appear-autolinks t)
-  :config
-  (defun qk-toggle-org-appear-on-insert-mode ()
-    "Toggle emphasis shown or hidden when entering or exiting insert mode."
-    (add-hook 'evil-insert-state-entry-hook #'org-appear-manual-start nil t)
-    (add-hook 'evil-insert-state-exit-hook #'org-appear-manual-stop nil t)))
+   org-appear-trigger 'always
+   org-appear-autolinks t))
 
 (provide 'qk-org)
 ;; qk-org.el ends here.

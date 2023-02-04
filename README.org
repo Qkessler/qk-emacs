@@ -47,5 +47,22 @@ Examples:
 - Confirm or Abort a commit message in =git-commit-mode=.
 - Confirm or Abort a temporary =emacs-everywhere-mode= buffer.
   
-** Modules
-Here is the list of the modules that have been implemented, and an explanation for each of them. I'll also add the keybindings that are connected to each module.
+** Example workflow
+In this section, I explain my productivity and organization workflow that I have with =qk-emacs=. This section is meant to be orientative, in case you pick-up Emacs and don't have a workflow yet. This works great for me, and I assume it would work great for you.
+
+*** Daily org-agenda, Standup agenda and Monthly Review agenda
+Every morning, and at different points of the day, I press =SPC o a=, which opens up an org-agenda (you can see how it looks like if you zoom on the example image at the top of this README file) view with:
+
+1. *Today's schedule*, with tasks that have been scheduled for today. *Note*: DONE tasks won't be on this section (or this agenda view for that matter). Whenever we set an org item as DONE (=t d= on the org-agenda-mode or =SPC m t d= in org-mode), it gets refiled to the daily file for that day. We can then either search through the files in the =qk-notes-dailies-directory= with =SPC n d=.
+2. *Project list*, where all of the org items with the PROJECT todo state reside. For a project to be turned to DONE, you need to mark all the tasks have have been refiled to it as DONE.
+3. *Tasks to Refile*. Here, you'll find all the tasks that you have captured, but haven't refiled (=r= in org-agenda-mode or =SPC m r= in org-mode) yet to the correct project. You can capture an idea, todo or note with =SPC o c= (Org Capture). I normally do it whenever something comes to mind, and it takes more than 2 mins to resolve.
+4. *Unscheduled Tasks*, contains all the tasks that have been refiled to the correct project, but haven't been scheduled to execute.
+5. *Waiting/Someday Tasks* has all the tasks that are blocked (external input or myself) and that will be solved someday. If I don't have anything on the *Unscheduled Tasks* section nor today, I'll pick up a task on the SOMEDAY state.
+6. *Notes*: this section has items that I want to keep in mind throughout my day, or feedback to keep in mind and revisit multiple times in a day.
+7. *Upcoming*: my week at a glance.
+
+Each day, we have a standup meeting, where we share the progress of the day, and the previous day, we communicate what we are blocked on and what we plan to work on for the day.
+
+For those meetings, I set up my =qk-denote-open-weekly-standup-agenda= function, bound to =SPC o s= (Org agenda standup). It shows all the DONE tasks (from the dailies files) in the past week, so I can have some context on the week.
+
+Finally, whenever I'm ready to do a Monthly review, I use the =qk-denote-open-monthly-agenda= function (not bound to any key, though you could bind it) and it shows all the DONE tasks in the past month.

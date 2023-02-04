@@ -69,7 +69,7 @@
 (require 'qk-lang)
 (require 'qk-mail)
 (require 'qk-eglot)
-(require 'qk-vterm)
+;; (require 'qk-vterm)
 (require 'qk-extra)
 (require 'qk-amz)
 

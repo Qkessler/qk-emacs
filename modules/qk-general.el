@@ -62,13 +62,6 @@
     "r"  'rename-buffer
     "R"  'revert-buffer)
 
-  ;; Evaluation commands.
-  (+general-global-menu! "eval" "e"
-    "b" 'eval-buffer
-    "d" 'eval-defun
-    "e" 'eval-expression
-    "s" 'eval-last-sexp)
-
   ;; Window commands.
   (+general-global-menu! "window" "w"
     "=" 'balance-windows
@@ -94,7 +87,7 @@
   (+general-global-menu! "insert" "i"
     "e" (lambda () (interactive)(qk-real-insert ?€)))
 
-  ;; Search commands, currently using `consult' and `affe'.
+  (+general-global-menu! "eval" "e")
   (+general-global-menu! "org" "o")
   (+general-global-menu! "help" "h")
   (+general-global-menu! "toggle" "t")

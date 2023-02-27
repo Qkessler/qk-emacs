@@ -23,7 +23,9 @@
 
   (+general-global-project
     "s" 'tab-bar-switch-to-tab
-    "l" 'qk-tab-bar-switch-to-last-tab))
+    "l" 'qk-tab-bar-switch-to-last-tab)
+  (+general-global-toggle
+    "r" 'tab-rename))
 
 (provide 'qk-tab-bar)
 ;; qk-tab-bar.el ends here.

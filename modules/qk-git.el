@@ -61,5 +61,9 @@
   :hook (magit-mode . magit-delta-mode)
   :init (setq magit-delta-default-dark-theme "gruvbox-dark"))
 
+(after! general
+  (+general-global-magit
+    "b" 'vc-region-history))
+
 (provide 'qk-git)
 ;; qk-git.el ends here.

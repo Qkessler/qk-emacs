@@ -57,6 +57,17 @@
   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
   :custom-face (bookmark-face ((t nil))))
 
+(after! general
+  (major-mode-definer
+    :major-modes '(emacs-lisp-mode)
+    :keymaps '(emacs-lisp-mode-map)
+    "b" 'eval-buffer
+    "d" 'eval-defun
+    "e" 'eval-expression
+    "s" 'eval-last-sexp)
+  (global-definer
+    "x" 'eval-expression))
+
 (defun visiting-buffer-rename (file newname &optional _ok-if-already-exists)
   "Rename buffer visiting FILE to NEWNAME.
 Intended as :after advice for `rename-file'."
@@ -114,6 +125,9 @@ Intended as :after advice for `delete-file'."
     (display-line-numbers-mode)))
 (global-display-line-numbers-mode)
 
+(use-package dabbrev
+  :config (pushnew! dabbrev-ignored-buffer-modes 'pdf-view-mode))
+
 (use-package shr
   :init
   (setq
@@ -141,7 +155,6 @@ Intended as :after advice for `delete-file'."
    eww-form-checkbox-selected-symbol "[X]"
    eww-form-checkbox-symbol "[ ]"
    eww-retrieve-command nil))
-
 
 (provide 'qk-defaults)
 ;; qk-defaults.el ends here.

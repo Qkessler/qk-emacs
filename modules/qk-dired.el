@@ -39,8 +39,7 @@
   :init (setq dired-subtree-use-backgrounds nil)
   :general 
   (:keymaps '(dired-mode-map)
-   "<tab>"  'dired-subtree-toggle
-   "<C-tab>" 'dired-subtree-cycle
+   "<tab>"  'dired-subtree-cycle
    "<backtab>" 'dired-subtree-remove))
 
 (elpaca-use-package all-the-icons-dired

@@ -23,12 +23,11 @@ See `dired-listing-switches'.")
   '("\\*Messages\\*"
     "\\*Warnings\\*"
     "Output\\*$"
-    "\\*Async Shell Command\\*"
     "^\\*eshell.*\\*$" eshell-mode ;eshell as a popup
     "^\\*shell.*\\*$"  shell-mode  ;shell as a popup
     "^\\*term.*\\*$"   term-mode   ;term as a popup
     "\\*pytest\\*.*"
-    help-mode helpful-mode compilation-mode
+    help-mode helpful-mode
     "^.*\\/harpoon\\/.*\\#.*$" harpoon-mode
     ("\\*Asing-native-compile-log\\*" . hide))
   "Default: all buffers that would make sense with the loaded packages.

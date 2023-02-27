@@ -6,7 +6,9 @@
     "&" '(project-async-shell-command :which-key "async shell-command")
     "c" 'project-compile
     "D" 'project-dired
-    "k" 'project-kill-buffers))
+    "k" 'project-kill-buffers)
+  (global-definer
+    "e" 'project-dired))
 
 ;; Harpoon offers quick bookmarks separated by project and branch. You can quick
 ;; navigate between your working files and forget about that files opened that

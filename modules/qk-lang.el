@@ -14,6 +14,24 @@
   (let ((shell-command-switch "-ic"))
     ad-do-it))
 
+(defmacro treesit! (prev-mode treesit-mode file-list)
+  "Macro to define the fall-back mode PREV-MODE when treesit mode is not
+available. If available use TREESIT-MODE for the file extensions inside FILE-LIST"
+  `(if (treesit-available-p)
+       (use-package ,treesit-mode
+         :mode ,file-list)
+     (use-package ,prev-mode
+       :mode ,file-list)))
+
+(defmacro treesit-remote! (prev-mode treesit-mode file-list)
+  "Macro to define the fall-back mode PREV-MODE when treesit mode is not
+available. PREV-MODE can be a package name or a recipe, it's going to get pulled from elpaca's menus. If available use TREESIT-MODE for the file extensions inside FILE-LIST"
+  `(if (treesit-available-p)
+       (use-package ,treesit-mode
+         :mode ,file-list)
+     (elpaca-use-package ,prev-mode
+       :mode ,file-list)))
+
 ;; Tree-sitter is a parser generator tool and an incremental parsing library.
 ;; It can build a concrete syntax tree for a source file and efficiently update the
 ;; syntax tree as the source file is edited. It could be the next generation of sintax
@@ -54,18 +72,12 @@
     "C" 'qk-consult-compile))
 
 (setq c-basic-offset qk-tab-width)
-(if (treesit-available-p)
-    (use-package c++-ts-mode :mode "\\.cpp\\'")
-  (use-package c++-mode :mode ("\\.cpp\\'" "\\.c\\'")))
 
 (setq
  python-shell-interpreter qk-python-shell-interpreter
  compilation-ask-about-save nil
  python-indent-guess-indent-offset-verbose nil
  compilation-scroll-output t)
-
-(when (treesit-available-p)
-  (use-package python-ts-mode :mode "\\.python\\'"))
 
 (after! python
   (defun mk-compile-python-buffer ()
@@ -100,50 +112,25 @@
 (elpaca-use-package rainbow-mode
   :commands rainbow-mode)
 
-(use-package mhtml-mode
-  :mode ("\\.html\\'" "\\.hbs\\'"))
+(setq
+ typescript-ts-mode-indent-offset qk-tab-width
+ json-ts-mode-indent-offset qk-tab-width)
 
-(if (not (treesit-available-p))
-    (use-package js-mode
-      :mode ("\\.js\\'" "\\.tsx\\'" "\\.ts\\'"))
-  (progn
-    (use-package js-ts-mode :mode "\\.js\\'")
-    (use-package typescript-ts-mode :mode "\\.ts\\'"
-      :init (setq typescript-ts-mode-indent-offset qk-tab-width))
-    (use-package tsx-ts-mode :mode "\\.tsx\\'")))
+;; REVIEW: 2023-02-11 should we have html-ts-mode? Not polished right now.
+(treesit! mhtml-mode html-ts-mode ("\\.html\\'" "\\.hbs\\'"))
+(treesit! c++-mode c++-ts-mode "\\.cpp\\'")
+(treesit! c-mode c-ts-mode "\\.c\\'")
+(treesit! python-mode python-ts-mode "\\.python\\'")
+(treesit! js-mode js-ts-mode "\\.js\\'")
+(treesit! js-mode typescript-ts-mode "\\.ts\\'")
+(treesit! js-mode tsx-ts-mode "\\.tsx\\'")
+(treesit! java-mode java-ts-mode "\\.java\\'")
+(treesit! bash-mode bash-ts-mode ("\\.bash\\'" "\\.sh\\'"))
+(treesit! rust-mode rust-ts-mode "\\.rs\\'")
+(treesit! conf-toml-mode toml-ts-mode "\\.toml\\'")
 
-(if (not (treesit-available-p))
-    (elpaca-use-package json-mode
-      :mode "\\.json\\'")
-  (use-package json-ts-mode :mode "\\.json\\'"
-    :init (setq json-ts-mode-indent-offset qk-tab-width)))
-
-(if (not (treesit-available-p))
-    (elpaca-use-package yaml-mode
-      :mode ("\\.yml\\'" "\\.yaml\\'"))
-  (use-package yaml-ts-mode
-    :mode ("\\.yaml\\'" "\\.yml\\'")))
-
-(when (treesit-available-p)
-  (use-package java-ts-mode :mode "\\.java\\'"))
-
-(when (treesit-available-p)
-  (use-package bash-ts-mode :mode ("\\.bash\\'" "\\.sh\\'")))
-
-(if (treesit-available-p)
-    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-ts-mode))
-
-  ;; Configure some emacs packages to reach the IDE level experience
-  ;; when Rust programming. Testing =rustic=, which is a newer fork of
-  ;; rust-mode. I won't be using the hydras the support, but having
-  ;; some cargo commands implemented is nice. The lsp configuration is
-  ;; also seamless, pretty good package.
-  (elpaca-use-package rustic
-    :commands rustic-cargo-add rustic-cargo-run rustic-cargo-test rustic-cargo-build
-    :init
-    (setq
-     rustic-format-on-save nil
-     rustic-lsp-client nil)))
+(treesit-remote! json-mode json-ts-mode "\\.json\\'")
+(treesit-remote! yaml-mode yaml-ts-mode ("\\.yaml\\'" "\\.yml\\'"))
 
 ;; Emacs, as always has its own integration of the key functions. I just use the
 ;; `cheat-sh-search', which is safe to say to be great.
@@ -182,7 +169,8 @@
   (major-mode-definer
     :keymaps '(markdown-mode-map)
     :major-modes '(gfm-mode markdown-mode)
-    "c" 'markdown-insert-code))
+    "c" 'markdown-insert-code
+    "l" 'markdown-insert-link))
 
 ;; Make sure .h files default to Objective-C mode, since I don't really code
 ;; in C. There isn't a problem anyway to do this. If worried about LSP not working,

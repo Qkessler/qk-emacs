@@ -186,6 +186,11 @@ to the org-capture function."
     (setq current-prefix-arg 0) ; C-0
     (call-interactively 'org-capture))
 
+  (defun qk-schedule-for-now ()
+    "Add an org timestamp for the current date time."
+    (interactive)
+    (org-schedule nil (format-time-string "%F %R")))
+
   (major-mode-definer
     :major-modes '(org-mode)
     :keymaps '(org-mode-map)
@@ -195,8 +200,8 @@ to the org-capture function."
     "f" 'org-capture-finalize
     "c" '(org-capture-kill :which-key "org-capture cancel")
     "r" 'org-capture-refile
-    "p" 'org-priority)
-  
+    "p" 'org-priority
+    "n" 'qk-schedule-for-now)
   (major-mode-definer
     :major-modes '(org-mode)
     :keymaps '(org-mode-map)
@@ -218,12 +223,10 @@ to the org-capture function."
     "f" 'org-edit-src-exit
     "c" 'org-edit-src-abort)
   (+general-global-org
-    "l" 'org-store-link)
+    "l" 'org-store-link
+    "n" 'qk-schedule-for-now)
   (+general-global-insert
-    "d" (lambda ()
-          (interactive)
-          (forward-char)
-          (insert (format-time-string "%F")))))
+    "d" (cmd! (forward-char) (insert (format-time-string "%F")))))
 
 (elpaca-use-package org-appear
   :hook (org-mode . org-appear-mode)

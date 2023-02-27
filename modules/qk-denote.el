@@ -44,8 +44,8 @@ times for the entries."
     (interactive)
     (let* ((time-minus-one (time-add nil (- (* 3600 24))))
            (day-of-week (format-time-string "%A" time-minus-one))
-           (sunday-p (string= day-of-week "Sunday"))
-           (org-agenda-files (qk-denote-dailies-between-times (time-add nil (- (* 3600 24 7))) (current-time))))
+           (sunday-p (string= day-of-week "Sunday")))
+      (setq org-agenda-files (qk-denote-dailies-between-times (time-add nil (- (* 3600 24 7))) (current-time)))
       (setq org-agenda-start-on-weekday (if sunday-p 5 1))
       (qk-silently-open-todo-agenda)))
 

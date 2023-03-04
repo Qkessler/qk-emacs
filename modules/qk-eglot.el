@@ -47,6 +47,7 @@ killing and opening many LSP/eglot-powered buffers.")
   :commands eglot eglot-ensure
   :hook
   (eglot-managed-mode . +lsp-optimization-mode)
+  (eglot-managed-mode . eglot-inlay-hints-mode)
   ((cc-mode
     c++-mode
     c++-ts-mode

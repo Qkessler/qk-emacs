@@ -6,6 +6,8 @@
   "Default: indent with 4 columns. See `tab-width'.")
 (defvar qk-fill-column 80
   "Default: add 80 characters as fill-column. See `fill-column'.")
+(defvar qk-line-numbers-type 'visual
+  "Default: Relative line numbers, for ergonomic line jumps. See `display-line-numbers-type'.")
 (defvar qk-dired-listing-switches "-aBhl"
   "Default: show hidden files with full information in human readable format.
 See `dired-listing-switches'.")

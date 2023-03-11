@@ -1,6 +1,6 @@
 ;;; qk-denote.el -*- lexical-binding: t; -*-
 
-(elpaca-use-package denote
+(use-package denote :elpaca t
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq

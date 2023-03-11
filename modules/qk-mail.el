@@ -157,7 +157,8 @@
 ;; that I'm interested in. For the latter, I still need to define a clear set
 ;; of rules for reducing the amount of unneded email that I mark as read everyday. 
 
-(elpaca-use-package mu4e-alert
+(use-package mu4e-alert
+  :elpaca t
   :hook (mu4e-main-mode . mu4e-alert-enable-mode-line-display)
   :init (setq mu4e-alert-interesting-mail-query qk-mu4e-alert-interesting-mail-query))
 
@@ -165,7 +166,8 @@
 
 ;; Send messages in org-mode and html format.
 
-(elpaca-use-package org-mime
+(use-package org-mime
+  :elpaca t
   :hook (message-send . org-mime-htmlize)
   :init (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
 

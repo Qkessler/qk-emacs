@@ -4,7 +4,7 @@
 ;; completing-read, which allows to quickly select an item from a list of candidates
 ;; with completion. Consult offers in particular an advanced buffer switching command
 ;; consult-buffer to switch between buffers and recently opened files. 
-(elpaca-use-package consult
+(use-package consult :elpaca t
   :commands
   consult--read consult-xref consult-register-format consult-register-window
   :general
@@ -59,7 +59,7 @@
 ;; and filtering provided by your completion setup - to any directory you’ve
 ;; visited recently, or to a project or bookmarked directory. The minibuffer
 ;; prompt will be replaced with the directory you choose.
-(elpaca-use-package consult-dir
+(use-package consult-dir :elpaca t
   :general
   (+general-global-project
     "d" 'consult-dir)
@@ -72,9 +72,9 @@
 ;; Personal package, using the same approach as consult-projectile by OlMon!
 ;; Creates a three source view (project files, projec buffers and known projects)
 ;; for the built-in package project.el.
-(elpaca-use-package (consult-project-extra
-                     :host github
-                     :repo "Qkessler/consult-project-extra")
+(elpaca (consult-project-extra
+         :host github
+         :repo "Qkessler/consult-project-extra")
   :general
   (+general-global-project
     "f" 'consult-project-extra-find

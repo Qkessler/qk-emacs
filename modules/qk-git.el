@@ -38,7 +38,7 @@
     "p" 'smerge-prev
     "a" 'smerge-keep-all))
 
-(elpaca-use-package magit
+(use-package magit :elpaca t
   :init 
   (setq
    git-commit-summary-max-length qk-git-commit-summary-max-length
@@ -57,7 +57,7 @@
   (add-hook! 'git-commit-mode-hook (set-fill-column qk-git-commit-fill-column))
   (add-hook! 'magit-status-mode (display-line-numbers-mode -1)))
 
-(elpaca-use-package magit-delta
+(use-package magit-delta :elpaca t
   :hook (magit-mode . magit-delta-mode)
   :init (setq magit-delta-default-dark-theme "gruvbox-dark"))
 

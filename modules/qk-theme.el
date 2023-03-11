@@ -30,7 +30,8 @@
   "Load the active indexed theme in the `qk-themes-list'"
   (qk-load-theme (nth qk-themes-index qk-themes-list)))
 
-(elpaca-use-package gruvbox-theme
+(use-package gruvbox-theme
+  :elpaca t
   :init
   (add-to-list 'qk-themes-list 'gruvbox-dark-medium)
   (add-to-list 'qk-themes-list 'modus-operandi)

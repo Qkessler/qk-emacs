@@ -4,7 +4,7 @@
 ;; in the box, but probably could be thought over. On the other hand, add defaults
 ;; that seem interesting for the modern user.
 
-(elpaca-use-package no-littering
+(use-package no-littering :elpaca t
   :init
   (setq
    backup-directory-alist `(("." . ,(no-littering-expand-var-file-name "backups/")))
@@ -29,7 +29,8 @@
    inhibit-startup-message t
    scroll-preserve-screen-position 'always
    scroll-margin 2
-   display-line-numbers-type t
+   shell-command-switch "-ic"
+   display-line-numbers-type qk-line-numbers-type
    display-line-numbers-width 3
    next-line-add-newlines t
    visible-bell nil

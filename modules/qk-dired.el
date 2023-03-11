@@ -34,7 +34,7 @@
                           :keymaps '(dired-mode-map)
                           "o" 'qk-dired-preview-other-window)))
 
-(elpaca-use-package dired-subtree
+(use-package dired-subtree :elpaca t
   :after dired
   :init (setq dired-subtree-use-backgrounds nil)
   :general 
@@ -42,7 +42,7 @@
    "<tab>"  'dired-subtree-cycle
    "<backtab>" 'dired-subtree-remove))
 
-(elpaca-use-package all-the-icons-dired
+(use-package all-the-icons-dired :elpaca t
   :if qk-dired-all-the-icons
   :init (setq all-the-icons-dired-monochrome (not qk-dired-all-the-icons-show-colors))
   :hook (dired-mode . all-the-icons-dired-mode))

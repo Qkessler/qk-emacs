@@ -1,6 +1,7 @@
 ;;; qk-evil.el  -*- lexical-binding: t; -*-
 
-(elpaca-use-package evil
+(use-package evil
+  :elpaca t
   :demand t
   :init 
   (setq
@@ -64,7 +65,8 @@
   (evil-set-initial-state 'org-agenda-mode 'motion)
   (evil-mode t))
 
-(elpaca-use-package evil-collection
+(use-package evil-collection
+  :elpaca t
   :commands evil-collection-init
   :init
   (setq
@@ -156,10 +158,12 @@ and complains if a module is loaded too early (during startup)."
       (with-eval-after-load req
         (+evil-collection-init mode +evil-collection-disabled-list)))))
 
-(elpaca-use-package evil-commentary
+(use-package evil-commentary
+  :elpaca t
   :hook (doom-first-input . evil-commentary-mode))
 
-(elpaca-use-package evil-org
+(use-package evil-org
+  :elpaca t
   :hook (org-mode . evil-org-mode)
   :init (setq evil-org-special-o/O '(table-row item))
   :config
@@ -214,19 +218,23 @@ and complains if a module is loaded too early (during startup)."
     "l" 'dired-find-file
     "h" 'dired-up-directory))
 
-(elpaca-use-package evil-matchit
+(use-package evil-matchit
+  :elpaca t
   :hook (doom-first-input . global-evil-matchit-mode))
 
-(elpaca-use-package avy
+(use-package avy
+  :elpaca t
   :general
   (global-definer
     "k" 'avy-goto-line-above
     "j" 'avy-goto-line-below))
 
-(elpaca-use-package evil-surround
+(use-package evil-surround
+  :elpaca t
   :hook (doom-first-input . global-evil-surround-mode))
 
-(elpaca-use-package evil-numbers
+(use-package evil-numbers
+  :elpaca t
   :general
   (general-nmap
     "C-a" 'evil-numbers/inc-at-pt

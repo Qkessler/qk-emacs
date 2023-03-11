@@ -1,6 +1,7 @@
 ;;; qk-vterm.el -*- lexical-binding: t; -*-
 
-(elpaca-use-package vterm
+(use-package vterm
+  :elpaca t
   :init
   (setq
    vterm-max-scrollback qk-vterm-max-scrollback

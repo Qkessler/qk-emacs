@@ -13,7 +13,8 @@
 ;; Harpoon offers quick bookmarks separated by project and branch. You can quick
 ;; navigate between your working files and forget about that files opened that
 ;; you will not use anymore.  Harpoon persists between emacs sessions.
-(elpaca-use-package (harpoon :host github :repo "otavioschwanck/harpoon.el")
+(use-package harpoon
+  :elpaca (harpoon :host github :repo "otavioschwanck/harpoon.el")
   :hook (harpoon-mode . auto-revert-mode)
   :init
   (defun qk-tab-bar-get-current-tab-name ())
@@ -38,7 +39,7 @@
 ;; out of the park. In this case, he is trying to come up with a replacement to the
 ;; commonly known fzf.el and fuzzy-find.el modes, which emulate fuzzy find matching
 ;; running fzf in an emacs terminal process.
-(elpaca-use-package affe
+(use-package affe :elpaca t
   :general
   (+general-global-window
     "f" 'qk-affe-workspace-find)
@@ -57,7 +58,7 @@
 
   (consult-customize affe-grep :preview-key (list :debounce 0.5 'any)))
 
-(elpaca-use-package detached
+(use-package detached :elpaca t
   :hook (doom-first-input . detached-init)
   :init
   (setq detached-show-output-on-attach t
@@ -71,7 +72,7 @@
          ([remap detached-open-session] . detached-consult-session))
   :general
   (global-definer
-    "C" 'detached-shell-command))
+    "C" 'detached-compile))
 
 (after! consult
   (defun qk-consult-compile (&optional command)

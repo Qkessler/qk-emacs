@@ -2,7 +2,6 @@
 ;;; Define spacemacs bindings using the leader SPC key and general
 ;;; for common Emacs keybidings, to avoid Rsi.
 
-(elpaca general (require 'general))
 (after! general
   (general-evil-setup)
   (defun qk-which-key-mode-name (arg)

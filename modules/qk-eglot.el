@@ -47,7 +47,6 @@ killing and opening many LSP/eglot-powered buffers.")
   :commands eglot eglot-ensure
   :hook
   (eglot-managed-mode . +lsp-optimization-mode)
-  (eglot-managed-mode . eglot-inlay-hints-mode)
   ((cc-mode
     c++-mode
     c++-ts-mode
@@ -150,7 +149,8 @@ server getting expensively restarted when reverting buffers."
     "gi" 'eglot-find-implementation
     "gr" 'xref-find-references))
 
-(elpaca-use-package eldoc-box
+(use-package eldoc-box
+  :elpaca t
   :hook (eglot-managed-mode . qk-add-eglot-keys)
   :config
   (defun qk-add-eglot-keys ()

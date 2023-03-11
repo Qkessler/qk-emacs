@@ -865,7 +865,8 @@ Restore the current buffer to its original directory on exit."
 (doom-run-hook-on 'doom-first-buffer-hook '(find-file-hook doom-switch-buffer-hook))
 
 
-(elpaca-use-package vulpea
+(use-package vulpea
+  :elpaca t
   :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)
 
 (setq safe-local-variable-values

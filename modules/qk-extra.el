@@ -1,6 +1,7 @@
 ;;; qk-extra.el -*- lexical-binding: t; -*-
 
-(elpaca-use-package pdf-tools
+(use-package pdf-tools
+  :elpaca t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
   (add-hook! 'pdf-view-mode-hook
@@ -14,20 +15,23 @@
 ;; defaults to the .authinfo.gpg file, configure Emacs to use
 ;; https://www.passwordstore.org/.
 
-;; (elpaca-use-package auth-source-pass
+;; (use-package auth-source-pass
+;; :elpaca t
 ;;   :init (auth-source-pass-enable))
 
 ;; The previous snippet configures Emacs to be able to access
 ;; the gpg files when a password is required. There is also a
 ;; pass major mode to insert and copy passwords from Emacs.
-(elpaca-use-package pass
+(use-package pass
+  :elpaca t
   :init (setq pass-username-field "login")
   :general
   (+general-global-applications
     "p" 'pass))
 
 ;; Emacs minor mode for making Anki cards with Org
-(elpaca-use-package anki-editor
+(use-package anki-editor
+  :elpaca t
   :init
   (setq
    anki-editor-create-decks t
@@ -58,7 +62,8 @@
 ;; Thanks to the amazing Ledger command line tool, which is an double-entry
 ;; accounting system that allows for fast queries and reports we are able to
 ;; connect our emacs --and ledger files-- to the amazing ledger-mode.
-(elpaca-use-package ledger-mode
+(use-package ledger-mode
+  :elpaca t
   :mode "\\.ledger\\'"
   :init
   (setq

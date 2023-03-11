@@ -3,13 +3,13 @@
 ;; In order to be able to differentiate the parenthesis in all programming
 ;; modes, rainbow-delimiters considers different faces from your current theme
 ;; and adds the same face to the matching parens.
-(elpaca-use-package rainbow-delimiters
+(use-package rainbow-delimiters :elpaca t
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(elpaca-use-package all-the-icons
+(use-package all-the-icons :elpaca t
   :commands all-the-icons-install-fonts)
 
-(elpaca-use-package doom-modeline
+(use-package doom-modeline :elpaca t
   :hook (elpaca-after-init . doom-modeline-mode)
   :init
   (setq

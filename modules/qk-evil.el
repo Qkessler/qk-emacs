@@ -17,7 +17,8 @@
   (general-mmap
     "j" 'evil-next-visual-line
     "k" 'evil-previous-visual-line
-    "gD" 'xref-find-definitions-other-window)
+    "gD" 'xref-find-definitions-other-window
+    [escape] 'qk-nohl-and-quit)
   (general-nmap
     [escape] 'qk-nohl-and-quit 
     "K" nil)

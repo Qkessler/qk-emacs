@@ -55,6 +55,12 @@ times for the entries."
     (setq org-agenda-files (qk-denote-dailies-between-times (time-add nil (- (* 3600 24 30))) (current-time)))
     (qk-silently-open-todo-agenda))
 
+  (defun qk-denote-open-quarterly-agenda ()
+    "Open an agenda buffer with the dailies from the past 4 months, a quarter."
+    (interactive)
+    (setq org-agenda-files (qk-denote-dailies-between-times (time-add nil (- (* 3600 24 4 30))) (current-time)))
+    (qk-silently-open-todo-agenda))
+
   (defvar qk-denote-capture-template
     '(("n" "New note (with denote.el)" plain
        (file denote-last-path)

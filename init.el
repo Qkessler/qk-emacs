@@ -71,10 +71,11 @@
 (require 'qk-tab-bar)
 (require 'qk-lang)
 (require 'qk-mail)
-(require 'qk-eglot)
+;; (require 'qk-eglot)
 ;; (require 'qk-vterm)
 (require 'qk-extra)
 (require 'qk-amz)
+(require 'qk-lsp-bridge)
 
 (setq custom-file "~/.emacs.d/var/custom.el")
 (message "*** Emacs loaded in %s with %d garbage collections."

@@ -64,8 +64,6 @@
   ;; Window commands.
   (+general-global-menu! "window" "w"
     "=" 'balance-windows
-    "v" 'split-window-vertically
-    "s" 'split-window-horizontally
     "m" 'delete-other-windows
     "d" 'delete-window)
 

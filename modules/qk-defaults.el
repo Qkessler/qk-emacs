@@ -29,7 +29,7 @@
    inhibit-startup-message t
    scroll-preserve-screen-position 'always
    scroll-margin 2
-   shell-command-switch "-ic"
+   shell-command-switch "-c"
    display-line-numbers-type qk-line-numbers-type
    display-line-numbers-width 3
    next-line-add-newlines t

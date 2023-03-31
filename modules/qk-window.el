@@ -37,11 +37,25 @@
 (use-package ace-window :elpaca t
   :general
   (+general-global-window
-    "o" 'ace-window)
+    "o" 'ace-window
+    "v" 'qk-split-window-vertically
+    "s" 'qk-split-window-horizontally)
   :init
   (setq
    aw-keys qk-aw-keys
-   aw-background nil))
+   aw-background nil)
+  :config
+  (defun qk-split-window-vertically ()
+    "Split the window vertically and focus the newly opened window."
+    (interactive)
+    (let ((window (split-window-vertically)))
+      (aw-switch-to-window window)))
+
+  (defun qk-split-window-horizontally ()
+    "Split the window horizontally and focus the newly opened window."
+    (interactive)
+    (let ((window (split-window-horizontally)))
+      (aw-switch-to-window window))))
 
 ;; Winner Mode is a global minor mode that allows you to “undo” and “redo” changes
 ;; in Window configuration. It is included in GNU Emacs, and documented as winner-mode.

@@ -38,6 +38,7 @@
    org-enforce-todo-dependencies t
    org-confirm-babel-evaluate nil
    org-log-repeat nil
+   org-modules '()
    org-refile-targets (quote ((org-agenda-files :todo . "PROJECT")))
    org-todo-keywords
    (quote ((sequence "TODO(t)" "|" "DONE(d)")

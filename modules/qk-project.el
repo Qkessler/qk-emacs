@@ -4,7 +4,6 @@
   (+general-global-project
     "!" '(project-shell-command :which-key "shell-command")
     "&" '(project-async-shell-command :which-key "async shell-command")
-    "c" 'project-compile
     "D" 'project-dired
     "k" 'project-kill-buffers)
   (global-definer
@@ -58,7 +57,8 @@
 
   (consult-customize affe-grep :preview-key (list :debounce 0.5 'any)))
 
-(use-package detached :elpaca t
+(use-package detached
+  :elpaca t
   :hook (doom-first-input . detached-init)
   :init
   (setq detached-show-output-on-attach t
@@ -72,20 +72,16 @@
          ([remap detached-open-session] . detached-consult-session))
   :general
   (global-definer
-    "C" 'detached-compile))
-
-(after! consult
-  (defun qk-consult-compile (&optional command)
-    "Run compile commands with consult history completion."
-    (interactive)
-    (compile (or command (consult--read compile-history))))
-
+    "C" 'detached-compile)
   (major-mode-definer
-    :keymaps '(prog-mode-map)
-    :major-modes '(prog-mode)
-    "C" 'qk-consult-compile))
-
-(after! general
+    :keymaps '(prog-mode-map conf-mode-map)
+    :major-modes '(prog-mode conf-mode)
+    "c" (cmd! (qk-run-dyncomp "run"))
+    "t" (cmd! (qk-run-dyncomp "test")))
+  (+general-global-project
+    "c" (cmd! (qk-run-dyncomp "run" t))
+    "t" (cmd! (qk-run-dyncomp "test" t)))
+  :config
   (defun qk-run-dyncomp (&optional command should-run-in-project-root)
     "Run `dyncomp' CLI with `COMMAND' passed as argument.
 If `COMMAND' is not provided, the user will be prompted to enter a command.
@@ -99,38 +95,19 @@ The current directory is set to the root directory of the current project before
            (argument-command (or command (consult--read compile-history)))
            (dyncomp-command (concat "dyncomp " argument-command)))
       (with-current-directory! directory
-        (compile dyncomp-command)
-        (add-to-list 'compile-history argument-command))))
+        (detached-compile dyncomp-command)
+        (add-to-list 'compile-history argument-command)))))
 
-  (defun qk-dyncomp-run ()
-    "Run `dyncomp run' using the `qk-run-dyncomp' function."
+(after! consult
+  (defun qk-consult-compile (&optional command)
+    "Run compile commands with consult history completion."
     (interactive)
-    (qk-run-dyncomp "run"))
-
-  (defun qk-dyncomp-test ()
-    "Run `dyncomp run' using the `qk-run-dyncomp' function."
-    (interactive)
-    (qk-run-dyncomp "test"))
-
-  (defun qk-dyncomp-project-run ()
-    "Run `dyncomp run' in `project-root'."
-    (interactive)
-    (qk-run-dyncomp "run" t))
-
-  (defun qk-dyncomp-project-test ()
-    "Run `dyncomp test' in `project-root'."
-    (interactive)
-    (qk-run-dyncomp "test" t))
+    (compile (or command (consult--read compile-history))))
 
   (major-mode-definer
-    :keymaps '(prog-mode-map conf-mode-map)
-    :major-modes '(prog-mode conf-mode)
-    "c" 'qk-dyncomp-run 
-    "t" 'qk-dyncomp-test)
-  (after! project
-    (+general-global-project
-      "c" 'qk-dyncomp-project-run
-      "t" 'qk-dyncomp-project-test)))
+    :keymaps '(prog-mode-map)
+    :major-modes '(prog-mode)
+    "C" 'qk-consult-compile))
 
 (provide 'qk-project)
 ;; qk-project.el ends here.

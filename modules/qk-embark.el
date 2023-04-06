@@ -8,6 +8,7 @@
 ;; - In the *Completions* buffer the target is the completion at point.
 ;; - In a regular buffer, the target is the region if active, or else the file, symbol or URL at point.
 (use-package embark :elpaca t
+  :defer 5
   :general
   ("M-o" 'embark-act)
   :config

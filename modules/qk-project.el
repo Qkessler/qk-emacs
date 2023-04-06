@@ -59,6 +59,7 @@
 
 (use-package detached
   :elpaca t
+  :commands qk-run-dyncomp
   :hook (doom-first-input . detached-init)
   :init
   (setq detached-show-output-on-attach t

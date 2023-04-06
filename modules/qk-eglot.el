@@ -159,5 +159,15 @@ server getting expensively restarted when reverting buffers."
       :keymaps 'eglot-mode-map
       "K" 'eldoc-box-eglot-help-at-point)))
 
+(elpaca sideline-flymake)
+(use-package sideline
+  :elpaca t
+  :hook (flymake-mode . sideline-mode)
+  :init
+  (setq
+   sideline-flymake-display-errors-whole-line 'point
+   sideline-delay 0.01)
+  :config (setq sideline-backends-right '(sideline-flymake)))
+
 (provide 'qk-eglot)
 ;;; qk-eglot.el ends here.

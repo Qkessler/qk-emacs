@@ -295,6 +295,7 @@ to *Messages*, only inhibit output in the echo area."
                    (unless visit (setq visit 'no-message))
                    (funcall write-region start end filename append visit lockname mustbenew)))
            ,@forms))))
+(fset 'silent! 'quiet!)
 
 (defmacro eval-if! (cond then &rest body)
   "Expands to THEN if COND is non-nil, to BODY otherwise.

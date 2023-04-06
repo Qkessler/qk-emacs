@@ -83,5 +83,9 @@
   :custom-face
   (ledger-occur-xact-face ((t (:background "#222324" :inherit nil)))))
 
+;; You should add your `chat-api-key' here.
+(use-package chat
+  :elpaca (chat :host github :repo "iwahbe/chat.el"))
+
 (provide 'qk-extra)
 ;; qk-extra.el ends here. 

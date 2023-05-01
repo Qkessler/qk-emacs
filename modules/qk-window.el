@@ -14,7 +14,7 @@
     (interactive)
     (let* ((is-active olivetti-mode)
            (state (if is-active -1 t)))
-      (olivetti-mode state)))
+      (olivetti-mode state))))
 
 ;; Popup windows are naturally annoying, disturbing the writing/programming flow
 ;; with every iteration or message. popper.el puts an end to the madness by managing

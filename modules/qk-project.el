@@ -82,6 +82,10 @@
   (+general-global-project
     "c" (cmd! (qk-run-dyncomp "run" t))
     "t" (cmd! (qk-run-dyncomp "test" t)))
+  (:keymaps
+   '(compilation-mode-map compilation-minor-mode-map)
+   "C-j" nil
+   "C-k" nil)
   :config
   (defun qk-run-dyncomp (&optional command should-run-in-project-root)
     "Run `dyncomp' CLI with `COMMAND' passed as argument.

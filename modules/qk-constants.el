@@ -102,7 +102,7 @@ See `git-commit-summary-max-length'.")
 (defvar qk-markdown-command "pandoc -t html5"
   "Default: command to use when compiling markdown to html.
 See `markdown-command'.")
-(defvar qk-mu4e-load-path "/opt/homebrew/Cellar/mu/1.8.11/share/emacs/site-lisp/mu/mu4e/"
+(defvar qk-mu4e-load-path "/opt/homebrew/Cellar/mu/1.8.10/share/emacs/site-lisp/mu/mu4e/"
   "Default: mu4e load path. See `mu4e-load-path'.")
 (defvar qk-mu4e-maildir "~/.Mail"
   "Default: mail directory that mu4e will use to pull emails from.
@@ -215,6 +215,8 @@ for modeline highlighting. See `mu4e-alert-interesting-mail-query'.")
     ("reg last month" "%(binary) -f %(ledger-file) reg -p \"last month\"")
     ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
     ("account" "%(binary) -f %(ledger-file) reg %(account)")
+    ("account this month" "%(binary) -f %(ledger-file) -p \"this month\" reg %(account)")
+    ("account last month" "%(binary) -f %(ledger-file) -p \"last month\" reg %(account)")
     ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
   \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
     ("expenses last month" "%(binary) -p \"last month\" -f %(ledger-file) bal Expenses and not \

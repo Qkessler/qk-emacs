@@ -193,7 +193,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 (if (treesit-available-p)
     (use-package kotlin-ts-mode
       :elpaca (kotlin-ts-mode :host gitlab :repo "bricka/emacs-kotlin-ts-mode")
-     :mode "\\.kt\\'")
+      :mode "\\.kt\\'")
   (elpaca kotlin-mode))
 
 (elpaca swift-mode)

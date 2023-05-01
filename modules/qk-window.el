@@ -12,13 +12,9 @@
     "Toggle olivetti-mode applying different checks and functions to
   remove all the display numbers, and put it back after toggle."
     (interactive)
-    (if olivetti-mode
-        (progn
-          (display-line-numbers-mode t)
-          (olivetti-mode -1))
-      (progn
-        (display-line-numbers-mode -1)
-        (olivetti-mode)))))
+    (let* ((is-active olivetti-mode)
+           (state (if is-active -1 t)))
+      (olivetti-mode state)))
 
 ;; Popup windows are naturally annoying, disturbing the writing/programming flow
 ;; with every iteration or message. popper.el puts an end to the madness by managing

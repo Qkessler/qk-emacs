@@ -121,10 +121,67 @@ server getting expensively restarted when reverting buffers."
                            "-Xmx8G"
                            "-XX:+UseG1GC"
                            "-XX:+UseStringDeduplication"
-                           ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar"))))
+                           ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar")
+                           :initializationOptions (:extendedClientCapabilities (:classFileContentsSupport t)))))
     (add-to-list 'eglot-server-programs `(java-mode . ,jdtls-arguments))
     (add-to-list 'eglot-server-programs `(java-ts-mode . ,jdtls-arguments)))
-  
+  (defun jdt-file-name-handler (operation &rest args)
+    "Support Eclipse jdtls `jdt://' uri scheme."
+    (let* ((uri (car args))
+           (cache-dir "/tmp/.eglot")
+           (source-file
+            (expand-file-name
+             (file-name-concat
+              cache-dir
+              (save-match-data
+                (when (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\.class\\?" uri))
+                (format "%s.java" (replace-regexp-in-string "/" "." (match-string 2 uri) t t)))))))
+      (unless (file-readable-p source-file)
+        (let ((content (jsonrpc-request (eglot-current-server) :java/classFileContents (list :uri uri)))
+              (metadata-file (format "%s.%s.metadata"
+                                     (file-name-directory source-file)
+                                     (file-name-base source-file))))
+          (unless (file-directory-p cache-dir) (make-directory cache-dir t))
+          (with-temp-file source-file (insert content))
+          (with-temp-file metadata-file (insert uri))))
+      source-file))
+
+  (add-to-list 'file-name-handler-alist '("\\`jdt://" . jdt-file-name-handler))
+
+  (defun jdthandler--wrap-legacy-eglot--path-to-uri (original-fn &rest args)
+    "Hack until eglot is updated.
+ARGS is a list with one element, a file path or potentially a URI.
+If path is a jar URI, don't parse. If it is not a jar call ORIGINAL-FN."
+    (let ((path (file-truename (car args))))
+      (if (equal "jdt" (url-type (url-generic-parse-url path)))
+          path
+        (apply original-fn args))))
+
+  (defun jdthandler--wrap-legacy-eglot--uri-to-path (original-fn &rest args)
+    "Hack until eglot is updated.
+ARGS is a list with one element, a URI.
+If URI is a jar URI, don't parse and let the `jdthandler--file-name-handler'
+handle it. If it is not a jar call ORIGINAL-FN."
+    (let ((uri (car args)))
+      (if (and (stringp uri)
+               (string= "jdt" (url-type (url-generic-parse-url uri))))
+          uri
+        (apply original-fn args))))
+
+
+  (defun jdthandler-patch-eglot ()
+    "Patch old versions of Eglot to work with Jdthandler."
+    (interactive) ;; TODO, remove when eglot is updated in melpa
+    (unless (or (and (advice-member-p #'jdthandler--wrap-legacy-eglot--path-to-uri 'eglot--path-to-uri)
+                     (advice-member-p #'jdthandler--wrap-legacy-eglot--uri-to-path 'eglot--uri-to-path))
+                (<= 29 emacs-major-version))
+      (advice-add 'eglot--path-to-uri :around #'jdthandler--wrap-legacy-eglot--path-to-uri)
+      (advice-add 'eglot--uri-to-path :around #'jdthandler--wrap-legacy-eglot--uri-to-path)
+      (message "[jdthandler] Eglot successfully patched.")))
+
+  ;; invoke
+  (jdthandler-patch-eglot)
+
   (add-to-list 'eglot-server-programs '(toml-ts-mode . ("taplo" "lsp" "stdio")))
   (add-to-list 'eglot-server-programs '(kotlin-ts-mode . ("kotlin-language-server"))))
 
@@ -133,10 +190,6 @@ server getting expensively restarted when reverting buffers."
     :keymaps 'flymake-mode
     "n" 'flymake-goto-next-error
     "p" 'flymake-goto-prev-error)
-  (general-def
-    :keymaps 'flymake-mode-map
-    "M-n" 'flymake-goto-next-error
-    "M-p" 'flymake-goto-prev-error)
   (minor-mode-definer
     :keymaps 'eglot--managed-mode
     "a" 'eglot-code-actions
@@ -144,6 +197,14 @@ server getting expensively restarted when reverting buffers."
     "R" 'xref-find-references
     "f" 'eglot-format-buffer
     "e" 'consult-flymake)
+  (general-def
+    :keymaps 'flymake-mode-map
+    "M-n" 'flymake-goto-next-error
+    "M-p" 'flymake-goto-prev-error)
+  (general-nmap
+    :keymaps '(flymake-mode-map)
+    "gj" 'flymake-goto-next-error
+    "gk" 'flymake-goto-prev-error)
   (general-nmap
     :major-modes '(eglot--managed-mode)
     "gi" 'eglot-find-implementation

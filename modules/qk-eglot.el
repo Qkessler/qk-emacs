@@ -79,7 +79,7 @@ killing and opening many LSP/eglot-powered buffers.")
   :init
   (setq
    eglot-sync-connect 1
-   eglot-connect-timeout 10
+   eglot-connect-timeout 500
    eglot-autoshutdown t
    eglot-send-changes-idle-time 0.5
    eglot-auto-display-help-buffer nil
@@ -212,13 +212,15 @@ handle it. If it is not a jar call ORIGINAL-FN."
 
 (use-package eldoc-box
   :elpaca t
-  :hook (eglot-managed-mode . qk-add-eglot-keys)
+  :hook
+  (eglot-managed-mode . qk-add-eglot-keys)
+  (eglot-managed-mode . eldoc-mode)
   :config
   (defun qk-add-eglot-keys ()
     "Add eglot bindings after a buffer has been managed."
     (general-nmap
       :keymaps 'eglot-mode-map
-      "K" 'eldoc-box-eglot-help-at-point)))
+      "K" 'eldoc-box-help-at-point)))
 
 (elpaca sideline-flymake)
 (use-package sideline

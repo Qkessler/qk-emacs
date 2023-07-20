@@ -22,6 +22,8 @@
   (+general-global-help
     "g" `(,(cmd! (consult-ripgrep ".")) :which-key "Grep here")
     "f" `(,(cmd! (consult-find ".")) :which-key "Find here"))
+  (general-nmap
+    "M-y" 'consult-yank-pop)
   :init
   (setq
    consult-narrow-key qk-consult-narrow-key

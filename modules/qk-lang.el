@@ -190,11 +190,16 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 
 ;; Kotlin still doesn't have full support inside emacs. To add the kotlin major
 ;; mode, use the kotlin-mode package.
-(if (treesit-available-p)
-    (use-package kotlin-ts-mode
-      :elpaca (kotlin-ts-mode :host gitlab :repo "bricka/emacs-kotlin-ts-mode")
-      :mode "\\.kt\\'")
-  (elpaca kotlin-mode))
+(use-package kotlin-mode
+  :elpaca t
+  :mode "\\.kt\\'")
+
+;; FIXME: Commenting the treesit integration for Kotlin since it doesn't seem to
+;; work with the latest Emacs 29.
+;; (unless (not (treesit-available-p))
+;;   (use-package kotlin-ts-mode
+;;     :elpaca (kotlin-ts-mode :host gitlab :repo "bricka/emacs-kotlin-ts-mode")
+;;     :mode "\\.kt\\'"))
 
 (elpaca swift-mode)
 (elpaca scala-mode)
@@ -212,7 +217,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
       ((rustic-mode go-mode) . apheleia-mode))
   (use-package apheleia
     :elpaca t
-    :hook ((rust-ts-mode go-ts-mode) . apheleia-mode)
+    :hook ((rust-ts-mode go-ts-mode typescript-ts-mode yaml-ts-mode tsx-ts-mode json-ts-mode) . apheleia-mode)
     :config
     (pushnew! apheleia-mode-alist
               '(go-ts-mode . gofmt)

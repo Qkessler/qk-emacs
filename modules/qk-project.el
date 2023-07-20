@@ -31,7 +31,8 @@
     "." 'harpoon-go-to-3)
   :config
   (defun qk-tab-bar-get-current-tab-name ()
-    (alist-get 'name (tab-bar--current-tab))))
+    (alist-get 'name (tab-bar--current-tab)))
+  (defun harpoon-project-root-function () nil))
 
 ;; Affe is another package from the great =minad=, which keeps coming out with these
 ;; amazing integrations to the emacs default functionality, improving the performance

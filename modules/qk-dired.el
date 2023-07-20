@@ -19,7 +19,9 @@
    dired-listing-switches qk-dired-listing-switches
    dired-use-ls-dired nil
    dired-kill-when-opening-new-dired-buffer t)
-  :hook (dired-mode . dired-hide-details-mode))
+  :hook
+  (dired-mode . dired-hide-details-mode)
+  (dired-mode . auto-revert-mode))
 
 (after! general
   (defun qk-dired-preview-other-window ()

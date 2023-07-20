@@ -138,7 +138,8 @@
   (setq
    sendmail-program qk-sendmail-program
    message-sendmail-f-is-evil t
-   message-sendmail-extra-arguments '("--read-envelope-from")
+   message-sendmail-extra-arguments
+   '("--read-envelope-from")
    send-mail-function 'smtpmail-send-it
    message-send-mail-function 'message-send-mail-with-sendmail))
 

@@ -86,7 +86,7 @@ org-mode
 
 (title "#+title: " p n "#+author: Enrique Kessler Martínez" n "#+language: en" n n)
 (quote "#+begin_quote" n> r> n> "#+end_quote")
-(example "#+begin_example" n> r> n> "#+end_example")
+(ex "#+begin_example" n> r> n> "#+end_example")
 (center "#+begin_center" n> r> n> "#+end_center")
 (comment "#+begin_comment" n> r> n> "#+end_comment")
 (verse "#+begin_verse" n> r> n> "#+end_verse")

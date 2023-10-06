@@ -4,7 +4,7 @@
   "Default: indent with spaces instead of tabs. See `indents-tabs-mode'.")
 (defvar qk-tab-width 4
   "Default: indent with 4 columns. See `tab-width'.")
-(defvar qk-fill-column 80
+(defvar qk-fill-column 120
   "Default: add 80 characters as fill-column. See `fill-column'.")
 (defvar qk-line-numbers-type 'visual
   "Default: Relative line numbers, for ergonomic line jumps. See `display-line-numbers-type'.")

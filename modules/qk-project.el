@@ -58,23 +58,11 @@
 
   (consult-customize affe-grep :preview-key (list :debounce 0.5 'any)))
 
-(use-package detached
-  :elpaca t
-  :commands qk-run-dyncomp
-  :hook (doom-first-input . detached-init)
-  :init
-  (setq detached-show-output-on-attach t
-        detached-terminal-data-command system-type)
-  :bind (;; Replace `async-shell-command' with `detached-shell-command'
-         ([remap async-shell-command] . detached-shell-command)
-         ;; Replace `compile' with `detached-compile'
-         ([remap compile] . detached-compile)
-         ([remap recompile] . detached-compile-recompile)
-         ;; Replace built in completion of sessions with `consult'
-         ([remap detached-open-session] . detached-consult-session))
+(use-package consult
+  :commands qk-consult-compile
   :general
   (global-definer
-    "C" 'detached-compile)
+    "C" 'qk-consult-compile)
   (major-mode-definer
     :keymaps '(prog-mode-map conf-mode-map)
     :major-modes '(prog-mode conf-mode)
@@ -83,11 +71,12 @@
   (+general-global-project
     "c" (cmd! (qk-run-dyncomp "run" t))
     "t" (cmd! (qk-run-dyncomp "test" t)))
-  (:keymaps
-   '(compilation-mode-map compilation-minor-mode-map)
-   "C-j" nil
-   "C-k" nil)
   :config
+  (defun qk-consult-compile (&optional command)
+    "Run compile commands with consult history completion."
+    (interactive)
+    (compile (or command (consult--read compile-history))))
+
   (defun qk-run-dyncomp (&optional command should-run-in-project-root)
     "Run `dyncomp' CLI with `COMMAND' passed as argument.
 If `COMMAND' is not provided, the user will be prompted to enter a command.
@@ -101,19 +90,13 @@ The current directory is set to the root directory of the current project before
            (argument-command (or command (consult--read compile-history)))
            (dyncomp-command (concat "dyncomp " argument-command)))
       (with-current-directory! directory
-        (detached-compile dyncomp-command)
+        (compile dyncomp-command)
         (add-to-list 'compile-history argument-command)))))
 
-(after! consult
-  (defun qk-consult-compile (&optional command)
-    "Run compile commands with consult history completion."
-    (interactive)
-    (compile (or command (consult--read compile-history))))
-
-  (major-mode-definer
-    :keymaps '(prog-mode-map)
-    :major-modes '(prog-mode)
-    "C" 'qk-consult-compile))
+(general-def
+  :keymaps '(compilation-mode-map compilation-minor-mode-map)
+  "C-j" nil
+  "C-k" nil)
 
 (provide 'qk-project)
 ;; qk-project.el ends here.

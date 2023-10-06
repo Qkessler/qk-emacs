@@ -81,7 +81,8 @@ which is the one that contains the todos for the day/week."
 (after! org-agenda
   (general-def
     :keymaps 'org-agenda-mode-map
-    "x" 'org-agenda-bulk-action)
+    "x" 'org-agenda-bulk-action
+    "o" 'org-agenda-show)
   (major-mode-definer
     :major-modes '(org-agenda-mode)
     :keymaps '(org-agenda-mode-map)

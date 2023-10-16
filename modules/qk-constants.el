@@ -67,7 +67,7 @@ See `consult-preview-key'")
 See `doom-modeline-buffer-file-name-style' for options.")
 (defvar qk-modeline-display-time t
   "Default: display updating time on modeline. See `display-time-update'.")
-(defvar qk-notes-directory (expand-file-name "~/Documents/slipbox/")
+(defvar qk-notes-directory (expand-file-name "~/slipbox-sync/slipbox/")
   "Default: my slipbox's path.")
 (defvar qk-org-archive-location (concat qk-notes-directory "../archive/%s_archive::")
   "Default: archive name concatenated to archive. See `org-archive-location'.")

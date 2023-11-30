@@ -61,6 +61,14 @@
   :hook (magit-mode . magit-delta-mode)
   :init (setq magit-delta-default-dark-theme "gruvbox-dark"))
 
+(use-package git-link
+  :elpaca t
+  :general
+  (major-mode-definer
+    :major-modes '(prog-mode)
+    :keymaps '(prog-mode-map)
+    "u" 'git-link))
+
 (after! general
   (+general-global-magit
     "b" 'vc-region-history))

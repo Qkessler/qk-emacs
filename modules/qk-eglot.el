@@ -196,7 +196,7 @@ handle it. If it is not a jar call ORIGINAL-FN."
     "r" 'eglot-rename
     "R" 'xref-find-references
     "f" 'eglot-format-buffer
-    "e" 'consult-flymake)
+    "e" (cmd! (consult-flymake t)))
   (general-def
     :keymaps 'flymake-mode-map
     "M-n" 'flymake-goto-next-error
@@ -209,6 +209,13 @@ handle it. If it is not a jar call ORIGINAL-FN."
     :major-modes '(eglot--managed-mode)
     "gi" 'eglot-find-implementation
     "gr" 'xref-find-references))
+
+(use-package consult-eglot
+  :elpaca t
+  :general
+  (minor-mode-definer
+    :keymaps 'eglot--managed-mode
+    "s" 'consult-eglot-symbols))
 
 (use-package eldoc-box
   :elpaca t

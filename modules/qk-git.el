@@ -65,8 +65,8 @@
   :elpaca t
   :general
   (major-mode-definer
-    :major-modes '(prog-mode)
-    :keymaps '(prog-mode-map)
+    :major-modes '(prog-mode toml-ts-mode)
+    :keymaps '(prog-mode-map toml-ts-mode-map)
     "u" 'git-link))
 
 (after! general

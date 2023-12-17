@@ -95,7 +95,7 @@ variable for an explanation of the defaults (in comments). See
     evil-mc eww ,@(if (> emacs-major-version 28) '(emoji)) fanyi finder
     flycheck flymake forge free-keys geiser ggtags git-timemachine gnus
     go-mode grep guix hackernews helm help helpful hg-histedit hungry-delete
-    ibuffer image image-dired image+ imenu imenu-list
+    ibuffer image image-dired image+ imenu imenu-list bufler
     (indent "indent") indium info ivy js2-mode leetcode lispy log-edit
     log-view lsp-ui-imenu lua-mode kotlin-mode macrostep man
     (magit magit-repos magit-submodule) magit-section magit-todos

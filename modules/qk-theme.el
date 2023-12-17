@@ -33,7 +33,7 @@
 (use-package gruvbox-theme
   :elpaca t
   :init
-  (add-to-list 'qk-themes-list 'gruvbox-dark-medium)
+  (add-to-list 'qk-themes-list 'gruvbox-dark-hard)
   (add-to-list 'qk-themes-list 'modus-operandi)
 
   (qk-load-indexed-theme))

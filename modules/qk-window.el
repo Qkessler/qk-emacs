@@ -75,9 +75,14 @@
    :states '(motion insert)
    "C-k" 'windmove-up))
 
-(after! general
+(use-package bufler
+  :elpaca t
+  :general
   (+general-global-buffer
-    "l" 'ibuffer))
+    "l" 'bufler)
+  (general-nmap
+    :keymaps 'bufler-list-mode-map
+    "q" 'quit-window))
 
 (provide 'qk-window)
 ;; qk-window.el ends here.

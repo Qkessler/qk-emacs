@@ -174,12 +174,29 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
   :mode ("\\.md\\'" . gfm-mode)
   :hook (markdown-mode . visual-line-mode)
   :init (setq markdown-command qk-markdown-command)
+  :config
+  (defun qk-markdown-insert-link-dwim ()
+    "Whenever a selection is selected, the link will immediately be added to the selection. This is key to copy links somewhere and write its description first, instead of typing []()."
+    (interactive)
+    (let* ((point-in-link (markdown-inline-code-at-point-p))
+           (clipboard-url (when (string-match-p "^http" (current-kill 0))
+                            (current-kill 0)))
+           (region-content (when (region-active-p)
+                             (buffer-substring-no-properties (region-beginning)
+                                                             (region-end)))))
+      (cond ((and region-content clipboard-url (not point-in-link))
+             (delete-region (region-beginning) (region-end))
+             (insert (concat "[" region-content "](" clipboard-url ")")))
+            ((and clipboard-url (not point-in-link))
+             (insert (concat "[" (read-string "title: ")
+                             "](" clipboard-url ")")))
+            (t (call-interactively 'markdown-insert-link)))))
   :general
   (major-mode-definer
     :keymaps '(markdown-mode-map)
     :major-modes '(gfm-mode markdown-mode)
     "c" 'markdown-insert-code
-    "l" 'markdown-insert-link))
+    "l" 'qk-markdown-insert-link-dwim))
 
 ;; Make sure .h files default to Objective-C mode, since I don't really code
 ;; in C. There isn't a problem anyway to do this. If worried about LSP not working,

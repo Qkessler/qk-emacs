@@ -24,7 +24,7 @@
   :hook (doom-first-input . popper-mode)
   :general
   (+general-global-toggle
-    "p" 'popper-toggle-latest
+    "p" 'popper-toggle
     "c" 'popper-cycle
     "T" 'popper-toggle-type)
   :init (setq popper-reference-buffers qk-popper-reference-buffers))

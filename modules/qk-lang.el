@@ -57,6 +57,12 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
           (advice-remove 'message #'silence))))
     (advice-add 'tree-sitter-langs-install-grammars :around #'suppress-messages)))
 
+(use-package treesit-auto
+  :elpaca t
+  :hook (doom-first-input . global-treesit-auto-mode)
+  :init (setq treesit-auto-install 'prompt)
+  :config (treesit-auto-add-to-auto-mode-alist 'all))
+
 (use-package compile
   :hook (compilation-filter . colorize-compilation-buffer)
   :config

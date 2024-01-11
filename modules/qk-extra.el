@@ -19,16 +19,6 @@
 ;; :elpaca t
 ;;   :init (auth-source-pass-enable))
 
-;; The previous snippet configures Emacs to be able to access
-;; the gpg files when a password is required. There is also a
-;; pass major mode to insert and copy passwords from Emacs.
-(use-package pass
-  :elpaca t
-  :init (setq pass-username-field "login")
-  :general
-  (+general-global-applications
-    "p" 'pass))
-
 ;; Emacs minor mode for making Anki cards with Org
 (use-package anki-editor
   :elpaca t
@@ -83,9 +73,12 @@
   :custom-face
   (ledger-occur-xact-face ((t (:background "#222324" :inherit nil)))))
 
-;; You should add your `chat-api-key' here.
-(use-package chat
-  :elpaca (chat :host github :repo "iwahbe/chat.el"))
+;; You should add your `gptel-api-key' here.
+(use-package gptel
+  :elpaca t
+  :general
+  (+general-global-chat
+    "s" 'gptel-send))
 
 (provide 'qk-extra)
 ;; qk-extra.el ends here. 

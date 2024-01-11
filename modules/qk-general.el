@@ -84,6 +84,7 @@
   (+general-global-menu! "insert" "i"
     "e" (lambda () (interactive)(qk-real-insert ?€)))
 
+  (+general-global-menu! "chat" "c")
   (+general-global-menu! "eval" "e")
   (+general-global-menu! "org" "o")
   (+general-global-menu! "help" "h")

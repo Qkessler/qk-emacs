@@ -88,8 +88,5 @@ which is the one that contains the todos for the day/week."
     :keymaps '(org-agenda-mode-map)
     "p" 'org-agenda-priority))
 
-(elpaca calfw)
-(elpaca calfw-org)
-
 (provide 'qk-org-agenda)
 ;; qk-org-agenda.el ends here.

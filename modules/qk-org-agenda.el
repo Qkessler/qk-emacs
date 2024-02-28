@@ -59,6 +59,13 @@
                    (t (org-agenda-skip-entry-if 'todo 'done))))
                 (org-agenda-todo-ignore-deadlines nil))))))))
 
+(use-package org-timeblock
+  :elpaca t
+  :general
+  (general-nmap
+    :keymaps 'org-timeblock-mode-map
+    "q" 'quit-window))
+
 (after! general
   (defun qk-silently-open-agenda ()
     "Using the `with-silent-modifications' macro, open the agenda on the 'd' view
@@ -82,11 +89,11 @@ which is the one that contains the todos for the day/week."
   (general-def
     :keymaps 'org-agenda-mode-map
     "x" 'org-agenda-bulk-action
-    "o" 'org-agenda-show)
-  (major-mode-definer
-    :major-modes '(org-agenda-mode)
-    :keymaps '(org-agenda-mode-map)
-    "p" 'org-agenda-priority))
+    "o" 'org-agenda-show
+    "p" 'org-agenda-priority)
+  (general-mmap
+    :keymaps 'org-agenda-mode-map
+    "T" 'org-timeblock))
 
 (provide 'qk-org-agenda)
 ;; qk-org-agenda.el ends here.

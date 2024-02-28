@@ -242,9 +242,11 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
     :elpaca t
     :hook ((rust-ts-mode go-ts-mode typescript-ts-mode yaml-ts-mode tsx-ts-mode json-ts-mode) . apheleia-mode)
     :config
+    (setf (alist-get 'prettier apheleia-formatters) '("apheleia-npx" "prettier" "--stdin-filepath" filepath))
     (pushnew! apheleia-mode-alist
               '(go-ts-mode . gofmt)
-              '(rust-ts-mode . rustfmt))))
+              '(rust-ts-mode . rustfmt)
+              '(typescript-ts-mode . prettier))))
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

@@ -4,7 +4,7 @@
 ;; completion system. By reusing the default system, Vertico achieves full compatibility
 ;; with built-in Emacs commands and completion tables. Vertico is pretty bare-bone and
 ;; comes with only a minimal set of commands.
-(use-package vertico :elpaca t
+(use-package vertico :ensure t
   :hook (doom-first-buffer . vertico-mode)
   :init (setq vertico-cycle t))
 
@@ -14,7 +14,7 @@
 ;; in any order. Each component can match in any one of several ways: literally, as a regexp,
 ;; as an initialism, in the flex style, or as multiple word prefixes. By default, regexp
 ;; and literal matches are enabled.
-(use-package orderless :elpaca t
+(use-package orderless :ensure t
   :init
   (setq
    completion-styles '(orderless partial-completion basic)
@@ -26,11 +26,11 @@
 ;; for your completion candidates. Marginalia can only add annotations to be displayed
 ;; with the completion candidates. It cannot modify the appearance of the candidates themselves,
 ;; which are shown as supplied by the original commands.
-(use-package marginalia :elpaca t
+(use-package marginalia :ensure t
   :hook (doom-first-buffer . marginalia-mode))
 
 (use-package corfu
-  :elpaca (corfu :host github :repo "minad/corfu" :files (:defaults "extensions/*"))
+  :ensure (corfu :host github :repo "minad/corfu" :files (:defaults "extensions/*"))
   :hook
   (doom-first-input . global-corfu-mode)
   :general
@@ -66,13 +66,13 @@
         (corfu-mode t)))
     (add-hook! minibuffer-setup 'corfu-enable-in-minibuffer)))
 
-(use-package kind-icon :elpaca t
+(use-package kind-icon :ensure t
   :commands kind-icon-margin-formatter)
 
 ;; Cape provides a bunch of Completion At Point Extensions which can be used in
 ;; combination with my Corfu completion UI or the default completion UI. The completion
 ;; backends used by completion-at-point are so called completion-at-point-functions (Capfs).
-(use-package cape :elpaca t
+(use-package cape :ensure t
   :hook
   ((text-mode prog-mode) . qk-update-completion-functions)
   (lsp-completion-mode . qk-update-lsp-completion-functions)
@@ -89,7 +89,7 @@
 
 ;; Use tempel instead of using yasnippet. It uses the local templates file, which I have
 ;; added to the `user-emacs-directory'. It's much more lightweight than yasnippet, and
-(use-package tempel :elpaca t
+(use-package tempel :ensure t
 ;; we can always add more snippets if we need to.
   :hook
   (prog-mode . tempel-setup-capf)

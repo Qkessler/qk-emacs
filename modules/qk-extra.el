@@ -1,7 +1,7 @@
 ;;; qk-extra.el -*- lexical-binding: t; -*-
 
 (use-package pdf-tools
-  :elpaca t
+  :ensure t
   :mode ("\\.pdf\\'" . pdf-view-mode)
   :config
   (add-hook! 'pdf-view-mode-hook
@@ -16,12 +16,12 @@
 ;; https://www.passwordstore.org/.
 
 ;; (use-package auth-source-pass
-;; :elpaca t
+;; :ensure t
 ;;   :init (auth-source-pass-enable))
 
 ;; Emacs minor mode for making Anki cards with Org
 (use-package anki-editor
-  :elpaca t
+  :ensure t
   :init
   (setq
    anki-editor-create-decks t
@@ -53,7 +53,7 @@
 ;; accounting system that allows for fast queries and reports we are able to
 ;; connect our emacs --and ledger files-- to the amazing ledger-mode.
 (use-package ledger-mode
-  :elpaca t
+  :ensure t
   :mode "\\.ledger\\'"
   :init
   (setq
@@ -75,7 +75,7 @@
 
 ;; You should add your `gptel-api-key' here.
 (use-package gptel
-  :elpaca t
+  :ensure t
   :general
   (+general-global-chat
     "s" 'gptel-send))

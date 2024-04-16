@@ -30,7 +30,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
        (use-package ,treesit-mode
          :mode ,file-list)
      (use-package ,prev-mode
-       :elpaca t
+       :ensure t
        :mode ,file-list)))
 
 ;; Tree-sitter is a parser generator tool and an incremental parsing library.
@@ -40,13 +40,13 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; team has been working on implementing a ton of languages.
 (unless (treesit-available-p)
   (use-package tree-sitter
-    :elpaca t
+    :ensure t
     :hook
     (doom-first-buffer . global-tree-sitter-mode)
     (tree-sitter-after-on . tree-sitter-hl-mode))
 
   (use-package tree-sitter-langs
-    :elpaca t
+    :ensure t
     :after tree-sitter
     :config
     (defun suppress-messages (old-fun &rest args)
@@ -58,7 +58,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
     (advice-add 'tree-sitter-langs-install-grammars :around #'suppress-messages)))
 
 (use-package treesit-auto
-  :elpaca t
+  :ensure t
   :hook (doom-first-input . global-treesit-auto-mode)
   :init (setq treesit-auto-install 'prompt)
   :config (treesit-auto-add-to-auto-mode-alist 'all))
@@ -104,7 +104,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; pyvenv-activate, which queries the user for a virtual environment directory
 ;; to activate, and pyvenv-workon.
 (use-package pyvenv
-  :elpaca t
+  :ensure t
   :hook (python-mode . rh-pyvenv-autoload)
   :config
   (elpaca f)
@@ -120,7 +120,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that
 ;; I intend to use rainbow-mode, which may be enabled with M-x `rainbow-mode'.
 (use-package rainbow-mode
-  :elpaca t
+  :ensure t
   :commands rainbow-mode)
 
 (setq
@@ -145,7 +145,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 (treesit-remote! yaml-mode yaml-ts-mode ("\\.yaml\\'" "\\.yml\\'"))
 
 (use-package scala-ts-mode
-  :elpaca (scala-ts-mode :host github :repo "KaranAhlawat/scala-ts-mode")
+  :ensure (scala-ts-mode :host github :repo "KaranAhlawat/scala-ts-mode")
   :init (setq treesit-font-lock-level 2
               scala-ts-indent-offset 2))
 (treesit-remote! scala-mode scala-ts-mode "\\.scala\\'")
@@ -165,7 +165,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; Emacs, as always has its own integration of the key functions. I just use the
 ;; `cheat-sh-search', which is safe to say to be great.
 (use-package cheat-sh
-  :elpaca t
+  :ensure t
   :general
   (major-mode-definer
     :keymaps '(prog-mode-map)
@@ -176,7 +176,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; related to the working environment, like: TODO, FIXME and some
 ;; more.
 (use-package hl-todo
-  :elpaca t
+  :ensure t
   :hook ((prog-mode gfm-mode org-mode) . hl-todo-mode)
   :config 
   (setq
@@ -194,7 +194,7 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; on Github. The are some interesting options like the change of the markdown-command
 ;; to pandoc which is way better at compiling html5. 
 (use-package markdown-mode
-  :elpaca t
+  :ensure t
   :mode ("\\.md\\'" . gfm-mode)
   :hook (markdown-mode . visual-line-mode)
   :init (setq markdown-command qk-markdown-command)
@@ -232,14 +232,14 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;; Kotlin still doesn't have full support inside emacs. To add the kotlin major
 ;; mode, use the kotlin-mode package.
 (use-package kotlin-mode
-  :elpaca t
+  :ensure t
   :mode "\\.kt\\'")
 
 ;; FIXME: Commenting the treesit integration for Kotlin since it doesn't seem to
 ;; work with the latest Emacs 29.
 ;; (unless (not (treesit-available-p))
 ;;   (use-package kotlin-ts-mode
-;;     :elpaca (kotlin-ts-mode :host gitlab :repo "bricka/emacs-kotlin-ts-mode")
+;;     :ensure (kotlin-ts-mode :host gitlab :repo "bricka/emacs-kotlin-ts-mode")
 ;;     :mode "\\.kt\\'"))
 
 (elpaca swift-mode)
@@ -252,11 +252,11 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 
 (if (not (treesit-available-p))
     (use-package apheleia
-      :elpaca t
+      :ensure t
       :hook
       ((rustic-mode go-mode) . apheleia-mode))
   (use-package apheleia
-    :elpaca t
+    :ensure t
     :hook ((rust-ts-mode go-ts-mode typescript-ts-mode yaml-ts-mode tsx-ts-mode json-ts-mode) . apheleia-mode)
     :config
     (setf (alist-get 'prettier apheleia-formatters) '("apheleia-npx" "prettier" "--stdin-filepath" filepath))

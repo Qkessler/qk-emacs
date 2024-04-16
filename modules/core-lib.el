@@ -867,7 +867,7 @@ Restore the current buffer to its original directory on exit."
 
 
 (use-package vulpea
-  :elpaca t
+  :ensure t
   :commands vulpea-buffer-tags-get vulpea-buffer-tags-add)
 
 (setq safe-local-variable-values

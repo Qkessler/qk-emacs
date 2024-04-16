@@ -49,7 +49,7 @@
 ;; threshold is set. When idling GC is triggered and a low threshold is set.
 ;; A more detailed explanation can be found at http://akrl.sdf.org/
 (use-package gcmh
-  :elpaca t
+  :ensure t
   :demand t
   :init
   (setq
@@ -63,7 +63,7 @@
 ;; like .profile and such. Installing the package exec-path-from-shell, we make sure
 ;; that those important config files are loaded.
 (use-package exec-path-from-shell
-  :elpaca t
+  :ensure t
   :defer 3
   :init (setq exec-path-from-shell-arguments '("-l"))
   :config 
@@ -72,7 +72,7 @@
 
 ;; Benchmark Emacs Startup time without ever leaving your Emacs.
 (use-package esup
-  :elpaca t
+  :ensure t
   :commands esup
   :init (setq esup-user-init-file (file-truename "~/.emacs.d/init.el")))
 

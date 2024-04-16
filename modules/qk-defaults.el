@@ -4,7 +4,7 @@
 ;; in the box, but probably could be thought over. On the other hand, add defaults
 ;; that seem interesting for the modern user.
 
-(use-package no-littering :elpaca t
+(use-package no-littering :ensure t
   :init
   (setq
    backup-directory-alist `(("." . ,(no-littering-expand-var-file-name "backups/")))

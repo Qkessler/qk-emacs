@@ -241,7 +241,7 @@ to the org-capture function."
   (+general-global-insert
     "d" (cmd! (forward-char) (insert (format-time-string "%F")))))
 
-(use-package org-appear :elpaca t
+(use-package org-appear :ensure t
   :hook (org-mode . org-appear-mode)
   :init
   (setq

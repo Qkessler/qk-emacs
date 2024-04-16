@@ -38,7 +38,7 @@
     "p" 'smerge-prev
     "a" 'smerge-keep-all))
 
-(use-package magit :elpaca t
+(use-package magit :ensure t
   :init 
   (setq
    git-commit-summary-max-length qk-git-commit-summary-max-length
@@ -59,7 +59,7 @@
   (add-hook! 'magit-status-mode (display-line-numbers-mode -1)))
 
 (use-package git-link
-  :elpaca t
+  :ensure t
   :general
   (major-mode-definer
     :major-modes '(prog-mode toml-ts-mode)

@@ -1,12 +1,12 @@
 ;;; qk-help.el -*- lexical-binding: t; -*-
 
-(use-package transient :elpaca t
+(use-package transient :ensure t
   :general
   (:keymaps
    '(transient-base-map)
    "<escape>" 'transient-quit-one))
 
-(use-package helpful :elpaca t
+(use-package helpful :ensure t
   :general
   (general-nmap
     :keymaps '(helpful-mode-map)
@@ -46,7 +46,7 @@
 ;; after enabling the minor mode if you enter C-x and wait for the default of 1
 ;; second the minibuffer will expand with all of the available key bindings that
 ;; follow C-x (or as many as space allows given your settings).
-(use-package which-key :elpaca t
+(use-package which-key :ensure t
   :hook (doom-first-input . (lambda ()
                               (which-key-setup-minibuffer)
                               (which-key-mode))))

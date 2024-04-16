@@ -161,7 +161,7 @@
 ;; of rules for reducing the amount of unneded email that I mark as read everyday. 
 
 (use-package mu4e-alert
-  :elpaca t
+  :ensure t
   :hook (mu4e-main-mode . mu4e-alert-enable-mode-line-display)
   :init (setq mu4e-alert-interesting-mail-query qk-mu4e-alert-interesting-mail-query))
 
@@ -170,7 +170,7 @@
 ;; Send messages in org-mode and html format.
 
 (use-package org-mime
-  :elpaca t
+  :ensure t
   :hook (message-send . org-mime-htmlize)
   :init (setq org-mime-export-options '(:section-numbers nil :with-author nil :with-toc nil)))
 

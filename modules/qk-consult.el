@@ -4,7 +4,7 @@
 ;; completing-read, which allows to quickly select an item from a list of candidates
 ;; with completion. Consult offers in particular an advanced buffer switching command
 ;; consult-buffer to switch between buffers and recently opened files. 
-(use-package consult :elpaca t
+(use-package consult :ensure t
   :commands
   consult--read consult-xref consult-register-format consult-register-window
   :general
@@ -61,7 +61,7 @@
 ;; and filtering provided by your completion setup - to any directory you’ve
 ;; visited recently, or to a project or bookmarked directory. The minibuffer
 ;; prompt will be replaced with the directory you choose.
-(use-package consult-dir :elpaca t
+(use-package consult-dir :ensure t
   :general
   (+general-global-project
     "d" 'consult-dir)

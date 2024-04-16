@@ -1,7 +1,7 @@
 ;;; qk-evil.el  -*- lexical-binding: t; -*-
 
 (use-package evil
-  :elpaca t
+  :ensure t
   :demand t
   :init 
   (setq
@@ -67,7 +67,7 @@
   (evil-mode t))
 
 (use-package evil-collection
-  :elpaca t
+  :ensure t
   :commands evil-collection-init
   :init
   (setq
@@ -160,11 +160,11 @@ and complains if a module is loaded too early (during startup)."
         (+evil-collection-init mode +evil-collection-disabled-list)))))
 
 (use-package evil-commentary
-  :elpaca t
+  :ensure t
   :hook (doom-first-input . evil-commentary-mode))
 
 (use-package evil-org
-  :elpaca t
+  :ensure t
   :hook (org-mode . evil-org-mode)
   :init (setq evil-org-special-o/O '(table-row item))
   :config
@@ -220,22 +220,22 @@ and complains if a module is loaded too early (during startup)."
     "h" 'dired-up-directory))
 
 (use-package evil-matchit
-  :elpaca t
+  :ensure t
   :hook (doom-first-input . global-evil-matchit-mode))
 
 (use-package avy
-  :elpaca t
+  :ensure t
   :general
   (global-definer
     "k" 'avy-goto-line-above
     "j" 'avy-goto-line-below))
 
 (use-package evil-surround
-  :elpaca t
+  :ensure t
   :hook (doom-first-input . global-evil-surround-mode))
 
 (use-package evil-numbers
-  :elpaca t
+  :ensure t
   :general
   (general-nmap
     "C-a" 'evil-numbers/inc-at-pt

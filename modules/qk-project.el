@@ -13,7 +13,7 @@
 ;; navigate between your working files and forget about that files opened that
 ;; you will not use anymore.  Harpoon persists between emacs sessions.
 (use-package harpoon
-  :elpaca (harpoon :host github :repo "otavioschwanck/harpoon.el")
+  :ensure (harpoon :host github :repo "otavioschwanck/harpoon.el")
   :hook (harpoon-mode . auto-revert-mode)
   :init
   (defun qk-tab-bar-get-current-tab-name ())
@@ -40,7 +40,7 @@
 ;; out of the park. In this case, he is trying to come up with a replacement to the
 ;; commonly known fzf.el and fuzzy-find.el modes, which emulate fuzzy find matching
 ;; running fzf in an emacs terminal process.
-(use-package affe :elpaca t
+(use-package affe :ensure t
   :general
   (+general-global-window
     "f" 'qk-affe-workspace-find)

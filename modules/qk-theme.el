@@ -31,7 +31,7 @@
   (qk-load-theme (nth qk-themes-index qk-themes-list)))
 
 (use-package gruvbox-theme
-  :elpaca t
+  :ensure t
   :init
   (add-to-list 'qk-themes-list 'gruvbox-dark-hard)
   (add-to-list 'qk-themes-list 'modus-operandi)

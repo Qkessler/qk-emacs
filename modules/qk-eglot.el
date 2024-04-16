@@ -196,8 +196,8 @@ handle it. If it is not a jar call ORIGINAL-FN."
   (add-to-list 'eglot-server-programs '(toml-ts-mode . ("taplo" "lsp" "stdio")))
   (add-to-list 'eglot-server-programs '(kotlin-ts-mode . ("kotlin-language-server"))))
 
-(use-package jsonrpc :elpaca t)
-(use-package dape :elpaca t)
+(use-package jsonrpc :ensure t)
+(use-package dape :ensure t)
 (after! eglot
   (minor-mode-definer
     :keymaps 'flymake-mode
@@ -224,19 +224,19 @@ handle it. If it is not a jar call ORIGINAL-FN."
     "gr" 'xref-find-references))
 
 (use-package eglot-booster
-  :elpaca (eglot-booster :host github :repo "jdtsmith/eglot-booster")
+  :ensure (eglot-booster :host github :repo "jdtsmith/eglot-booster")
   :after eglot
   :config (eglot-booster-mode))
 
 (use-package consult-eglot
-  :elpaca t
+  :ensure t
   :general
   (minor-mode-definer
     :keymaps 'eglot--managed-mode
     "s" 'consult-eglot-symbols))
 
 (use-package eldoc-box
-  :elpaca t
+  :ensure t
   :hook
   (eglot-managed-mode . qk-add-eglot-keys)
   (eglot-managed-mode . eldoc-mode)
@@ -249,7 +249,7 @@ handle it. If it is not a jar call ORIGINAL-FN."
 
 (elpaca sideline-flymake)
 (use-package sideline
-  :elpaca t
+  :ensure t
   :hook (flymake-mode . sideline-mode)
   :init
   (setq

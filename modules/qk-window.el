@@ -3,7 +3,7 @@
 ;; Olivetti is a mode for better writting, putting the buffer in a similar way as Quip
 ;; does. We need to make sure that some of the modes that we enable for other modes,
 ;; i.e. Display number lines mode, needs to be disabled when olivetti-mode is turned on.
-(use-package olivetti :elpaca t
+(use-package olivetti :ensure t
   :general
   (+general-global-toggle
     "o" 'qk-toggle-olivetti-mode)
@@ -20,7 +20,7 @@
 ;; with every iteration or message. popper.el puts an end to the madness by managing
 ;; the buffers defined by the `popper-reference-buffers' variable inside its own groups.
 ;; You can toggle and cycle through them, to avoid losing your place and your window configuration.
-(use-package popper :elpaca t
+(use-package popper :ensure t
   :hook (doom-first-input . popper-mode)
   :general
   (+general-global-toggle
@@ -30,7 +30,7 @@
   :init (setq popper-reference-buffers qk-popper-reference-buffers))
 
 ;; Switch between windows using the keys in the home-row.
-(use-package ace-window :elpaca t
+(use-package ace-window :ensure t
   :general
   (+general-global-window
     "o" 'ace-window
@@ -76,7 +76,7 @@
    "C-k" 'windmove-up))
 
 (use-package bufler
-  :elpaca t
+  :ensure t
   :general
   (+general-global-buffer
     "l" 'bufler)

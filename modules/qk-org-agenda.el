@@ -60,7 +60,7 @@
                 (org-agenda-todo-ignore-deadlines nil))))))))
 
 (use-package org-timeblock
-  :elpaca t
+  :ensure t
   :general
   (general-nmap
     :keymaps 'org-timeblock-mode-map

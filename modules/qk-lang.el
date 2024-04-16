@@ -144,6 +144,24 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 (treesit-remote! json-mode json-ts-mode "\\.json\\'")
 (treesit-remote! yaml-mode yaml-ts-mode ("\\.yaml\\'" "\\.yml\\'"))
 
+(use-package scala-ts-mode
+  :elpaca (scala-ts-mode :host github :repo "KaranAhlawat/scala-ts-mode")
+  :init (setq treesit-font-lock-level 2
+              scala-ts-indent-offset 2))
+(treesit-remote! scala-mode scala-ts-mode "\\.scala\\'")
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false")))
+
 ;; Emacs, as always has its own integration of the key functions. I just use the
 ;; `cheat-sh-search', which is safe to say to be great.
 (use-package cheat-sh
@@ -225,7 +243,6 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
 ;;     :mode "\\.kt\\'"))
 
 (elpaca swift-mode)
-(elpaca scala-mode)
 
 (if (not (treesit-available-p))
     (elpaca go-mode)
@@ -243,10 +260,12 @@ available. PREV-MODE can be a package name or a recipe, it's going to get pulled
     :hook ((rust-ts-mode go-ts-mode typescript-ts-mode yaml-ts-mode tsx-ts-mode json-ts-mode) . apheleia-mode)
     :config
     (setf (alist-get 'prettier apheleia-formatters) '("apheleia-npx" "prettier" "--stdin-filepath" filepath))
+    (setf (alist-get 'prettier-json apheleia-formatters) '("apheleia-npx" "prettier" "--stdin-filepath" filepath "--parser\=json"))
     (pushnew! apheleia-mode-alist
               '(go-ts-mode . gofmt)
               '(rust-ts-mode . rustfmt)
-              '(typescript-ts-mode . prettier))))
+              '(typescript-ts-mode . prettier)
+              '(kotlin-ts-mode . ktlint))))
 
 (provide 'qk-lang)
 ;; qk-lang.el ends here.

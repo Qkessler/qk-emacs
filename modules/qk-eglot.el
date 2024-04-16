@@ -69,6 +69,7 @@ killing and opening many LSP/eglot-powered buffers.")
     yaml-mode
     yaml-ts-mode
     scala-mode
+    scala-ts-mode
     kotlin-mode
     kotlin-ts-mode
     go-mode
@@ -84,6 +85,7 @@ killing and opening many LSP/eglot-powered buffers.")
    eglot-send-changes-idle-time 0.5
    eglot-auto-display-help-buffer nil
    eglot-report-progress nil
+   eglot-events-buffer-size 0
    rustic-lsp-client 'eglot
    eglot-workspace-configuration
    '(:vscode-json-language-server (:provideFormatter t)))
@@ -121,8 +123,10 @@ server getting expensively restarted when reverting buffers."
                            "-Xmx8G"
                            "-XX:+UseG1GC"
                            "-XX:+UseStringDeduplication"
-                           ,(concat "--jvm-arg=-javaagent:" (getenv "HOME") "/.lombok/lombok.jar")
-                           :initializationOptions (:extendedClientCapabilities (:classFileContentsSupport t)))))
+                           ,(concat "--jvm-arg=-javaagent:" qk-java-lombok-jar)
+                           :initializationOptions
+                           (:extendedClientCapabilities (:classFileContentsSupport t)
+                            :bundles [,qk-java-debug-jar]))))
     (add-to-list 'eglot-server-programs `(java-mode . ,jdtls-arguments))
     (add-to-list 'eglot-server-programs `(java-ts-mode . ,jdtls-arguments)))
   (defun jdt-file-name-handler (operation &rest args)
@@ -182,9 +186,18 @@ handle it. If it is not a jar call ORIGINAL-FN."
   ;; invoke
   (jdthandler-patch-eglot)
 
+  (defvar qk-scala-ts-mode-server-configuration '(scala-ts-mode . ("metals-emacs"
+                                                                   "-Dmetals.client=emacs"
+                                                                   "-Dmetals.sbt-script=./brazil-build-bloop"
+                                                                   :initializationOptions (:isHttpEnabled nil)))
+    "Configuration used by eglot to contact Metals.")
+  (add-to-list 'eglot-server-programs qk-scala-ts-mode-server-configuration)
+
   (add-to-list 'eglot-server-programs '(toml-ts-mode . ("taplo" "lsp" "stdio")))
   (add-to-list 'eglot-server-programs '(kotlin-ts-mode . ("kotlin-language-server"))))
 
+(use-package jsonrpc :elpaca t)
+(use-package dape :elpaca t)
 (after! eglot
   (minor-mode-definer
     :keymaps 'flymake-mode
@@ -209,6 +222,11 @@ handle it. If it is not a jar call ORIGINAL-FN."
     :major-modes '(eglot--managed-mode)
     "gi" 'eglot-find-implementation
     "gr" 'xref-find-references))
+
+(use-package eglot-booster
+  :elpaca (eglot-booster :host github :repo "jdtsmith/eglot-booster")
+  :after eglot
+  :config (eglot-booster-mode))
 
 (use-package consult-eglot
   :elpaca t

@@ -19,6 +19,7 @@
    mu4e-compose-signature qk-mu4e-compose-signature
    mu4e-update-interval qk-mu4e-update-interval
    mu4e-compose-signature-auto-include t
+   mu4e-modeline-mode nil
    mu4e-confirm-quit nil
    mu4e-sent-messages-behavior 'sent
    mu4e-headers-auto-update t
@@ -31,7 +32,7 @@
      (:from . 22)
      (:subject))
    mu4e-view-show-addresses t
-   mu4e-display-update-status-in-modeline t
+   mu4e-display-update-status-in-modeline nil
    mu4e-view-show-images t
    mu4e-context-policy 'pick-first
    mu4e-compose-format-flowed t
@@ -62,7 +63,8 @@
     :keymaps '(mu4e-compose-mode-map) 
     "f" 'message-send-and-exit
     "c" 'message-dont-send
-    "a" 'mail-add-attachment)
+    "a" 'mail-add-attachment
+    "l" 'ar-org-insert-link-dwim)
   (general-nmap
     :keymaps '(mu4e-view-mode-map)
     "F" 'mu4e-compose-forward)

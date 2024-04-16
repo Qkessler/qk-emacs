@@ -42,7 +42,8 @@
   :init 
   (setq
    git-commit-summary-max-length qk-git-commit-summary-max-length
-   magit-diff-hide-trailing-cr-characters t)
+   magit-diff-hide-trailing-cr-characters t
+   magit-refresh-status-buffer nil)
   :general
   (minor-mode-definer
     :keymaps 'git-commit-mode
@@ -56,10 +57,6 @@
   :config
   (add-hook! 'git-commit-mode-hook (set-fill-column qk-git-commit-fill-column))
   (add-hook! 'magit-status-mode (display-line-numbers-mode -1)))
-
-(use-package magit-delta :elpaca t
-  :hook (magit-mode . magit-delta-mode)
-  :init (setq magit-delta-default-dark-theme "gruvbox-dark"))
 
 (use-package git-link
   :elpaca t

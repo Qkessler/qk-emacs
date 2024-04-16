@@ -102,7 +102,7 @@ See `git-commit-summary-max-length'.")
 (defvar qk-markdown-command "pandoc -t html5"
   "Default: command to use when compiling markdown to html.
 See `markdown-command'.")
-(defvar qk-mu4e-load-path "/opt/homebrew/Cellar/mu/1.8.10/share/emacs/site-lisp/mu/mu4e/"
+(defvar qk-mu4e-load-path "/opt/homebrew/Cellar/mu/HEAD-0e05ab8/share/emacs/site-lisp/mu/mu4e"
   "Default: mu4e load path. See `mu4e-load-path'.")
 (defvar qk-mu4e-maildir "~/.Mail"
   "Default: mail directory that mu4e will use to pull emails from.
@@ -226,6 +226,11 @@ for modeline highlighting. See `mu4e-alert-interesting-mail-query'.")
   "Default: reports available when running `ledger-report'.")
 (defvar qk-chatgpt-repo-path "~/.emacs.d/elpaca/repos/ChatGPT/"
   "Default: repo using the `elpaca' package manager. See `chatgpt-repo-path'.")
+(defvar qk-java-lombok-jar (concat (getenv "HOME") "/.lombok/lombok.jar")
+  "Default: ~/.lombok/lombok.jar")
+(defvar qk-java-debug-jar
+  (concat (getenv "HOME") "/source-repos/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-0.52.0.jar")
+  "Default: My own path to the java-debug repository I built following instructions on the README.md file.")
 
 (provide 'qk-constants)
 ;; qk-constants.el ends here.

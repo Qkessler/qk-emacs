@@ -86,6 +86,18 @@
                                                 'title))))))))
             (t (call-interactively 'org-insert-link)))))
 
+  (defun qk-org-edit-special-or-surround-with-code ()
+    "If in a source block, edit it. If not, surround the extended word (including region) with `='."
+    (interactive)
+    (if (org-in-src-block-p)
+        (org-edit-special)
+      (let ((beg (if (region-active-p) (region-beginning) (save-excursion (backward-word) (point)))))
+        (let ((end (if (region-active-p) (region-end) (save-excursion (forward-word) (point)))))
+          (goto-char end)
+          (insert "=")
+          (goto-char beg)
+          (insert "=")))))
+
   (defun bg-org-fill-paragraph-with-link-nobreak-p ()
     "Do not allow `fill-paragraph' to break inside the middle of Org mode links."
     (and (assq :link (org-context)) t))
@@ -206,7 +218,7 @@ to the org-capture function."
   (major-mode-definer
     :major-modes '(org-mode)
     :keymaps '(org-mode-map)
-    "c" '(org-edit-special :which-key "open source block")
+    "c" '(qk-org-edit-special-or-surround-with-code :which-key "open source block")
     "d" 'org-deadline
     "e" 'org-export-dispatch
     "l" 'ar-org-insert-link-dwim

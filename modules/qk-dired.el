@@ -19,6 +19,14 @@
    dired-listing-switches qk-dired-listing-switches
    dired-use-ls-dired nil
    dired-kill-when-opening-new-dired-buffer t)
+  :general
+  (general-mmap
+    "-" 'qk-dired-current)
+  :config
+  (defun qk-dired-current ()
+    "Open a dired buffer for the current file."
+    (interactive)
+    (dired default-directory))
   :hook
   (dired-mode . dired-hide-details-mode)
   (dired-mode . auto-revert-mode))

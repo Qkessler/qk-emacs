@@ -76,9 +76,9 @@
 (require 'qk-tab-bar)
 (require 'qk-lang)
 (require 'qk-mail)
-(require 'qk-eglot)
+;; (require 'qk-eglot)
 ;; (require 'qk-vterm)
-(require 'qk-tramp)
+;; (require 'qk-tramp)
 (require 'qk-extra)
 (require 'qk-amz)
 

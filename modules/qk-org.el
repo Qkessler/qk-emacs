@@ -1,6 +1,7 @@
 ;;; qk-org.el -*- lexical-binding: t; -*-
 
 (use-package org
+  :defer 2
   :hook
   (org-clock-in-hook . org-save-all-org-buffers)
   (org-clock-out-hook . org-save-all-org-buffers)

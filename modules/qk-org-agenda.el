@@ -1,6 +1,7 @@
 ;;; qk-org-agenda.el -*- lexical-binding: t; -*-
 
 (use-package org-agenda
+  :defer 3
   :init
   (setq
    org-agenda-prefix-format "  %?-12t% s"

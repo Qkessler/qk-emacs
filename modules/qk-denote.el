@@ -1,6 +1,7 @@
 ;;; qk-denote.el -*- lexical-binding: t; -*-
 
 (use-package denote :ensure t
+  :defer 1
   :hook (dired-mode . denote-dired-mode-in-directories)
   :init
   (setq

@@ -5,6 +5,7 @@
 ;; that the mu4e version is in sync with the mu binary from my distro.
 (add-to-list 'load-path qk-mu4e-load-path)
 (use-package mu4e
+  :defer 6
   :hook (mu4e-compose-mode . flyspell-mode)
   :commands mu4e mu4e-headers-search
   :init

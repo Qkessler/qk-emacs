@@ -13,10 +13,11 @@
    denote-date-format nil
    denote-link-fontify-backlinks t
    denote-dired-rename-expert nil
+   denote-file-type 'markdown-yaml
    denote-org-capture-specifiers "%l\n%i\n%?")
   :general
   (+general-global-notes
-    "c" 'qk-denote-org-capture
+    "c" 'denote-create-note
     "f" 'qk-denote-find-notes
     "i" 'denote-link
     "d" 'qk-denote-find-dailies

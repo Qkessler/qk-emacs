@@ -30,13 +30,15 @@
   "Load the active indexed theme in the `qk-themes-list'"
   (qk-load-theme (nth qk-themes-index qk-themes-list)))
 
-(use-package gruvbox-theme
-  :ensure t
+(use-package rose-pine-theme
+  :ensure (rose-pine-theme :host github :repo "konrad1977/pinerose-emacs")
   :init
-  (add-to-list 'qk-themes-list 'gruvbox-dark-hard)
+  (add-to-list 'qk-themes-list 'rose-pine)
   (add-to-list 'qk-themes-list 'modus-operandi)
 
   (qk-load-indexed-theme))
+
+(use-package gruvbox-theme :ensure t)
 
 ;; Emacs does not have an =after-load-theme-hook=, which a I find key for adding
 ;; or changing some of the faces dinamically. Not everything is lost, we still

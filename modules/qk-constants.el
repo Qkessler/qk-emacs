@@ -117,7 +117,7 @@ See `mu4e-get-mail-command'.")
 (defvar qk-mu4e-update-interval (* 5 60)
   "Default: interval on which update mail. See `mu4e-update-interval'.")
 
-(defvar qk-notificator-team-mu-query "to:kindle-notifications-dev@amazon.com")
+(defvar qk-notificator-team-mu-query "(to:channels-outbound-rex-dev@amazon.com OR cc:channels-outbound-rex-dev@amazon.com)")
 (defvar qk-manager-mu-query "(from:josli@amazon.com OR from:josli@amazon.es)")
 (defvar qk-to-me-mu-query "(to:enrikes@amazon.com OR to:enrikes@amazon.es)")
 (defvar qk-unread-mu-query " AND g:unread AND NOT g:trashed")
@@ -135,7 +135,7 @@ See `mu4e-get-mail-command'.")
     (:name "Direct to Me" :query ,(concat qk-to-me-mu-query qk-unread-mu-query) :key ?m)
     (:name "josli@" :query ,(concat qk-manager-mu-query qk-unread-mu-query) :key ?j)
     (:name "CRs" :query ,(concat "maildir:/amazon/CRs" qk-unread-mu-query) :key ?c)
-    (:name "kindle-notifications-dev"
+    (:name "channels-outbound-rex-dev"
            :query ,(concat qk-notificator-team-mu-query qk-unread-mu-query)
            :key ?d)
 

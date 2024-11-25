@@ -39,7 +39,6 @@
     "a" 'smerge-keep-all))
 
 (use-package magit :ensure t
-  :defer 4
   :init 
   (setq
    git-commit-summary-max-length qk-git-commit-summary-max-length

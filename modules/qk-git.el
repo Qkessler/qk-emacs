@@ -54,12 +54,12 @@
     "f" 'magit-find-file
     "l" 'magit-log-buffer-file
     "d" 'magit-diff-buffer-file)
-  (general-nmap
-    :keymaps '(magit-mode-map)
-    "p" 'magit-pull)
   :config
   (add-hook! 'git-commit-mode-hook (set-fill-column qk-git-commit-fill-column))
-  (add-hook! 'magit-status-mode (display-line-numbers-mode -1)))
+  (add-hook! 'magit-status-mode (display-line-numbers-mode -1))
+  (general-nmap
+    :keymaps '(magit-mode-map)
+    "p" 'magit-pull))
 
 (use-package git-link
   :ensure t
